@@ -65,5 +65,25 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+	<dict>
+		<key>CFBundleURLSchemes</key>
+		<array>
+			<string>fb2154983148033763</string>
+		</array>
+	</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>2154983148033763</string>
+	<key>FacebookClientToken</key>
+	<string>a9391665a524c6cb41f8cb290000b75d</string>
+	<key>FacebookDisplayName</key>
+	<string>Login Quicky</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	<string>fbapi</string>
+	<string>fb-messenger-share-api</string>
+	</array>
 </dict>
 </plist>

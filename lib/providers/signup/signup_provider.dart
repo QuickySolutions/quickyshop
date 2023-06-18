@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SignUpProvider extends ChangeNotifier {
+  bool _isSignedWithSocialMedia = false;
+
   String _storeName = "";
   String _emailStore = "";
   String _passwordStore = "";
@@ -12,6 +14,8 @@ class SignUpProvider extends ChangeNotifier {
   String _subLevelSelected = "";
   String _subSubLevelSelected = "";
 
+  bool get isSignedWithSocialMedia => _isSignedWithSocialMedia;
+
   String get storeName => _storeName;
   String get emailStore => _emailStore;
   String get passwordStore => _passwordStore;
@@ -21,6 +25,11 @@ class SignUpProvider extends ChangeNotifier {
   String get subSubLevelSelected => _subSubLevelSelected;
 
   int get cellPhoneStore => _cellPhoneStore;
+
+  void setSignedWithSocialMedia() {
+    _isSignedWithSocialMedia = !_isSignedWithSocialMedia;
+    notifyListeners();
+  }
 
   void setNameStore(String valueNameStore) {
     _storeName = valueNameStore;

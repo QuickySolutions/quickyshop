@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickyshop/firebase/authentication.dart';
 
 import '../../utils/Colors.dart';
 import '../../widgets/scaffolds/authScaffold.dart';
@@ -11,6 +12,7 @@ class PrincipalScreen extends StatefulWidget {
 }
 
 class _PrincipalScreenState extends State<PrincipalScreen> {
+  AuthenticationService _authenticationService = AuthenticationService();
   @override
   Widget build(BuildContext context) {
     return QuickyAuthScaffold(
@@ -92,14 +94,22 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () async {
+                      final response =
+                          await _authenticationService.signInWithFacebook();
+                    },
                     child: Image(
                         height: 40,
                         width: 40,
                         image: AssetImage('assets/icons/auth/facebook.png')),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () async {
+                      final response =
+                          await _authenticationService.signInWithGoogle();
+
+                      print(response);
+                    },
                     child: Image(
                         height: 40,
                         width: 40,

@@ -6,8 +6,9 @@ class SignUpProvider extends ChangeNotifier {
   String _storeName = "";
   String _emailStore = "";
   String _passwordStore = "";
+  String _photoProfile = "";
 
-  int _cellPhoneStore = 0;
+  String _cellPhoneStore = "";
 
   //category selection
   String _principalCategorySelected = "";
@@ -17,6 +18,7 @@ class SignUpProvider extends ChangeNotifier {
   bool get isSignedWithSocialMedia => _isSignedWithSocialMedia;
 
   String get storeName => _storeName;
+  String get photoProfile => _photoProfile;
   String get emailStore => _emailStore;
   String get passwordStore => _passwordStore;
 
@@ -24,7 +26,7 @@ class SignUpProvider extends ChangeNotifier {
   String get subLevelSelected => _subLevelSelected;
   String get subSubLevelSelected => _subSubLevelSelected;
 
-  int get cellPhoneStore => _cellPhoneStore;
+  String get cellPhoneStore => _cellPhoneStore;
 
   void setSignedWithSocialMedia() {
     _isSignedWithSocialMedia = !_isSignedWithSocialMedia;
@@ -41,12 +43,17 @@ class SignUpProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setPhotoProfile(String photoProfileValue) {
+    _photoProfile = photoProfileValue;
+    notifyListeners();
+  }
+
   void setPasswordStore(String valuePasswordStore) {
     _passwordStore = valuePasswordStore;
     notifyListeners();
   }
 
-  void setNumberCellPhone(int numberStore) {
+  void setNumberCellPhone(String numberStore) {
     _cellPhoneStore = numberStore;
     notifyListeners();
   }

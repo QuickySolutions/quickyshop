@@ -18,9 +18,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   //String _secondPassword = "";
   bool wantToSeePassword = false;
   bool wantToSeePassword2 = false;
+
+  final TextEditingController _nameStoreController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final signUpProvider = Provider.of<SignUpProvider>(context);
+
     return QuickyAuthScaffold(
       currentScreenType: 'register',
       contentScreen: Scaffold(
@@ -40,6 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               SizedBox(height: 40),
               QuickyTextField(
+                defaultValue: signUpProvider.storeName,
                 hintText: 'Nombre completo',
                 prefixIcon: Padding(
                   padding: EdgeInsets.only(left: 10),
@@ -51,104 +55,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
               ),
               SizedBox(height: 15),
-              TextField(
-                onChanged: (value) {
-                  signUpProvider.setEmailStore(value);
-                },
-                decoration: InputDecoration(
-                  hintStyle: TextStyle(color: Colors.black),
-                  prefixIcon: Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: getCustomIconToTextFieldInPrefx(
-                          'assets/icons/usability/mail.png')),
-                  hintText: 'Correo electrónico',
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(50),
-                  ),
+              QuickyTextField(
+                defaultValue: signUpProvider.emailStore,
+                hintText: 'Correo Electronico',
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: getCustomIconToTextFieldInPrefx(
+                      'assets/icons/usability/mail.png'),
                 ),
+                onChanged: (String value) {
+                  signUpProvider.setNameStore(value);
+                },
               ),
               SizedBox(height: 15),
-              TextField(
-                obscureText: wantToSeePassword ? false : true,
-                onChanged: (value) {
-                  signUpProvider.setPasswordStore(value);
-                },
-                decoration: InputDecoration(
-                  hintStyle: TextStyle(color: Colors.black),
-                  prefixIcon: Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: getCustomIconToTextFieldInPrefx(
-                          'assets/icons/usability/key.png')),
-                  suffixIcon: !wantToSeePassword
-                      ? GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              wantToSeePassword = !wantToSeePassword;
-                            });
-                          },
-                          child: Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child: Icon(Icons.remove_red_eye)),
-                        )
-                      : GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              wantToSeePassword = !wantToSeePassword;
-                            });
-                          },
-                          child: Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child: Icon(Icons.visibility_off)),
-                        ),
-                  hintText: 'Contraseña',
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(50),
-                  ),
+              QuickyTextField(
+                hintText: 'Contraseña',
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: getCustomIconToTextFieldInPrefx(
+                      'assets/icons/usability/key.png'),
                 ),
+                hideText: true,
+                onChanged: (String value) {},
               ),
               SizedBox(height: 15),
-              // TextField(
-              //   obscureText: wantToSeePassword2 ? false : true,
-              //   onChanged: (value) {
-              //     setState(() {
-              //       _secondPassword = value;
-              //     });
-              //   },
-              //   decoration: InputDecoration(
-              //     hintStyle: TextStyle(color: Colors.black),
-              //     prefixIcon: Padding(
-              //         padding: EdgeInsets.only(left: 10),
-              //         child: getCustomIconToTextFieldInPrefx(
-              //             'assets/icons/usability/key.png')),
-              //     suffixIcon: !wantToSeePassword2
-              //         ? GestureDetector(
-              //             onTap: () {
-              //               setState(() {
-              //                 wantToSeePassword2 = !wantToSeePassword2;
-              //               });
-              //             },
-              //             child: Padding(
-              //                 padding: EdgeInsets.only(right: 10),
-              //                 child: Icon(Icons.remove_red_eye)),
-              //           )
-              //         : GestureDetector(
-              //             onTap: () {},
-              //             child: Padding(
-              //                 padding: EdgeInsets.only(right: 10),
-              //                 child: Icon(Icons.visibility_off)),
-              //           ),
-              //     hintText: 'Confirmar contraseña',
-              //     filled: true,
-              //     border: OutlineInputBorder(
-              //       borderSide: BorderSide.none,
-              //       borderRadius: BorderRadius.circular(50),
-              //     ),
-              //   ),
-              // ),
+              QuickyTextField(
+                hintText: 'Confirmar contraseña',
+                hideText: true,
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: getCustomIconToTextFieldInPrefx(
+                      'assets/icons/usability/key.png'),
+                ),
+                onChanged: (String value) {},
+              ),
               SizedBox(height: 30),
               Center(
                 child: Container(

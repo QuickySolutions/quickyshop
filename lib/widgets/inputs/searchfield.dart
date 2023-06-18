@@ -10,12 +10,14 @@ class QuickyTextField extends StatelessWidget {
   bool? readOnly;
   bool? isNumeric;
   TextEditingController? controller;
-  final bool isDate;
+  final bool? isDate;
+  final bool? hideText;
   QuickyTextField(
       {this.prefixIcon,
       this.onChanged,
       this.controller,
       this.isNumeric = false,
+      this.hideText = false,
       this.onTap,
       this.readOnly = false,
       this.suffixIcon,
@@ -31,6 +33,7 @@ class QuickyTextField extends StatelessWidget {
       readOnly: readOnly!,
       onChanged: onChanged,
       controller: controller,
+      obscureText: hideText!,
       keyboardType: isNumeric! ? TextInputType.number : TextInputType.text,
       decoration: InputDecoration(
         hintStyle: TextStyle(color: Colors.black),

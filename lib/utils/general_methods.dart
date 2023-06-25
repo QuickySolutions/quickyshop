@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../providers/store/store_provider.dart';
+import 'package:quickyshop/providers/signup/signup_provider.dart';
 
 Widget getCustomIconToTextFieldInPrefx(String pathAssetImage) {
   return Padding(
@@ -14,10 +13,12 @@ Widget getCustomIconToTextFieldInPrefx(String pathAssetImage) {
   );
 }
 
-ImageProvider<Object> getProfile(StoreProvider provider) {
+ImageProvider<Object> getProfile(SignUpProvider provider) {
   if (provider.photoProfile == "no_photo") {
     return AssetImage("assets/images/not-available.png");
+  } else if (provider.physicalPhoto.path.isNotEmpty) {
+    return AssetImage(provider.photoProfile);
   } else {
-    return AssetImage("assets/images/not-available.png");
+    return NetworkImage(provider.photoProfile);
   }
 }

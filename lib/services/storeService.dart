@@ -7,14 +7,10 @@ class StoreService {
 
   Future<Map<String, dynamic>> registerStore(
       Map<String, dynamic> storeData) async {
-    late Map<String, dynamic> responseMap = {};
+    Response response =
+        await _dio.post(ApiUrl.LOCAL_API + '/stores/brand', data: storeData);
 
-    Response response = await _dio
-        .post(ApiUrl.LOCAL_API + '/stores/addBrandStore', data: storeData);
-
-    print(response.data);
-
-    return responseMap;
+    return response.data;
   }
 
   Future<Map<String, dynamic>> verifyNumberStoreToSendSMS(

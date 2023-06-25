@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 // import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:quickyshop/providers/signup/signup_provider.dart';
 
 import '../../providers/photo/photo_provider.dart';
 import '../../providers/store/store_provider.dart';
+import '../../services/pictureSelectionService.dart';
 import '../../utils/Colors.dart';
 import '../../utils/general_methods.dart';
 
@@ -35,25 +37,13 @@ class ProfileUser extends StatefulWidget {
 class _ProfileUserState extends State<ProfileUser> {
   late File imageFile;
   bool pickedImage = false;
-
-  /// Get from gallery
-  // _getFromGallery() async {
-  //   final providerPhoto = Provider.of<PhotoProvider>(context, listen: false);
-  //   PickedFile? pickedFile = await ImagePicker().getImage(
-  //     source: ImageSource.gallery,
-  //     maxWidth: 1800,
-  //     maxHeight: 1800,
-  //   );
-  //   if (pickedFile != null) {
-  //     providerPhoto.setImage(File(pickedFile.path));
-  //     providerPhoto.setPicketPicture(true);
-  //   }
-  // }
+  File? image;
+  //PictureSelectionService _pictureSelectionService = PictureSelectionService();
 
   @override
   Widget build(BuildContext context) {
     final photoProvider = Provider.of<PhotoProvider>(context);
-    final storeProvider = Provider.of<StoreProvider>(context);
+    final signUpProvider = Provider.of<SignUpProvider>(context);
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
@@ -67,12 +57,12 @@ class _ProfileUserState extends State<ProfileUser> {
               backgroundColor: QuickyColors.greyColor,
               strokeWidth: 3,
               color: QuickyColors.primaryColor,
-              value: .30,
+              value: .0,
             ),
           ),
           ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(100)),
-            child: widget.editPicture! && photoProvider.pickedPicture
+            child: widget.editPicture!
                 ? Image.file(
                     photoProvider.photo!,
                     width: widget.width,
@@ -83,7 +73,7 @@ class _ProfileUserState extends State<ProfileUser> {
                     width: widget.width,
                     height: widget.height,
                     fit: BoxFit.cover,
-                    image: getProfile(storeProvider)),
+                    image: getProfile(signUpProvider)),
           ),
           !widget.editPicture! && widget.showAddButton!
               ? Positioned(

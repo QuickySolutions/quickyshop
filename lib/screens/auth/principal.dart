@@ -110,14 +110,20 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      UserCredential response =
-                          await _authenticationService.signInWithGoogle();
+                      try {
+                        final response =
+                            await _authenticationService.signInWithGoogle();
+                        _signUpProvider
+                            .setNameStore(response.user!.displayName!);
+                        _signUpProvider.setEmailStore(response.user!.email!);
+                        _signUpProvider
+                            .setPhotoProfile(response.user!.photoURL!);
+                        _signUpProvider.setSignedWithSocialMedia(true);
 
-                      _signUpProvider.setNameStore(response.user!.displayName!);
-                      _signUpProvider.setEmailStore(response.user!.email!);
-                      _signUpProvider.setPhotoProfile(response.user!.photoURL!);
-
-                      Navigator.pushNamed(context, '/send-code');
+                        Navigator.pushNamed(context, '/send-code');
+                      } catch (e) {
+                        _signUpProvider.setSignedWithSocialMedia(false);
+                      }
                     },
                     child: Image(
                         height: 40,

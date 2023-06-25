@@ -1,12 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class SignUpProvider extends ChangeNotifier {
   bool _isSignedWithSocialMedia = false;
+  late File _phisicalPhoto = File('');
 
   String _storeName = "";
   String _emailStore = "";
   String _passwordStore = "";
-  String _photoProfile = "";
+  String _photoProfile = "no_photo";
 
   String _cellPhoneStore = "";
 
@@ -21,6 +24,7 @@ class SignUpProvider extends ChangeNotifier {
   String get photoProfile => _photoProfile;
   String get emailStore => _emailStore;
   String get passwordStore => _passwordStore;
+  File get physicalPhoto => _phisicalPhoto;
 
   String get principalCategorySelected => _principalCategorySelected;
   String get subLevelSelected => _subLevelSelected;
@@ -28,8 +32,8 @@ class SignUpProvider extends ChangeNotifier {
 
   String get cellPhoneStore => _cellPhoneStore;
 
-  void setSignedWithSocialMedia() {
-    _isSignedWithSocialMedia = !_isSignedWithSocialMedia;
+  void setSignedWithSocialMedia(bool value) {
+    _isSignedWithSocialMedia = value;
     notifyListeners();
   }
 
@@ -40,6 +44,11 @@ class SignUpProvider extends ChangeNotifier {
 
   void setEmailStore(String valueEmailStore) {
     _emailStore = valueEmailStore;
+    notifyListeners();
+  }
+
+  void setPhisicalPhoto(File file) {
+    _phisicalPhoto = file;
     notifyListeners();
   }
 

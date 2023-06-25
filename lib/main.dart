@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/firebase/authentication.dart';
 import 'package:quickyshop/firebase_options.dart';
+import 'package:quickyshop/preferences/appPreferences.dart';
 
 import 'providers/photo/photo_provider.dart';
 import 'providers/signup/signup_provider.dart';
@@ -18,6 +19,7 @@ import 'screens/home/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AppPreferences.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -39,6 +41,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+        //initialRoute: AppPreferences.getIsLogin('isLogged')! ? '/home' : '/',
         initialRoute: '/',
         routes: {
           '/': (context) => const PrincipalScreen(),

@@ -68,27 +68,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
               ),
               SizedBox(height: 15),
-              QuickyTextField(
-                hintText: 'Contraseña',
-                prefixIcon: Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: getCustomIconToTextFieldInPrefx(
-                      'assets/icons/usability/key.png'),
-                ),
-                hideText: true,
-                onChanged: (String value) {},
-              ),
-              SizedBox(height: 15),
-              QuickyTextField(
-                hintText: 'Confirmar contraseña',
-                hideText: true,
-                prefixIcon: Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: getCustomIconToTextFieldInPrefx(
-                      'assets/icons/usability/key.png'),
-                ),
-                onChanged: (String value) {},
-              ),
+              !signUpProvider.isSignedWithSocialMedia
+                  ? Column(
+                      children: [
+                        QuickyTextField(
+                          hintText: 'Contraseña',
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: getCustomIconToTextFieldInPrefx(
+                                'assets/icons/usability/key.png'),
+                          ),
+                          hideText: true,
+                          onChanged: (String value) {},
+                        ),
+                        SizedBox(height: 15),
+                        QuickyTextField(
+                          hintText: 'Confirmar contraseña',
+                          hideText: true,
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: getCustomIconToTextFieldInPrefx(
+                                'assets/icons/usability/key.png'),
+                          ),
+                          onChanged: (String value) {},
+                        ),
+                      ],
+                    )
+                  : Container(),
               SizedBox(height: 30),
               Center(
                 child: Container(

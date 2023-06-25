@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:quickyshop/firebase/uploadFilesToFirebase.dart';
+import 'package:quickyshop/preferences/appPreferences.dart';
+import 'package:quickyshop/services/pictureSelectionService.dart';
 import '../../providers/signup/signup_provider.dart';
 import '../../services/storeService.dart';
 import '../../utils/Colors.dart';
@@ -17,6 +21,12 @@ class DefinePhotoCommerceScreen extends StatefulWidget {
 
 class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
   StoreService _storeService = StoreService();
+  PictureSelectionService _pictureSelectionService = PictureSelectionService();
+
+  bool isLoadingSaveData = false;
+
+  UploadFilesToFirebase _filesToFirebase = UploadFilesToFirebase();
+
   @override
   Widget build(BuildContext context) {
     final signUpProvider = Provider.of<SignUpProvider>(context);
@@ -45,7 +55,17 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
-            ProfileUser(),
+            SizedBox(height: 30),
+            ProfileUser(
+              height: 200,
+              width: 200,
+              onTap: () async {
+                final image = await _pictureSelectionService.pickImage();
+                final imageTemp = File(image.path);
+                signUpProvider.setPhisicalPhoto(imageTemp);
+                signUpProvider.setPhotoProfile(imageTemp.path);
+              },
+            ),
             SizedBox(height: 30),
             Container(
               height: 65,
@@ -58,7 +78,12 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
                       borderRadius: BorderRadius.circular(100),
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    await _filesToFirebase.uploadFile(
+                        signUpProvider.physicalPhoto,
+                        signUpProvider.storeName,
+                        signUpProvider);
+
                     Map<String, dynamic> storeData = {
                       'name': signUpProvider.storeName,
                       'email': signUpProvider.emailStore,
@@ -67,11 +92,18 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
                       'principal_category':
                           signUpProvider.principalCategorySelected,
                       'category': signUpProvider.subLevelSelected,
-                      'subcategory': signUpProvider.subSubLevelSelected
+                      'subcategory': signUpProvider.subSubLevelSelected,
+                      'photo': signUpProvider.photoProfile
                     };
 
-                    _storeService.registerStore(storeData);
+                    signUpProvider.setPhisicalPhoto(File(''));
 
+                    final response =
+                        await _storeService.registerStore(storeData);
+
+                    AppPreferences.setIsLogin('isLogged', true);
+                    AppPreferences.setIdBrand(
+                        'idBrand', response['data']['_id']);
                     Navigator.pushNamed(context, '/home');
                   },
                   child: Text(

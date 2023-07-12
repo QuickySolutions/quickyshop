@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quickyshop/firebase/authentication.dart';
 import 'package:quickyshop/firebase_options.dart';
 import 'package:quickyshop/preferences/appPreferences.dart';
+import 'package:quickyshop/providers/app/appProvider.dart';
 
 import 'providers/photo/photo_provider.dart';
 import 'providers/signup/signup_provider.dart';
@@ -35,14 +35,15 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => SignUpProvider()),
         ChangeNotifierProvider(create: (_) => PhotoProvider()),
-        ChangeNotifierProvider(create: (_) => StoreProvider())
+        ChangeNotifierProvider(create: (_) => StoreProvider()),
+        ChangeNotifierProvider(create: (_) => AppProvider())
       ],
       child: MaterialApp(
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
         //initialRoute: AppPreferences.getIsLogin('isLogged')! ? '/home' : '/',
-        initialRoute: '/',
+        initialRoute: '/home',
         routes: {
           '/': (context) => const PrincipalScreen(),
           '/send-code': (context) => SendCodeScreen(),

@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quickyshop/models/Store.dart';
+import 'package:quickyshop/models/Brand.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
 
 import '../../utils/Colors.dart';
 
-class StoreMiniCard extends StatelessWidget {
+class BrandMiniCard extends StatelessWidget {
   final bool isSelected;
-  final Store store;
-  const StoreMiniCard(
-      {super.key, this.isSelected = false, required this.store});
+  final Brand brand;
+  const BrandMiniCard(
+      {super.key, this.isSelected = false, required this.brand});
 
   @override
   Widget build(BuildContext context) {
     final appProvider = Provider.of<AppProvider>(context);
     return GestureDetector(
       onTap: () {
-        appProvider.selectStore(store);
+        appProvider.restoreBrandDefault();
       },
       child: Container(
         padding: EdgeInsets.all(10),
@@ -49,7 +49,7 @@ class StoreMiniCard extends StatelessWidget {
                   height: double.infinity,
                   width: 100,
                   fit: BoxFit.cover,
-                  image: NetworkImage(store.photo)),
+                  image: NetworkImage(brand.photo)),
             ),
             SizedBox(width: 5),
             Expanded(
@@ -59,13 +59,13 @@ class StoreMiniCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      store.name,
+                      brand.name,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontWeight: FontWeight.w700),
                     ),
                     SizedBox(height: 10),
                     Text(
-                      store.category,
+                      brand.category,
                       overflow: TextOverflow.ellipsis,
                     )
                   ],

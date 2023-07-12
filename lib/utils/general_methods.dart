@@ -13,12 +13,10 @@ Widget getCustomIconToTextFieldInPrefx(String pathAssetImage) {
   );
 }
 
-ImageProvider<Object> getProfile(SignUpProvider provider) {
-  if (provider.photoProfile == "no_photo") {
+ImageProvider<Object> getProfile(String photo) {
+  if (photo == "no_photo") {
     return AssetImage("assets/images/not-available.png");
-  } else if (provider.physicalPhoto.path.isNotEmpty) {
-    return AssetImage(provider.photoProfile);
   } else {
-    return NetworkImage(provider.photoProfile);
+    return NetworkImage(photo);
   }
 }

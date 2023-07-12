@@ -1,16 +1,17 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:quickyshop/models/Brand.dart';
 
 class SignUpProvider extends ChangeNotifier {
   bool _isSignedWithSocialMedia = false;
   late File _phisicalPhoto = File('');
+  late Brand _brand;
 
   String _storeName = "";
   String _emailStore = "";
   String _passwordStore = "";
   String _photoProfile = "no_photo";
-
   String _cellPhoneStore = "";
 
   //category selection
@@ -31,6 +32,8 @@ class SignUpProvider extends ChangeNotifier {
   String get subSubLevelSelected => _subSubLevelSelected;
 
   String get cellPhoneStore => _cellPhoneStore;
+
+  Brand get brand => _brand;
 
   void setSignedWithSocialMedia(bool value) {
     _isSignedWithSocialMedia = value;
@@ -79,6 +82,12 @@ class SignUpProvider extends ChangeNotifier {
 
   void selectedSubSubLevelCategory(String value) {
     _subSubLevelSelected = value;
+    notifyListeners();
+  }
+
+  void setBrandInformation(Map<String, dynamic> brandResponse) {
+    _brand = Brand.fromJSONResponse(brandResponse);
+    _photoProfile = _brand.photo;
     notifyListeners();
   }
 

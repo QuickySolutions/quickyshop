@@ -6,15 +6,18 @@ class Brand {
   String principalCategory;
   String category;
   String subCategory;
+  String photo;
 
-  Brand(
-      {required this.id,
-      required this.name,
-      required this.email,
-      required this.cellphone,
-      required this.principalCategory,
-      required this.category,
-      required this.subCategory});
+  Brand({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.cellphone,
+    required this.principalCategory,
+    required this.category,
+    required this.subCategory,
+    required this.photo,
+  });
 
   factory Brand.fromJSONResponse(Map<String, dynamic> response) {
     return Brand(
@@ -24,6 +27,7 @@ class Brand {
         cellphone: response['cellphone'],
         principalCategory: response['principal_category'],
         category: response['category'],
-        subCategory: response['subcategory']);
+        subCategory: response['subcategory'],
+        photo: response['photo']);
   }
 }

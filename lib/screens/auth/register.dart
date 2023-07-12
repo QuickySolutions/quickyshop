@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quickyshop/providers/app/appProvider.dart';
 
 import '../../providers/signup/signup_provider.dart';
 import '../../utils/Colors.dart';
@@ -23,6 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final signUpProvider = Provider.of<SignUpProvider>(context);
+    final appProvider = Provider.of<AppProvider>(context);
 
     return QuickyAuthScaffold(
       currentScreenType: 'register',
@@ -44,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               SizedBox(height: 40),
               QuickyTextField(
                 defaultValue: signUpProvider.storeName,
-                hintText: 'Nombre completo',
+                hintText: 'Nombre de Tienda',
                 prefixIcon: Padding(
                   padding: EdgeInsets.only(left: 10),
                   child: getCustomIconToTextFieldInPrefx(
@@ -56,8 +58,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               SizedBox(height: 15),
               QuickyTextField(
-                defaultValue: signUpProvider.emailStore,
-                hintText: 'Correo Electronico',
+                defaultValue: appProvider.wantToAddNewStore
+                    ? signUpProvider.brand.email
+                    : signUpProvider.emailStore,
+                hintText: 'Correo de Tienda',
                 prefixIcon: Padding(
                   padding: EdgeInsets.only(left: 10),
                   child: getCustomIconToTextFieldInPrefx(
@@ -68,7 +72,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
               ),
               SizedBox(height: 15),
-              !signUpProvider.isSignedWithSocialMedia
+              !signUpProvider.isSignedWithSocialMedia &&
+                      appProvider.wantToAddNewStore == false
                   ? Column(
                       children: [
                         QuickyTextField(
@@ -109,7 +114,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       onPressed: () async {
-                        Navigator.pushNamed(context, '/select/category');
+                        if (appProvider.wantToAddNewStore) {
+                          Navigator.pushNamed(context, '/select/photo');
+                        } else {
+                          Navigator.pushNamed(context, '/select/category');
+                        }
                       },
                       child: Text(
                         'Registrarse',

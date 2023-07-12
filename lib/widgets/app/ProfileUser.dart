@@ -1,13 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-// import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/providers/signup/signup_provider.dart';
 
 import '../../providers/photo/photo_provider.dart';
-import '../../providers/store/store_provider.dart';
-import '../../services/pictureSelectionService.dart';
 import '../../utils/Colors.dart';
 import '../../utils/general_methods.dart';
 
@@ -37,13 +36,26 @@ class ProfileUser extends StatefulWidget {
 class _ProfileUserState extends State<ProfileUser> {
   late File imageFile;
   bool pickedImage = false;
-  File? image;
-  //PictureSelectionService _pictureSelectionService = PictureSelectionService();
+
+  // Get from gallery
+  _getFromGallery() async {
+    final providerPhoto = Provider.of<PhotoProvider>(context, listen: false);
+    PickedFile? pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+    if (pickedFile != null) {
+      providerPhoto.setImage(File(pickedFile.path));
+      providerPhoto.setPicketPicture(true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final clientProvider = Provider.of<SignUpProvider>(context);
     final photoProvider = Provider.of<PhotoProvider>(context);
-    final signUpProvider = Provider.of<SignUpProvider>(context);
+    final appProvider = Provider.of<AppProvider>(context);
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
@@ -62,7 +74,7 @@ class _ProfileUserState extends State<ProfileUser> {
           ),
           ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(100)),
-            child: widget.editPicture!
+            child: widget.editPicture! && photoProvider.pickedPicture
                 ? Image.file(
                     photoProvider.photo!,
                     width: widget.width,
@@ -73,7 +85,11 @@ class _ProfileUserState extends State<ProfileUser> {
                     width: widget.width,
                     height: widget.height,
                     fit: BoxFit.cover,
-                    image: getProfile(signUpProvider)),
+                    image: getProfile(appProvider.hasSelectedBrand
+                        ? appProvider.brandDefault.photo
+                        : appProvider.hasSelectedStore
+                            ? appProvider.storeSelected.photo
+                            : clientProvider.photoProfile)),
           ),
           !widget.editPicture! && widget.showAddButton!
               ? Positioned(
@@ -82,7 +98,7 @@ class _ProfileUserState extends State<ProfileUser> {
                   child: Image(
                     height: 30,
                     width: 30,
-                    image: AssetImage('assets/icons/usability/plusButton.png'),
+                    image: AssetImage('assets/quicky/icons/plusButton.png'),
                   ),
                 )
               : Container(),
@@ -92,7 +108,7 @@ class _ProfileUserState extends State<ProfileUser> {
                   right: 5,
                   child: GestureDetector(
                     onTap: () {
-                      //_getFromGallery();
+                      _getFromGallery();
                     },
                     child: CircleAvatar(
                       radius: 15,
@@ -117,8 +133,8 @@ class _ProfileUserState extends State<ProfileUser> {
                     child: Image(
                       height: 35,
                       width: 35,
-                      image: AssetImage(
-                          'assets/icons/usability/exitAppCircular.png'),
+                      image:
+                          AssetImage('assets/quicky/icons/exitAppCircular.png'),
                     ),
                   ),
                 )

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quickyshop/providers/app/appProvider.dart';
 
 import '../../providers/signup/signup_provider.dart';
 import '../../utils/Colors.dart';
@@ -18,9 +19,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   //String _secondPassword = "";
   bool wantToSeePassword = false;
   bool wantToSeePassword2 = false;
+
+  final TextEditingController _nameStoreController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final signUpProvider = Provider.of<SignUpProvider>(context);
+    final appProvider = Provider.of<AppProvider>(context);
+
     return QuickyAuthScaffold(
       currentScreenType: 'register',
       contentScreen: Scaffold(
@@ -40,7 +45,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               SizedBox(height: 40),
               QuickyTextField(
-                hintText: 'Nombre completo',
+                defaultValue: signUpProvider.storeName,
+                hintText: 'Nombre de Tienda',
                 prefixIcon: Padding(
                   padding: EdgeInsets.only(left: 10),
                   child: getCustomIconToTextFieldInPrefx(
@@ -51,104 +57,61 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
               ),
               SizedBox(height: 15),
-              TextField(
-                onChanged: (value) {
-                  signUpProvider.setEmailStore(value);
-                },
-                decoration: InputDecoration(
-                  hintStyle: TextStyle(color: Colors.black),
-                  prefixIcon: Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: getCustomIconToTextFieldInPrefx(
-                          'assets/icons/usability/mail.png')),
-                  hintText: 'Correo electrónico',
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(50),
-                  ),
+              QuickyTextField(
+                defaultValue: appProvider.wantToAddNewStore
+                    ? appProvider.brandDefault.email
+                    : signUpProvider.emailStore,
+                hintText: 'Correo de Tienda',
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: getCustomIconToTextFieldInPrefx(
+                      'assets/icons/usability/mail.png'),
                 ),
+                onChanged: (String value) {
+                  signUpProvider.setNameStore(value);
+                },
               ),
               SizedBox(height: 15),
-              TextField(
-                obscureText: wantToSeePassword ? false : true,
-                onChanged: (value) {
-                  signUpProvider.setPasswordStore(value);
+              QuickyTextField(
+                hintText: 'Ubicación',
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: getCustomIconToTextFieldInPrefx(
+                      'assets/icons/usability/home.png'),
+                ),
+                onChanged: (String value) {
+                  signUpProvider.setLocation(value);
                 },
-                decoration: InputDecoration(
-                  hintStyle: TextStyle(color: Colors.black),
-                  prefixIcon: Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: getCustomIconToTextFieldInPrefx(
-                          'assets/icons/usability/key.png')),
-                  suffixIcon: !wantToSeePassword
-                      ? GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              wantToSeePassword = !wantToSeePassword;
-                            });
-                          },
-                          child: Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child: Icon(Icons.remove_red_eye)),
-                        )
-                      : GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              wantToSeePassword = !wantToSeePassword;
-                            });
-                          },
-                          child: Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child: Icon(Icons.visibility_off)),
+              ),
+              SizedBox(height: 15),
+              !signUpProvider.isSignedWithSocialMedia &&
+                      appProvider.wantToAddNewStore == false
+                  ? Column(
+                      children: [
+                        QuickyTextField(
+                          hintText: 'Contraseña',
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: getCustomIconToTextFieldInPrefx(
+                                'assets/icons/usability/key.png'),
+                          ),
+                          hideText: true,
+                          onChanged: (String value) {},
                         ),
-                  hintText: 'Contraseña',
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              // TextField(
-              //   obscureText: wantToSeePassword2 ? false : true,
-              //   onChanged: (value) {
-              //     setState(() {
-              //       _secondPassword = value;
-              //     });
-              //   },
-              //   decoration: InputDecoration(
-              //     hintStyle: TextStyle(color: Colors.black),
-              //     prefixIcon: Padding(
-              //         padding: EdgeInsets.only(left: 10),
-              //         child: getCustomIconToTextFieldInPrefx(
-              //             'assets/icons/usability/key.png')),
-              //     suffixIcon: !wantToSeePassword2
-              //         ? GestureDetector(
-              //             onTap: () {
-              //               setState(() {
-              //                 wantToSeePassword2 = !wantToSeePassword2;
-              //               });
-              //             },
-              //             child: Padding(
-              //                 padding: EdgeInsets.only(right: 10),
-              //                 child: Icon(Icons.remove_red_eye)),
-              //           )
-              //         : GestureDetector(
-              //             onTap: () {},
-              //             child: Padding(
-              //                 padding: EdgeInsets.only(right: 10),
-              //                 child: Icon(Icons.visibility_off)),
-              //           ),
-              //     hintText: 'Confirmar contraseña',
-              //     filled: true,
-              //     border: OutlineInputBorder(
-              //       borderSide: BorderSide.none,
-              //       borderRadius: BorderRadius.circular(50),
-              //     ),
-              //   ),
-              // ),
+                        SizedBox(height: 15),
+                        QuickyTextField(
+                          hintText: 'Confirmar contraseña',
+                          hideText: true,
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: getCustomIconToTextFieldInPrefx(
+                                'assets/icons/usability/key.png'),
+                          ),
+                          onChanged: (String value) {},
+                        ),
+                      ],
+                    )
+                  : Container(),
               SizedBox(height: 30),
               Center(
                 child: Container(
@@ -163,7 +126,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       onPressed: () async {
-                        Navigator.pushNamed(context, '/select/category');
+                        if (appProvider.wantToAddNewStore) {
+                          Navigator.pushNamed(context, '/select/photo');
+                        } else {
+                          Navigator.pushNamed(context, '/select/category');
+                        }
                       },
                       child: Text(
                         'Registrarse',

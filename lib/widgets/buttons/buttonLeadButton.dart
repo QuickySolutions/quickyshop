@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quickyshop/providers/app/appProvider.dart';
 
 class ButtonLeadButton extends StatelessWidget {
   const ButtonLeadButton({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final appProvider = Provider.of<AppProvider>(context);
     return Container(
         width: MediaQuery.of(context).size.width * 0.90,
         child: Stack(
@@ -24,7 +27,8 @@ class ButtonLeadButton extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/home');
+                      appProvider.setWantToAddNewStore(true);
+                      Navigator.pushNamed(context, '/register');
                     },
                     child: Text(
                       'Agregar tienda',

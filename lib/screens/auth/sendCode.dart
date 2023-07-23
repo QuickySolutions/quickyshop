@@ -87,8 +87,7 @@ class _SendCodeScreenState extends State<SendCodeScreen> {
                                 .verifyNumberStoreToSendSMS(data);
 
                             if (!response['exist']) {
-                              signUpProvider
-                                  .setNumberCellPhone(numericPhone as int);
+                              signUpProvider.setNumberCellPhone(numericPhone);
                               Navigator.pushNamed(context, '/confirm-code',
                                   arguments: {'code': code});
                             } else {

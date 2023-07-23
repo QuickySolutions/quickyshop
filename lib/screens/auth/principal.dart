@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quickyshop/firebase/authentication.dart';
+import 'package:quickyshop/providers/signup/signup_provider.dart';
 
 import '../../utils/Colors.dart';
 import '../../widgets/scaffolds/authScaffold.dart';
@@ -11,8 +15,11 @@ class PrincipalScreen extends StatefulWidget {
 }
 
 class _PrincipalScreenState extends State<PrincipalScreen> {
+  AuthenticationService _authenticationService = AuthenticationService();
+
   @override
   Widget build(BuildContext context) {
+    final _signUpProvider = Provider.of<SignUpProvider>(context);
     return QuickyAuthScaffold(
       currentScreenType: 'principal',
       contentScreen: Container(
@@ -92,14 +99,32 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () async {
+                      final response =
+                          await _authenticationService.signInWithFacebook();
+                    },
                     child: Image(
                         height: 40,
                         width: 40,
                         image: AssetImage('assets/icons/auth/facebook.png')),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () async {
+                      try {
+                        final response =
+                            await _authenticationService.signInWithGoogle();
+                        _signUpProvider
+                            .setNameStore(response.user!.displayName!);
+                        _signUpProvider.setEmailStore(response.user!.email!);
+                        _signUpProvider
+                            .setPhotoProfile(response.user!.photoURL!);
+                        _signUpProvider.setSignedWithSocialMedia(true);
+
+                        Navigator.pushNamed(context, '/send-code');
+                      } catch (e) {
+                        _signUpProvider.setSignedWithSocialMedia(false);
+                      }
+                    },
                     child: Image(
                         height: 40,
                         width: 40,

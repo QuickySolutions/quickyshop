@@ -1,6 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:quickyshop/firebase/uploadFilesToFirebase.dart';
+import 'package:quickyshop/preferences/appPreferences.dart';
+import 'package:quickyshop/providers/app/appProvider.dart';
+import 'package:quickyshop/providers/photo/photo_provider.dart';
+import 'package:quickyshop/services/brandService.dart';
+import 'package:quickyshop/services/pictureSelectionService.dart';
 import '../../providers/signup/signup_provider.dart';
 import '../../services/storeService.dart';
 import '../../utils/Colors.dart';
@@ -17,9 +24,53 @@ class DefinePhotoCommerceScreen extends StatefulWidget {
 
 class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
   StoreService _storeService = StoreService();
+  PictureSelectionService _pictureSelectionService = PictureSelectionService();
+  BrandService _brandService = BrandService();
+  bool isLoadingSaveData = false;
+
+  UploadFilesToFirebase _filesToFirebase = UploadFilesToFirebase();
+
+  void createBranchOrBranchOffice(SignUpProvider signUpProvider,
+      AppProvider appProvider, String photoUrl) async {
+    Map<String, dynamic> storeData = {
+      'name': signUpProvider.storeName,
+      'email': appProvider.wantToAddNewStore
+          ? appProvider.brandDefault.email
+          : signUpProvider.emailStore,
+      'password': signUpProvider.passwordStore,
+      'location': signUpProvider.storeLocation,
+      'cellphone': signUpProvider.cellPhoneStore,
+      'principal_category': appProvider.wantToAddNewStore
+          ? appProvider.brandDefault.principalCategory
+          : signUpProvider.principalCategorySelected,
+      'category': appProvider.wantToAddNewStore
+          ? appProvider.brandDefault.category
+          : signUpProvider.subLevelSelected,
+      'subcategory': appProvider.wantToAddNewStore
+          ? appProvider.brandDefault.subCategory
+          : signUpProvider.subSubLevelSelected,
+      'photo': photoUrl,
+      'brandId':
+          appProvider.wantToAddNewStore ? appProvider.brandDefault.id : null
+    };
+
+    if (!appProvider.wantToAddNewStore) {
+      final response = await _storeService.createBranch(storeData);
+
+      AppPreferences.setIsLogin('isLogged', true);
+      AppPreferences.setIdBrand('idBrand', response['data']['_id']);
+      signUpProvider.setPhotoProfile(photoUrl);
+    } else {
+      await _brandService.createBranchOffice(
+          appProvider.brandDefault.id, storeData);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final signUpProvider = Provider.of<SignUpProvider>(context);
+    final photoProvider = Provider.of<PhotoProvider>(context);
+    final appProvider = Provider.of<AppProvider>(context);
     return QuickyAuthScaffold(
       currentScreenType: 'register',
       contentScreen: Container(
@@ -45,7 +96,15 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
-            ProfileUser(),
+            SizedBox(height: 30),
+            Container(
+              width: 280,
+              child: ProfileUser(
+                height: 200,
+                width: 200,
+                editPicture: true,
+              ),
+            ),
             SizedBox(height: 30),
             Container(
               height: 65,
@@ -58,21 +117,18 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
                       borderRadius: BorderRadius.circular(100),
                     ),
                   ),
-                  onPressed: () {
-                    Map<String, dynamic> storeData = {
-                      'name': signUpProvider.storeName,
-                      'email': signUpProvider.emailStore,
-                      'password': signUpProvider.passwordStore,
-                      'cellphone': signUpProvider.cellPhoneStore,
-                      'principal_category':
-                          signUpProvider.principalCategorySelected,
-                      'category': signUpProvider.subLevelSelected,
-                      'subcategory': signUpProvider.subSubLevelSelected
-                    };
-
-                    _storeService.registerStore(storeData);
-
+                  onPressed: () async {
+                    String url = await _filesToFirebase.uploadFile(
+                        photoProvider.photo!,
+                        signUpProvider.storeName,
+                        signUpProvider,
+                        photoProvider,
+                        appProvider.wantToAddNewStore);
+                    createBranchOrBranchOffice(
+                        signUpProvider, appProvider, url);
+                    signUpProvider.setPhotoProfile(url);
                     Navigator.pushNamed(context, '/home');
+                    photoProvider.uploadPicToFirebase(false);
                   },
                   child: Text(
                     'Guardar',

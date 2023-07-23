@@ -5,16 +5,12 @@ import '../utils/api.dart';
 class StoreService {
   Dio _dio = Dio();
 
-  Future<Map<String, dynamic>> registerStore(
+  Future<Map<String, dynamic>> createBranch(
       Map<String, dynamic> storeData) async {
-    late Map<String, dynamic> responseMap = {};
+    Response response =
+        await _dio.post(ApiUrl.LOCAL_API + '/stores/brand', data: storeData);
 
-    Response response = await _dio
-        .post(ApiUrl.LOCAL_API + '/stores/addBrandStore', data: storeData);
-
-    print(response.data);
-
-    return responseMap;
+    return response.data;
   }
 
   Future<Map<String, dynamic>> verifyNumberStoreToSendSMS(
@@ -31,5 +27,14 @@ class StoreService {
     }
 
     return responseMap;
+  }
+
+  Future<void> changeStatusStore(String id, bool status) async {
+    try {
+      await _dio.put(ApiUrl.LOCAL_API + '/stores/${id}/change/status',
+          data: {'status': status});
+    } catch (e) {
+      print(e);
+    }
   }
 }

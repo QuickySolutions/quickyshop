@@ -1,62 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quickyshop/models/Store.dart';
+import 'package:quickyshop/providers/app/appProvider.dart';
 
 import '../../utils/Colors.dart';
 
 class StoreMiniCard extends StatelessWidget {
   final bool isSelected;
-  const StoreMiniCard({super.key, this.isSelected = false});
+  final Store store;
+  const StoreMiniCard(
+      {super.key, this.isSelected = false, required this.store});
 
   @override
   Widget build(BuildContext context) {
-    int completeSize = 70;
-    return Container(
-      width: 100,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.white,
-          boxShadow: [
-            isSelected
-                ? BoxShadow(
-                    color: Colors.grey.withOpacity(0.5), //color of shadow
-                    spreadRadius: 2, //spread radius
-                    blurRadius: 2, // blur radius
-                    offset: Offset(0, 1), // changes position of shadow
-                    //first paramerter of offset is left-right
-                    //second parameter is top to down
-                  )
-                : BoxShadow()
-          ]),
-      margin: EdgeInsets.only(right: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Stack(alignment: Alignment.center, children: [
-            SizedBox(
-              height: (completeSize + 10),
-              width: (completeSize + 10),
-              child: CircularProgressIndicator(
-                backgroundColor: QuickyColors.greyColor,
-                strokeWidth: 3,
-                color: QuickyColors.primaryColor,
-                value: .30,
-              ),
-            ),
+    final appProvider = Provider.of<AppProvider>(context);
+    return GestureDetector(
+      onTap: () {
+        appProvider.selectStore(store);
+      },
+      child: Container(
+        padding: EdgeInsets.all(10),
+        width: 280,
+        margin: EdgeInsets.only(right: 20),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white,
+            boxShadow: [
+              isSelected
+                  ? BoxShadow(
+                      color: QuickyColors.primaryColor,
+                      spreadRadius: 1,
+                      blurRadius: 1,
+                      offset: Offset(0, 1),
+                    )
+                  : BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 1,
+                      offset: Offset(0, 1),
+                    )
+            ]),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(100)),
-                child: Image(
-                  height: completeSize.toDouble(),
-                  width: completeSize.toDouble(),
+              borderRadius: BorderRadius.circular(10),
+              child: Image(
+                  height: double.infinity,
+                  width: 100,
                   fit: BoxFit.cover,
-                  image: NetworkImage(
-                      'https://cnnespanol.cnn.com/wp-content/uploads/2022/09/220912105429-01-burger-king-signs-021522-file-full-169.jpg?quality=100&strip=info'),
-                )),
-          ]),
-          SizedBox(height: 10),
-          Text(
-            'LGV',
-            style: TextStyle(fontSize: 16),
-          )
-        ],
+                  image: NetworkImage(store.photo)),
+            ),
+            SizedBox(width: 5),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.only(top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      store.name,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      store.category,
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

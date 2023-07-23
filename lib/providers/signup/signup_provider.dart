@@ -1,29 +1,54 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:quickyshop/models/Brand.dart';
 
 class SignUpProvider extends ChangeNotifier {
+  bool _isSignedWithSocialMedia = false;
+  late File _phisicalPhoto = File('');
+  late Brand _brand;
+
   String _storeName = "";
+  String _storeLocation = "";
   String _emailStore = "";
   String _passwordStore = "";
-
-  int _cellPhoneStore = 0;
+  String _photoProfile = "no_photo";
+  String _cellPhoneStore = "";
 
   //category selection
   String _principalCategorySelected = "";
   String _subLevelSelected = "";
   String _subSubLevelSelected = "";
 
+  bool get isSignedWithSocialMedia => _isSignedWithSocialMedia;
+
   String get storeName => _storeName;
+  String get photoProfile => _photoProfile;
+  String get storeLocation => _storeLocation;
   String get emailStore => _emailStore;
   String get passwordStore => _passwordStore;
+  File get physicalPhoto => _phisicalPhoto;
 
   String get principalCategorySelected => _principalCategorySelected;
   String get subLevelSelected => _subLevelSelected;
   String get subSubLevelSelected => _subSubLevelSelected;
 
-  int get cellPhoneStore => _cellPhoneStore;
+  String get cellPhoneStore => _cellPhoneStore;
+
+  Brand get brand => _brand;
+
+  void setSignedWithSocialMedia(bool value) {
+    _isSignedWithSocialMedia = value;
+    notifyListeners();
+  }
 
   void setNameStore(String valueNameStore) {
     _storeName = valueNameStore;
+    notifyListeners();
+  }
+
+  void setLocation(String valueLocationStore) {
+    _storeLocation = valueLocationStore;
     notifyListeners();
   }
 
@@ -32,12 +57,22 @@ class SignUpProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setPhisicalPhoto(File file) {
+    _phisicalPhoto = file;
+    notifyListeners();
+  }
+
+  void setPhotoProfile(String photoProfileValue) {
+    _photoProfile = photoProfileValue;
+    notifyListeners();
+  }
+
   void setPasswordStore(String valuePasswordStore) {
     _passwordStore = valuePasswordStore;
     notifyListeners();
   }
 
-  void setNumberCellPhone(int numberStore) {
+  void setNumberCellPhone(String numberStore) {
     _cellPhoneStore = numberStore;
     notifyListeners();
   }
@@ -54,6 +89,12 @@ class SignUpProvider extends ChangeNotifier {
 
   void selectedSubSubLevelCategory(String value) {
     _subSubLevelSelected = value;
+    notifyListeners();
+  }
+
+  void setBrandInformation(Map<String, dynamic> brandResponse) {
+    _brand = Brand.fromJSONResponse(brandResponse);
+    _photoProfile = _brand.photo;
     notifyListeners();
   }
 

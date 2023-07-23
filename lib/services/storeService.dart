@@ -5,7 +5,7 @@ import '../utils/api.dart';
 class StoreService {
   Dio _dio = Dio();
 
-  Future<Map<String, dynamic>> registerStore(
+  Future<Map<String, dynamic>> createBranch(
       Map<String, dynamic> storeData) async {
     Response response =
         await _dio.post(ApiUrl.LOCAL_API + '/stores/brand', data: storeData);
@@ -27,5 +27,14 @@ class StoreService {
     }
 
     return responseMap;
+  }
+
+  Future<void> changeStatusStore(String id, bool status) async {
+    try {
+      await _dio.put(ApiUrl.LOCAL_API + '/stores/${id}/change/status',
+          data: {'status': status});
+    } catch (e) {
+      print(e);
+    }
   }
 }

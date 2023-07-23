@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   final BrandService _brandService = BrandService();
   int selectedStore = -1;
 
-  void getBrandInformation() async {
+  Future<void> getBrandInformation() async {
     //final signupProvider = Provider.of<SignUpProvider>(context, listen: false);
     final appProvider = Provider.of<AppProvider>(context, listen: false);
     final Map<String, dynamic> brand =
@@ -50,253 +50,299 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: isLoadingBrandInformation
-          ? Center(
-              child: Text('Cargando información'),
-            )
-          : SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.only(
-                  top: 50,
+          ? RefreshIndicator(
+              onRefresh: getBrandInformation,
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: Center(
+                    child: Text('Cargando información'),
+                  ),
                 ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'Tienda',
-                                style:
-                                    TextStyle(fontSize: 25, color: Colors.grey),
-                              ),
-                              SizedBox(width: 5),
-                              Text(
-                                'Principal',
-                                style: TextStyle(
-                                    fontSize: 25, color: Colors.black),
-                              )
-                            ],
-                          ),
-                          ProfileUser()
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    FutureBuilder(
-                        future: _brandService
-                            .branchOfficesByBrand("64989445c41230ffd2539f89"),
-                        builder:
-                            (context, AsyncSnapshot<List<Store>> snapshot) {
-                          if (snapshot.hasData) {
-                            return Container(
-                              height: 120,
-                              child: ListView(
-                                padding: EdgeInsets.only(
-                                    top: 5, bottom: 5, left: 20),
-                                scrollDirection: Axis.horizontal,
-                                children: <Widget>[
-                                  BrandMiniCard(
-                                    brand: appProvider.brandDefault,
-                                    isSelected: appProvider.hasSelectedBrand &&
-                                        !appProvider.hasSelectedStore,
-                                  ),
+              ),
+            )
+          : RefreshIndicator(
+              onRefresh: getBrandInformation,
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Container(
+                  padding: EdgeInsets.only(
+                    top: 50,
+                  ),
+                  child: Column(
+                    children: [
+                      appProvider.hasSelectedBrand
+                          ? Container(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
                                   Row(
-                                      children: snapshot.data!.map((e) {
-                                    return StoreMiniCard(
-                                        store: e,
-                                        isSelected: appProvider.hasSelectedStore
-                                            ? e.id ==
-                                                appProvider.storeSelected.id
-                                            : false);
-                                  }).toList()),
+                                    children: [
+                                      Text(
+                                        'Tienda',
+                                        style: TextStyle(
+                                            fontSize: 25, color: Colors.grey),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        'Principal',
+                                        style: TextStyle(
+                                            fontSize: 25, color: Colors.black),
+                                      )
+                                    ],
+                                  ),
+                                  ProfileUser(
+                                    onTap: () {
+                                      Navigator.pushNamed(context, '/profile');
+                                    },
+                                  )
                                 ],
                               ),
-                            );
-                          } else {
-                            return CircularProgressIndicator();
-                          }
-                        }),
-                    SizedBox(height: 10),
-                    ButtonLeadButton(),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Image(
-                        image: AssetImage('assets/images/example-graph.png'),
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Encuesta más popular: ',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w500),
-                          ),
-                          Text(
-                            'Ver todas',
-                            style: TextStyle(
-                                color: Colors.grey,
-                                decoration: TextDecoration.underline),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: 120,
-                            height: 120,
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                padding: EdgeInsets.only(bottom: 8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.2),
-                                      spreadRadius: 2,
-                                      blurRadius: 2,
-                                      offset: Offset(
-                                          0, 3), // changes position of shadow
+                            )
+                          : Container(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      appProvider.storeSelected.name,
+                                      style: TextStyle(
+                                          fontSize: 25, color: Colors.grey),
                                     ),
-                                  ],
-                                  color: Colors.white,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    SizedBox(height: 10),
-                                    Text('Ver encuestas',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w700,
-                                            overflow: TextOverflow.ellipsis))
-                                  ],
-                                ),
+                                  ),
+                                  ProfileUser(
+                                    onTap: () {
+                                      Navigator.pushNamed(context, '/profile');
+                                    },
+                                  )
+                                ],
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 120,
-                            height: 120,
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                padding: EdgeInsets.only(bottom: 8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.2),
-                                      spreadRadius: 2,
-                                      blurRadius: 2,
-                                      offset: Offset(0, 3),
+                      SizedBox(height: 20),
+                      FutureBuilder(
+                          future: _brandService
+                              .branchOfficesByBrand("64989445c41230ffd2539f89"),
+                          builder:
+                              (context, AsyncSnapshot<List<Store>> snapshot) {
+                            if (snapshot.hasData) {
+                              return Container(
+                                height: 120,
+                                child: ListView(
+                                  padding: EdgeInsets.only(
+                                      top: 5, bottom: 5, left: 20),
+                                  scrollDirection: Axis.horizontal,
+                                  children: <Widget>[
+                                    BrandMiniCard(
+                                      brand: appProvider.brandDefault,
+                                      isSelected:
+                                          appProvider.hasSelectedBrand &&
+                                              !appProvider.hasSelectedStore,
                                     ),
-                                  ],
-                                  color: Colors.white,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    SizedBox(height: 10),
-                                    Text('Cupones',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w700,
-                                            overflow: TextOverflow.ellipsis))
+                                    Row(
+                                        children: snapshot.data!.map((e) {
+                                      return StoreMiniCard(
+                                          store: e,
+                                          isSelected: appProvider
+                                                  .hasSelectedStore
+                                              ? e.id ==
+                                                  appProvider.storeSelected.id
+                                              : false);
+                                    }).toList()),
                                   ],
                                 ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 120,
-                            height: 120,
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                padding: EdgeInsets.only(bottom: 8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.2),
-                                      spreadRadius: 2,
-                                      blurRadius: 2,
-                                      offset: Offset(0, 3),
-                                    ),
-                                  ],
-                                  color: Colors.white,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    SizedBox(height: 10),
-                                    Text('Estadisticas',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w700,
-                                            overflow: TextOverflow.ellipsis))
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                              );
+                            } else {
+                              return CircularProgressIndicator();
+                            }
+                          }),
+                      SizedBox(height: 10),
+                      !appProvider.hasSelectedStore
+                          ? ButtonLeadButton()
+                          : Container(),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Image(
+                          image: AssetImage('assets/images/example-graph.png'),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 30),
-                    Container(
-                      height: 65,
-                      width: MediaQuery.of(context).size.width * 0.85,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor: QuickyColors.primaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
+                      SizedBox(height: 30),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Encuesta más popular: ',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w500),
                             ),
-                          ),
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/home');
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '+',
-                                style: TextStyle(
-                                    fontSize: 17,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500),
+                            Text(
+                              'Ver todas',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  decoration: TextDecoration.underline),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 30),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 120,
+                              height: 120,
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  padding: EdgeInsets.only(bottom: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        spreadRadius: 2,
+                                        blurRadius: 2,
+                                        offset: Offset(
+                                            0, 3), // changes position of shadow
+                                      ),
+                                    ],
+                                    color: Colors.white,
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      SizedBox(height: 10),
+                                      Text('Ver encuestas',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700,
+                                              overflow: TextOverflow.ellipsis))
+                                    ],
+                                  ),
+                                ),
                               ),
-                              SizedBox(width: 10),
-                              Text(
-                                'Crear nueva encuesta',
-                                style: TextStyle(
-                                    fontSize: 17,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500),
-                              )
-                            ],
-                          )),
-                    ),
-                  ],
+                            ),
+                            SizedBox(
+                              width: 120,
+                              height: 120,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/coupons');
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.only(bottom: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        spreadRadius: 2,
+                                        blurRadius: 2,
+                                        offset: Offset(0, 3),
+                                      ),
+                                    ],
+                                    color: Colors.white,
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      SizedBox(height: 10),
+                                      Text('Cupones',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700,
+                                              overflow: TextOverflow.ellipsis))
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 120,
+                              height: 120,
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  padding: EdgeInsets.only(bottom: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        spreadRadius: 2,
+                                        blurRadius: 2,
+                                        offset: Offset(0, 3),
+                                      ),
+                                    ],
+                                    color: Colors.white,
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      SizedBox(height: 10),
+                                      Text('Estadisticas',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700,
+                                              overflow: TextOverflow.ellipsis))
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 30),
+                      Container(
+                        height: 65,
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              backgroundColor: QuickyColors.primaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/home');
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '+',
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Crear nueva encuesta',
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500),
+                                )
+                              ],
+                            )),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

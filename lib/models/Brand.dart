@@ -30,4 +30,16 @@ class Brand {
         subCategory: response['subcategory'],
         photo: response['photo']);
   }
+
+  factory Brand.init() {
+    return Brand(
+        id: '',
+        name: '',
+        email: '',
+        cellphone: '',
+        principalCategory: '',
+        category: '',
+        subCategory: '',
+        photo: 'photo');
+  }
 }

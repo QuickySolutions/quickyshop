@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:quickyshop/firebase_options.dart';
 import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
+import 'package:quickyshop/providers/coupons/coupon_provider.dart';
+import 'package:quickyshop/screens/coupons/coupons-list.dart';
+import 'package:quickyshop/screens/profile/profile.dart';
 
 import 'providers/photo/photo_provider.dart';
 import 'providers/signup/signup_provider.dart';
@@ -36,6 +39,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SignUpProvider()),
         ChangeNotifierProvider(create: (_) => PhotoProvider()),
         ChangeNotifierProvider(create: (_) => StoreProvider()),
+        ChangeNotifierProvider(create: (_) => CouponProvider()),
         ChangeNotifierProvider(create: (_) => AppProvider())
       ],
       child: MaterialApp(
@@ -52,7 +56,9 @@ class MyApp extends StatelessWidget {
           '/select/category': (context) => DefineCategoryScreen(),
           '/select/photo': (context) => DefinePhotoCommerceScreen(),
           '/login': (context) => const LoginScreen(),
-          '/home': (context) => HomePage()
+          '/home': (context) => HomePage(),
+          '/coupons': (context) => CouponsListScreeen(),
+          '/profile': (context) => ProfileScreen()
         },
       ),
     );

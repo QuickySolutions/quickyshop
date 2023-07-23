@@ -59,7 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               SizedBox(height: 15),
               QuickyTextField(
                 defaultValue: appProvider.wantToAddNewStore
-                    ? signUpProvider.brand.email
+                    ? appProvider.brandDefault.email
                     : signUpProvider.emailStore,
                 hintText: 'Correo de Tienda',
                 prefixIcon: Padding(
@@ -69,6 +69,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 onChanged: (String value) {
                   signUpProvider.setNameStore(value);
+                },
+              ),
+              SizedBox(height: 15),
+              QuickyTextField(
+                hintText: 'Ubicación',
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: getCustomIconToTextFieldInPrefx(
+                      'assets/icons/usability/home.png'),
+                ),
+                onChanged: (String value) {
+                  signUpProvider.setLocation(value);
                 },
               ),
               SizedBox(height: 15),

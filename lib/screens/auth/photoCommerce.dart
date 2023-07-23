@@ -34,31 +34,35 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
       AppProvider appProvider, String photoUrl) async {
     Map<String, dynamic> storeData = {
       'name': signUpProvider.storeName,
-      'email': signUpProvider.emailStore,
+      'email': appProvider.wantToAddNewStore
+          ? appProvider.brandDefault.email
+          : signUpProvider.emailStore,
       'password': signUpProvider.passwordStore,
+      'location': signUpProvider.storeLocation,
       'cellphone': signUpProvider.cellPhoneStore,
       'principal_category': appProvider.wantToAddNewStore
-          ? signUpProvider.brand.principalCategory
+          ? appProvider.brandDefault.principalCategory
           : signUpProvider.principalCategorySelected,
       'category': appProvider.wantToAddNewStore
-          ? signUpProvider.brand.category
+          ? appProvider.brandDefault.category
           : signUpProvider.subLevelSelected,
       'subcategory': appProvider.wantToAddNewStore
-          ? signUpProvider.brand.subCategory
+          ? appProvider.brandDefault.subCategory
           : signUpProvider.subSubLevelSelected,
       'photo': photoUrl,
-      'brandId': appProvider.wantToAddNewStore ? signUpProvider.brand.id : null
+      'brandId':
+          appProvider.wantToAddNewStore ? appProvider.brandDefault.id : null
     };
 
     if (!appProvider.wantToAddNewStore) {
-      final response = await _storeService.registerStore(storeData);
+      final response = await _storeService.createBranch(storeData);
 
       AppPreferences.setIsLogin('isLogged', true);
       AppPreferences.setIdBrand('idBrand', response['data']['_id']);
+      signUpProvider.setPhotoProfile(photoUrl);
     } else {
       await _brandService.createBranchOffice(
-          signUpProvider.brand.id, storeData);
-      signUpProvider.setPhotoProfile(signUpProvider.brand.photo);
+          appProvider.brandDefault.id, storeData);
     }
   }
 

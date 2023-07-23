@@ -4,6 +4,7 @@ class Store {
   String photo;
   String category;
   String subcategory;
+  String location;
   List<dynamic> coupons;
   List<dynamic> surveys;
   String principal_category;
@@ -16,6 +17,7 @@ class Store {
       required this.category,
       required this.subcategory,
       required this.coupons,
+      required this.location,
       required this.surveys,
       required this.principal_category,
       required this.brandId});
@@ -25,6 +27,7 @@ class Store {
         id: response['_id'],
         name: response['name'],
         photo: response['photo'],
+        location: response['location'],
         category: response['category'],
         subcategory: response['subcategory'],
         coupons: response['coupons'],

@@ -76,6 +76,7 @@ flutter:
     - assets/icons/auth/
     - assets/icons/brand/
     - assets/icons/usability/
+    - assets/icons/usability/medals/
     - assets/images/
     - assets/utils/
 

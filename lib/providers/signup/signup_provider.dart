@@ -9,6 +9,7 @@ class SignUpProvider extends ChangeNotifier {
   late Brand _brand;
 
   String _storeName = "";
+  String _storeLocation = "";
   String _emailStore = "";
   String _passwordStore = "";
   String _photoProfile = "no_photo";
@@ -23,6 +24,7 @@ class SignUpProvider extends ChangeNotifier {
 
   String get storeName => _storeName;
   String get photoProfile => _photoProfile;
+  String get storeLocation => _storeLocation;
   String get emailStore => _emailStore;
   String get passwordStore => _passwordStore;
   File get physicalPhoto => _phisicalPhoto;
@@ -42,6 +44,11 @@ class SignUpProvider extends ChangeNotifier {
 
   void setNameStore(String valueNameStore) {
     _storeName = valueNameStore;
+    notifyListeners();
+  }
+
+  void setLocation(String valueLocationStore) {
+    _storeLocation = valueLocationStore;
     notifyListeners();
   }
 

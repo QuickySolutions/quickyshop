@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quickyshop/models/Coupon.dart';
+import 'package:quickyshop/providers/coupons/coupon_provider.dart';
 
 class CouponCard extends StatelessWidget {
+  Coupon coupon;
+
+  CouponCard({required this.coupon});
+
   @override
   Widget build(BuildContext context) {
+    CouponProvider couponProvider = Provider.of<CouponProvider>(context);
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child: Row(
@@ -35,8 +43,14 @@ class CouponCard extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.all(12),
-                  child: Text('Cupon del 20% en comidas'),
-                )
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(coupon.name),
+                      Text("\$${coupon.monetization.toDouble()}")
+                    ],
+                  ),
+                ),
               ],
             ),
           )),
@@ -54,9 +68,15 @@ class CouponCard extends StatelessWidget {
               CircleAvatar(
                 backgroundColor: Colors.grey.withOpacity(0.1),
                 radius: 30,
-                child: Image(
-                    height: 20,
-                    image: AssetImage('assets/icons/usability/close-icon.png')),
+                child: GestureDetector(
+                  onTap: () {
+                    couponProvider.delete(coupon.id!);
+                  },
+                  child: Image(
+                      height: 20,
+                      image:
+                          AssetImage('assets/icons/usability/close-icon.png')),
+                ),
               ),
             ],
           )

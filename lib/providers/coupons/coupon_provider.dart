@@ -49,6 +49,8 @@ class CouponProvider extends ChangeNotifier {
     if (listCoupons.isNotEmpty) {
       _coupons = listCoupons;
       setIsLoading(false);
+    } else {
+      setIsLoading(false);
     }
 
     notifyListeners();
@@ -56,12 +58,24 @@ class CouponProvider extends ChangeNotifier {
 
   void create(Coupon coupon) async {
     setIsLoading(true);
-    await _couponsService.createCoupon(coupon);
+    CouponResponse response = await _couponsService.createCoupon(coupon);
+    _coupons.add(Coupon.fromJSONResponse(response.data));
+    setIsLoading(false);
+    notifyListeners();
   }
 
-  void update(Coupon coupon) {}
+  void update(Coupon updatedCoupon) {
+    int indexOfItem =
+        _coupons.indexWhere((coupon) => coupon.id == updatedCoupon.id);
 
-  void delete(String id) {}
+    print(indexOfItem);
+  }
+
+  void delete(String id) {
+    _coupons.removeWhere((coupon) => coupon.id == id);
+    _couponsService.desactiveCoupon(id);
+    notifyListeners();
+  }
 
   void setIsLoading(bool value) {
     _isLoadingRequest = value;

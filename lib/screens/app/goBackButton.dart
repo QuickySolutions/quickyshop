@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+enum BackButton { primary, secondary }
+
 class GoBackButton extends StatelessWidget {
   const GoBackButton({super.key});
 
@@ -10,7 +12,7 @@ class GoBackButton extends StatelessWidget {
         Navigator.pop(context, true);
       },
       child: CircleAvatar(
-        backgroundColor: Color(0xffF4F4F4),
+        backgroundColor: Colors.white,
         radius: 30,
         child: Image(
           height: 30,

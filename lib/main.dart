@@ -5,8 +5,11 @@ import 'package:quickyshop/firebase_options.dart';
 import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/providers/coupons/coupon_provider.dart';
+import 'package:quickyshop/providers/survey/survey_provider.dart';
 import 'package:quickyshop/screens/coupons/coupons-list.dart';
 import 'package:quickyshop/screens/profile/profile.dart';
+import 'package:quickyshop/screens/surveys/create_survey_questions_screen.dart';
+import 'package:quickyshop/screens/surveys/create_survey_screen.dart';
 
 import 'providers/photo/photo_provider.dart';
 import 'providers/signup/signup_provider.dart';
@@ -40,6 +43,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => PhotoProvider()),
         ChangeNotifierProvider(create: (_) => StoreProvider()),
         ChangeNotifierProvider(create: (_) => CouponProvider()),
+        ChangeNotifierProvider(create: (_) => SurveyProvider()),
         ChangeNotifierProvider(create: (_) => AppProvider())
       ],
       child: MaterialApp(
@@ -58,7 +62,10 @@ class MyApp extends StatelessWidget {
           '/login': (context) => const LoginScreen(),
           '/home': (context) => HomePage(),
           '/coupons': (context) => CouponsListScreeen(),
-          '/profile': (context) => ProfileScreen()
+          '/profile': (context) => ProfileScreen(),
+          '/create/survey': (context) => CreateSurveyScreen(),
+          '/create/survey/questions': (context) => CreateSurveyQuestionsScreen()
+          // '/end/create/survey': (context) =>
         },
       ),
     );

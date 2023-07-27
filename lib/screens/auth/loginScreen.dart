@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../services/storeService.dart';
 import '../../utils/Colors.dart';
 import '../../utils/general_methods.dart';
-import '../../widgets/inputs/searchfield.dart';
+import '../../widgets/inputs/quicky_textfield.dart';
 import '../../widgets/scaffolds/authScaffold.dart';
 
 class LoginScreen extends StatefulWidget {

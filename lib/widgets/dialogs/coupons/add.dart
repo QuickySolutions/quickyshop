@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/providers/coupons/coupon_provider.dart';
-import 'package:quickyshop/widgets/inputs/searchfield.dart';
+import 'package:quickyshop/widgets/inputs/quicky_textfield.dart';
 
 class AddCouponForm extends StatelessWidget {
   AddCouponForm({super.key});
@@ -24,9 +24,13 @@ class AddCouponForm extends StatelessWidget {
         SizedBox(height: 15),
         QuickyTextField(
             isNumeric: true,
-            onChanged: (dynamic value) {
-              double money = double.tryParse(value)!;
-              _couponProvider.onChangeMonetization(money);
+            onChanged: (String? value) {
+              if (value!.isEmpty) {
+                _couponProvider.onChangeMonetization(0.0);
+              } else {
+                double money = double.tryParse(value!)!;
+                _couponProvider.onChangeMonetization(money);
+              }
             },
             hintText: 'Valor monetario del cupón'),
         SizedBox(height: 25),

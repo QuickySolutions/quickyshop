@@ -318,7 +318,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.pushNamed(context, '/home');
+                              Navigator.pushNamed(context, '/create/survey');
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,

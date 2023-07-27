@@ -6,7 +6,6 @@ import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/widgets/coupons/coupon-card.dart';
 import 'package:quickyshop/widgets/dialogs/QuickyAlertDialog.dart';
 import 'package:quickyshop/widgets/dialogs/coupons/content_alert_coupon.dart';
-import 'package:quickyshop/widgets/inputs/searchfield.dart';
 
 class CouponsListScreeen extends StatefulWidget {
   const CouponsListScreeen({super.key});
@@ -32,34 +31,7 @@ class _CouponsListScreeenState extends State<CouponsListScreeen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: QuickyColors.primaryColor,
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return QuickyAlertDialog(
-                    onNextClick: () {
-                      if (couponProvider.isValidForm) {
-                        Coupon couponItem = Coupon(
-                            active: true,
-                            brandId: '64989445c41230ffd2539f89',
-                            name: couponProvider.couponName,
-                            monetization: couponProvider.couponMonetization);
-                        couponProvider.create(couponItem);
-                        Navigator.pop(context);
-                      } else {
-                        const snackBar = SnackBar(
-                          content: Text('Rellena los datos'),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    },
-                    showNextButton: true,
-                    size: 'md',
-                    childContent: ContentAlertCoupon(
-                      operationType: OperationType.add,
-                    ));
-              });
-        },
+        onPressed: () => addNewCoupon(couponProvider),
         child: Icon(Icons.add),
       ),
       backgroundColor: Colors.white,
@@ -108,5 +80,34 @@ class _CouponsListScreeenState extends State<CouponsListScreeen> {
         ),
       ),
     );
+  }
+
+  void addNewCoupon(CouponProvider couponProvider) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return QuickyAlertDialog(
+              onNextClick: () {
+                if (couponProvider.isValidForm) {
+                  Coupon couponItem = Coupon(
+                      active: true,
+                      brandId: '64989445c41230ffd2539f89',
+                      name: couponProvider.couponName,
+                      monetization: couponProvider.couponMonetization);
+                  couponProvider.create(couponItem);
+                  Navigator.pop(context);
+                } else {
+                  const snackBar = SnackBar(
+                    content: Text('Rellena los datos'),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+              },
+              showNextButton: true,
+              size: 'md',
+              childContent: ContentAlertCoupon(
+                operationType: OperationType.add,
+              ));
+        });
   }
 }

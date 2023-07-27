@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/models/Coupon.dart';
 import 'package:quickyshop/providers/coupons/coupon_provider.dart';
+import 'package:quickyshop/widgets/dialogs/QuickyAlertDialog.dart';
+import 'package:quickyshop/widgets/dialogs/coupons/content_alert_coupon.dart';
 
 class CouponCard extends StatelessWidget {
   Coupon coupon;
@@ -60,9 +62,15 @@ class CouponCard extends StatelessWidget {
               CircleAvatar(
                 backgroundColor: Colors.grey.withOpacity(0.1),
                 radius: 30,
-                child: Image(
-                    height: 20,
-                    image: AssetImage('assets/icons/usability/edit.png')),
+                child: GestureDetector(
+                  onTap: () {
+                    couponProvider.selectCouponToEdit(coupon);
+                    editCoupon(couponProvider, context);
+                  },
+                  child: Image(
+                      height: 20,
+                      image: AssetImage('assets/icons/usability/edit.png')),
+                ),
               ),
               SizedBox(height: 10),
               CircleAvatar(
@@ -83,5 +91,35 @@ class CouponCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void editCoupon(CouponProvider couponProvider, BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return QuickyAlertDialog(
+              onNextClick: () {
+                if (couponProvider.isValidForm) {
+                  Coupon couponItem = Coupon(
+                      id: couponProvider.selectedCoupon.id,
+                      active: true,
+                      brandId: '64989445c41230ffd2539f89',
+                      name: couponProvider.couponName,
+                      monetization: couponProvider.couponMonetization);
+                  couponProvider.update(couponItem);
+                  Navigator.pop(context);
+                } else {
+                  const snackBar = SnackBar(
+                    content: Text('Rellena los datos'),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+              },
+              showNextButton: true,
+              size: 'md',
+              childContent: ContentAlertCoupon(
+                operationType: OperationType.edit,
+              ));
+        });
   }
 }

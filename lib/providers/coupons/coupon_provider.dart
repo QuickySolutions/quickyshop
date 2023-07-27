@@ -6,19 +6,21 @@ class CouponProvider extends ChangeNotifier {
   CouponsService _couponsService = CouponsService();
   bool _isLoadingRequest = false;
   List<Coupon> _coupons = [];
-  late String _couponName;
-  double _couponMonetization = 0.0;
+  late String _couponName = "";
+  num _couponMonetization = 0.0;
+  late Coupon _selectedCoupon;
   int _addToStores = 0;
 
   bool get isLoading => _isLoadingRequest;
   List<Coupon> get couponsList => _coupons;
+  Coupon get selectedCoupon => _selectedCoupon;
   String get couponName => _couponName;
   int get addToStores => _addToStores;
-  double get couponMonetization => _couponMonetization;
+  num get couponMonetization => _couponMonetization;
 
   bool get isValidForm {
-    if (_couponName.isEmpty && _couponMonetization.isNegative ||
-        _couponMonetization == 0) {
+    if (_couponName.isEmpty ||
+        (_couponMonetization.isNegative || _couponMonetization == 0)) {
       return false;
     } else {
       return true;
@@ -30,7 +32,7 @@ class CouponProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onChangeMonetization(double monetization) {
+  void onChangeMonetization(num monetization) {
     _couponMonetization = monetization;
     notifyListeners();
   }
@@ -68,7 +70,8 @@ class CouponProvider extends ChangeNotifier {
     int indexOfItem =
         _coupons.indexWhere((coupon) => coupon.id == updatedCoupon.id);
 
-    print(indexOfItem);
+    _coupons[indexOfItem] = updatedCoupon;
+    notifyListeners();
   }
 
   void delete(String id) {
@@ -79,6 +82,13 @@ class CouponProvider extends ChangeNotifier {
 
   void setIsLoading(bool value) {
     _isLoadingRequest = value;
+    notifyListeners();
+  }
+
+  void selectCouponToEdit(Coupon couponItem) {
+    _couponName = couponItem.name;
+    _couponMonetization = couponItem.monetization;
+    _selectedCoupon = couponItem;
     notifyListeners();
   }
 }

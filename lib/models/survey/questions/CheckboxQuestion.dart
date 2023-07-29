@@ -2,6 +2,13 @@ import 'package:quickyshop/models/survey/questions/options/OptionQuestion.dart';
 import 'package:quickyshop/models/survey/Question.dart';
 
 class CheckBoxQuestion implements Question {
+  int minimumOptions;
+  int maximumOptions;
+
+  int? maxSelected;
+  int? minimumSelected;
+  bool isCompletedQuestion;
+
   @override
   List<OptionQuestion>? options;
 
@@ -15,7 +22,10 @@ class CheckBoxQuestion implements Question {
       {required this.title,
       required this.type,
       required this.options,
-      required this.id});
+      required this.id,
+      required this.minimumOptions,
+      required this.maximumOptions,
+      this.isCompletedQuestion = false});
 
   @override
   String id;

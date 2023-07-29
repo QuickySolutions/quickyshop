@@ -5,4 +5,5 @@ abstract class Question {
   late String title;
   late String? type;
   late List<OptionQuestion>? options;
+  Map<String, dynamic>? toJson();
 }

@@ -114,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       onPressed: () {
                         _storeService.changeStatusStore(
-                            appProvider.storeSelected.id, false);
+                            appProvider.storeSelected.id!, false);
                       },
                       child: Text(
                         'Deshabilitar',

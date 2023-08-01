@@ -9,19 +9,56 @@ import 'package:quickyshop/models/survey/questions/options/OptionQuestion.dart';
 import 'package:uuid/uuid.dart';
 
 class SurveyProvider extends ChangeNotifier {
-  Survey _survey = Survey(
-      id: '1234',
-      name: 'prueba',
-      questions: [],
-      photo: '',
-      secretPassword: '1334444',
-      initDate: "2034-03-32",
-      finalDate: "3233-43-43");
+  late Survey _survey;
+  late String _surveyName;
+  late String _surveyDescription;
+  late String _initDate;
+  late String _finalDate;
 
   Survey get survey => _survey;
+  String get surveyName => _surveyName;
+  String get surveyDescription => _surveyDescription;
+  String get initDate => _initDate;
+  String get finalDate => _finalDate;
+
+  bool get isValidForm {
+    if (_surveyName.isEmpty ||
+        _surveyDescription.isEmpty ||
+        _initDate.isEmpty ||
+        _finalDate.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  void onChangeName(String value) {
+    _surveyName = value;
+    notifyListeners();
+  }
+
+  void onChangeDescription(String value) {
+    _surveyDescription = value;
+    notifyListeners();
+  }
+
+  void onChangeInitDate(String date) {
+    _initDate = date;
+    notifyListeners();
+  }
+
+  void onChangeFinalDate(String date) {
+    _finalDate = date;
+    notifyListeners();
+  }
 
   void addNewQuestion(Question question) {
     _survey.questions!.add(question);
+    notifyListeners();
+  }
+
+  void addSurvey(Survey survey) {
+    _survey = survey;
     notifyListeners();
   }
 
@@ -32,6 +69,8 @@ class SurveyProvider extends ChangeNotifier {
       _survey.questions![indexQuestion] = CheckBoxQuestion(
           maximumOptions: 6,
           minimumOptions: 3,
+          maxSelected: 6,
+          minimumSelected: 2,
           id: oldQuestion.id,
           title: oldQuestion.title,
           type: keyType,

@@ -1,24 +1,22 @@
 class Store {
-  String id;
+  String? id;
   String name;
   String photo;
   String category;
   String subcategory;
   String location;
-  List<dynamic> coupons;
-  List<dynamic> surveys;
+  String email;
   String principal_category;
   String brandId;
 
   Store(
-      {required this.id,
+      {this.id,
       required this.name,
       required this.photo,
       required this.category,
       required this.subcategory,
-      required this.coupons,
+      required this.email,
       required this.location,
-      required this.surveys,
       required this.principal_category,
       required this.brandId});
 
@@ -26,13 +24,25 @@ class Store {
     return Store(
         id: response['_id'],
         name: response['name'],
+        email: response['email'],
         photo: response['photo'],
         location: response['location'],
         category: response['category'],
         subcategory: response['subcategory'],
-        coupons: response['coupons'],
-        surveys: response['surveys'],
         principal_category: response['principal_category'],
         brandId: response['brandId']);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'photo': photo,
+      'location': location,
+      'email': email,
+      'category': category,
+      'subcategory': subcategory,
+      'principal_category': principal_category,
+      'brandId': brandId
+    };
   }
 }

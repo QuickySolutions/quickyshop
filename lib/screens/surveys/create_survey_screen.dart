@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quickyshop/models/survey/Survey.dart';
+import 'package:quickyshop/providers/survey/survey_provider.dart';
 import 'package:quickyshop/screens/app/goBackButton.dart';
 import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/widgets/buttons/quickyButton.dart';
@@ -9,6 +12,7 @@ class CreateSurveyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final surveyProvider = Provider.of<SurveyProvider>(context);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -17,9 +21,9 @@ class CreateSurveyScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 backgroundSurvey(),
-                principalFormSurvey(context),
+                principalFormSurvey(context, surveyProvider),
                 SizedBox(height: 20),
-                buttonsSurveys(context)
+                buttonsSurveys(context, surveyProvider)
               ],
             ),
           ),
@@ -73,7 +77,8 @@ Widget backgroundSurvey() {
   );
 }
 
-Widget principalFormSurvey(BuildContext context) {
+Widget principalFormSurvey(
+    BuildContext context, SurveyProvider surveyProvider) {
   return Container(
     padding: EdgeInsets.only(top: 30, bottom: 10, left: 30, right: 30),
     child: Column(
@@ -81,11 +86,20 @@ Widget principalFormSurvey(BuildContext context) {
       children: [
         Text('Nombre de la encuesta:'),
         SizedBox(height: 15),
-        QuickyTextField(),
+        QuickyTextField(
+          onChanged: (String value) {
+            surveyProvider.onChangeName(value);
+          },
+        ),
         SizedBox(height: 15),
         Text('Descripción (opcional)'),
         SizedBox(height: 15),
-        QuickyTextArea(maxLines: 5),
+        QuickyTextArea(
+          maxLines: 5,
+          onChanged: (String value) {
+            surveyProvider.onChangeDescription(value);
+          },
+        ),
         SizedBox(height: 15),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,7 +112,19 @@ Widget principalFormSurvey(BuildContext context) {
                 Container(
                     width: 150,
                     child: QuickyTextField(
-                      onTap: () async {},
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1950),
+                            lastDate: DateTime(2100));
+                        var date = DateTime.parse(pickedDate.toString());
+
+                        var formattedDate =
+                            "${date.year}-${date.month}-${date.day}";
+                        print(formattedDate);
+                        surveyProvider.onChangeInitDate(formattedDate);
+                      },
                       isDate: true,
                     ))
               ],
@@ -117,6 +143,12 @@ Widget principalFormSurvey(BuildContext context) {
                             initialDate: DateTime.now(),
                             firstDate: DateTime(1950),
                             lastDate: DateTime(2100));
+                        var date = DateTime.parse(pickedDate.toString());
+
+                        var formattedDate =
+                            "${date.year}-${date.month}-${date.day}";
+                        print(formattedDate);
+                        surveyProvider.onChangeFinalDate(formattedDate);
                       },
                       isDate: true,
                     ))
@@ -129,7 +161,7 @@ Widget principalFormSurvey(BuildContext context) {
   );
 }
 
-Widget buttonsSurveys(BuildContext context) {
+Widget buttonsSurveys(BuildContext context, SurveyProvider surveyProvider) {
   return Container(
     alignment: Alignment.center,
     child: Column(
@@ -177,6 +209,17 @@ Widget buttonsSurveys(BuildContext context) {
         QuickyButton(
             type: QuickyButtonTypes.primary,
             onTap: () {
+              Survey survey = Survey(
+                  id: '',
+                  name: surveyProvider.surveyName,
+                  questions: [],
+                  description: surveyProvider.surveyDescription,
+                  photo: '',
+                  secretPassword: '1334444',
+                  initDate: surveyProvider.initDate,
+                  finalDate: surveyProvider.finalDate);
+
+              surveyProvider.addSurvey(survey);
               Navigator.pushNamed(context, '/create/survey/questions');
             },
             child: Text(

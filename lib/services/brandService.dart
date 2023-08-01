@@ -3,6 +3,22 @@ import 'package:quickyshop/models/Brand.dart';
 import 'package:quickyshop/models/Store.dart';
 import 'package:quickyshop/utils/api.dart';
 
+class BrandResponse {
+  String message;
+  dynamic data;
+  bool status;
+
+  BrandResponse(
+      {required this.message, required this.data, required this.status});
+
+  factory BrandResponse.fromJSONResponse(Map<String, dynamic> response) {
+    return BrandResponse(
+        message: response['message'],
+        data: response['data'],
+        status: response['status']);
+  }
+}
+
 class BrandService {
   final Dio _dio = Dio();
   Future<Map<String, dynamic>> getBrandInformation(String brandId) async {

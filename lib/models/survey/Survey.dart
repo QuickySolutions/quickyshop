@@ -23,12 +23,12 @@ class Survey {
       this.active = true,
       this.questions});
 
-  String toJson() {
+  Map<String, dynamic> toJson() {
     var len = id ?? null;
     Map<String, dynamic> map = {
       'id': len,
       'photo': photo,
-      'nameSurvey': name,
+      'name': name,
       'active': active,
       'secretPassword': secretPassword,
       'initDate': initDate,
@@ -38,6 +38,6 @@ class Survey {
     if (questions != null)
       map['questions'] = questions!.map((q) => q.toJson()).toList();
 
-    return jsonEncode(map);
+    return map;
   }
 }

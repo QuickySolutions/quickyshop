@@ -25,12 +25,22 @@ class CheckBoxQuestion implements Question {
       required this.id,
       required this.minimumOptions,
       required this.maximumOptions,
+      required this.maxSelected,
+      required this.minimumSelected,
       this.isCompletedQuestion = false});
 
   @override
   String id;
 
   Map<String, dynamic> toJson() {
-    return {'id': id, 'title': title, 'type': type, 'options': options};
+    return {
+      'id': id,
+      'title': title,
+      'type': type,
+      'options': options,
+      'completedQuestion': isCompletedQuestion,
+      'maxSelected': maxSelected,
+      'minimumSelected': minimumSelected
+    };
   }
 }

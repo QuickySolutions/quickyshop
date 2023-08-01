@@ -145,13 +145,21 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Row(
                                         children: snapshot.data!.map((e) {
-                                      return StoreMiniCard(
-                                          store: e,
-                                          isSelected: appProvider
-                                                  .hasSelectedStore
-                                              ? e.id ==
-                                                  appProvider.storeSelected.id
-                                              : false);
+                                      return Container(
+                                        width: 280,
+                                        margin: EdgeInsets.only(right: 20),
+                                        child: StoreMiniCard(
+                                            showImage: true,
+                                            onTap: () {
+                                              appProvider.selectStore(e);
+                                            },
+                                            store: e,
+                                            isSelected: appProvider
+                                                    .hasSelectedStore
+                                                ? e.id ==
+                                                    appProvider.storeSelected.id
+                                                : false),
+                                      );
                                     }).toList()),
                                   ],
                                 ),

@@ -209,7 +209,9 @@ class _HomePageState extends State<HomePage> {
                               width: 120,
                               height: 120,
                               child: GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/surveys');
+                                },
                                 child: Container(
                                   padding: EdgeInsets.only(bottom: 8),
                                   decoration: BoxDecoration(

@@ -1,15 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/models/survey/Survey.dart';
 import 'package:quickyshop/providers/survey/survey_provider.dart';
-import 'package:quickyshop/screens/app/goBackButton.dart';
+import 'package:quickyshop/utils/survey_utils.dart';
+import 'package:quickyshop/widgets/app/goBackButton.dart';
 import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/widgets/buttons/quickyButton.dart';
 import 'package:quickyshop/widgets/inputs/quicky_textfield.dart';
 
 class CreateSurveyScreen extends StatelessWidget {
-  const CreateSurveyScreen({super.key});
-
+  CreateSurveyScreen({super.key});
   @override
   Widget build(BuildContext context) {
     final surveyProvider = Provider.of<SurveyProvider>(context);
@@ -20,7 +23,7 @@ class CreateSurveyScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                backgroundSurvey(),
+                backgroundSurvey(surveyProvider),
                 principalFormSurvey(context, surveyProvider),
                 SizedBox(height: 20),
                 buttonsSurveys(context, surveyProvider)
@@ -33,11 +36,28 @@ class CreateSurveyScreen extends StatelessWidget {
   }
 }
 
-Widget backgroundSurvey() {
+_getFromGallery(SurveyProvider surveyProvider) async {
+  PickedFile? pickedFile = await ImagePicker().getImage(
+    source: ImageSource.gallery,
+    maxWidth: 1800,
+    maxHeight: 1800,
+  );
+  if (pickedFile != null) {
+    File imageFile = File(pickedFile.path);
+    surveyProvider.selectPicture(imageFile);
+  }
+}
+
+Widget backgroundSurvey(SurveyProvider surveyProvider) {
   return Container(
-    color: Color(0xff9C9FA0),
+    decoration: BoxDecoration(
+        color: Color(0xff9C9FA0),
+        image: DecorationImage(
+          image: FileImage(surveyProvider.selectedPhoto),
+          fit: BoxFit.cover,
+        )),
     width: double.infinity,
-    height: 150,
+    height: 180,
     child: Stack(
       children: [
         Positioned(
@@ -48,27 +68,32 @@ Widget backgroundSurvey() {
         Positioned(
           left: 40,
           bottom: 20,
-          child: Container(
-            width: 170,
-            height: 50,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: const Color.fromARGB(255, 210, 206, 206)),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: QuickyColors.primaryColor,
-                  radius: 25,
-                  child: Image(
-                      height: 20,
-                      image:
-                          AssetImage('assets/icons/usability/edit_white.png')),
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                Text('Añadir foto')
-              ],
+          child: GestureDetector(
+            onTap: () {
+              _getFromGallery(surveyProvider);
+            },
+            child: Container(
+              width: 170,
+              height: 50,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: const Color.fromARGB(255, 210, 206, 206)),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: QuickyColors.primaryColor,
+                    radius: 25,
+                    child: Image(
+                        height: 20,
+                        image: AssetImage(
+                            'assets/icons/usability/edit_white.png')),
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text('Añadir foto')
+                ],
+              ),
             ),
           ),
         )
@@ -78,7 +103,9 @@ Widget backgroundSurvey() {
 }
 
 Widget principalFormSurvey(
-    BuildContext context, SurveyProvider surveyProvider) {
+  BuildContext context,
+  SurveyProvider surveyProvider,
+) {
   return Container(
     padding: EdgeInsets.only(top: 30, bottom: 10, left: 30, right: 30),
     child: Column(
@@ -87,6 +114,9 @@ Widget principalFormSurvey(
         Text('Nombre de la encuesta:'),
         SizedBox(height: 15),
         QuickyTextField(
+          defaultValue: surveyProvider.surveyAction == SurveyAction.create
+              ? ''
+              : surveyProvider.surveyName,
           onChanged: (String value) {
             surveyProvider.onChangeName(value);
           },
@@ -95,6 +125,9 @@ Widget principalFormSurvey(
         Text('Descripción (opcional)'),
         SizedBox(height: 15),
         QuickyTextArea(
+          defaultValue: surveyProvider.surveyAction == SurveyAction.create
+              ? ''
+              : surveyProvider.surveyDescription,
           maxLines: 5,
           onChanged: (String value) {
             surveyProvider.onChangeDescription(value);
@@ -112,6 +145,8 @@ Widget principalFormSurvey(
                 Container(
                     width: 150,
                     child: QuickyTextField(
+                      controller: surveyProvider.initDateController,
+                      readOnly: true,
                       onTap: () async {
                         DateTime? pickedDate = await showDatePicker(
                             context: context,
@@ -122,8 +157,8 @@ Widget principalFormSurvey(
 
                         var formattedDate =
                             "${date.year}-${date.month}-${date.day}";
-                        print(formattedDate);
                         surveyProvider.onChangeInitDate(formattedDate);
+                        surveyProvider.initDateController.text = formattedDate;
                       },
                       isDate: true,
                     ))
@@ -137,6 +172,8 @@ Widget principalFormSurvey(
                 Container(
                     width: 150,
                     child: QuickyTextField(
+                      controller: surveyProvider.finalDateController,
+                      readOnly: true,
                       onTap: () async {
                         DateTime? pickedDate = await showDatePicker(
                             context: context,
@@ -147,8 +184,8 @@ Widget principalFormSurvey(
 
                         var formattedDate =
                             "${date.year}-${date.month}-${date.day}";
-                        print(formattedDate);
                         surveyProvider.onChangeFinalDate(formattedDate);
+                        surveyProvider.finalDateController.text = formattedDate;
                       },
                       isDate: true,
                     ))
@@ -209,17 +246,30 @@ Widget buttonsSurveys(BuildContext context, SurveyProvider surveyProvider) {
         QuickyButton(
             type: QuickyButtonTypes.primary,
             onTap: () {
-              Survey survey = Survey(
-                  id: '',
-                  name: surveyProvider.surveyName,
-                  questions: [],
-                  description: surveyProvider.surveyDescription,
-                  photo: '',
-                  secretPassword: '1334444',
-                  initDate: surveyProvider.initDate,
-                  finalDate: surveyProvider.finalDate);
+              if (surveyProvider.surveyAction == SurveyAction.create) {
+                Survey survey = Survey(
+                    id: '',
+                    name: surveyProvider.surveyName,
+                    questions: [],
+                    description: surveyProvider.surveyDescription,
+                    photo: '',
+                    secretPassword: '1334444',
+                    initDate: surveyProvider.initDate,
+                    finalDate: surveyProvider.finalDate);
 
-              surveyProvider.addSurvey(survey);
+                surveyProvider.addSurvey(survey);
+              } else {
+                Survey survey = Survey(
+                    id: surveyProvider.survey.id,
+                    name: surveyProvider.surveyName,
+                    questions: surveyProvider.survey.questions,
+                    description: surveyProvider.surveyDescription,
+                    secretPassword: '1334444',
+                    initDate: surveyProvider.initDate,
+                    finalDate: surveyProvider.finalDate);
+
+                surveyProvider.addSurvey(survey);
+              }
               Navigator.pushNamed(context, '/create/survey/questions');
             },
             child: Text(

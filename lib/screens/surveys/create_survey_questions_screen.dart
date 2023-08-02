@@ -5,7 +5,8 @@ import 'package:quickyshop/models/survey/questions/TemplateQuestion.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/providers/store/store_provider.dart';
 import 'package:quickyshop/providers/survey/survey_provider.dart';
-import 'package:quickyshop/screens/app/goBackButton.dart';
+import 'package:quickyshop/utils/survey_utils.dart';
+import 'package:quickyshop/widgets/app/goBackButton.dart';
 import 'package:quickyshop/services/surveyService.dart';
 import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/widgets/dialogs/QuickyAlertDialog.dart';
@@ -28,7 +29,7 @@ class CreateSurveyQuestionsScreen extends StatelessWidget {
           FloatingActionButton(
             onPressed: () {
               Question newQuestion = TemplateQuestion(
-                  id: Uuid().v4(), title: 'hola', type: 'normal');
+                  id: Uuid().v4(), title: 'hola', type: 'normal') as Question;
               surveyProvider.addNewQuestion(newQuestion);
             },
             child: Icon(Icons.add),
@@ -36,67 +37,74 @@ class CreateSurveyQuestionsScreen extends StatelessWidget {
           SizedBox(width: 20),
           FloatingActionButton(
             onPressed: () async {
-              if (surveyProvider.survey.questions!.length < 3) {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return QuickyAlertDialog(
-                          size: 'xs-small',
-                          childContent: Center(
-                            child: Text(
-                                'La encuesta debe de tener al menos 3 preguntas'),
-                          ));
-                    });
-              } else if (surveyProvider.survey.questions!
-                  .any((element) => element.type == 'normal')) {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return QuickyAlertDialog(
-                          size: 'xs-small',
-                          childContent: Center(
-                            child: Text(
-                                'Alguna de tus preguntas no tiene un tipo valido de pregunta'),
-                          ));
-                    });
-              } else if (surveyProvider.survey.questions!
-                  .any((element) => element.options!.isEmpty)) {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return QuickyAlertDialog(
-                          size: 'xs-small',
-                          childContent: Center(
-                            child: Text(
-                                'Todas las preguntas deben de tener al menos una opción'),
-                          ));
-                    });
-              } else {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return QuickyAlertDialog(
-                          showNextButton: true,
-                          onNextClick: () async {
+              // if (surveyProvider.survey.questions!.length < 3) {
+              //   showDialog(
+              //       context: context,
+              //       builder: (BuildContext context) {
+              //         return QuickyAlertDialog(
+              //             size: 'xs-small',
+              //             childContent: Center(
+              //               child: Text(
+              //                   'La encuesta debe de tener al menos 3 preguntas'),
+              //             ));
+              //       });
+              // } else if (surveyProvider.survey.questions!
+              //     .any((element) => element.type == 'normal')) {
+              //   showDialog(
+              //       context: context,
+              //       builder: (BuildContext context) {
+              //         return QuickyAlertDialog(
+              //             size: 'xs-small',
+              //             childContent: Center(
+              //               child: Text(
+              //                   'Alguna de tus preguntas no tiene un tipo valido de pregunta'),
+              //             ));
+              //       });
+              // } else if (surveyProvider.survey.questions!
+              //     .any((element) => element.options!.isEmpty)) {
+              //   showDialog(
+              //       context: context,
+              //       builder: (BuildContext context) {
+              //         return QuickyAlertDialog(
+              //             size: 'xs-small',
+              //             childContent: Center(
+              //               child: Text(
+              //                   'Todas las preguntas deben de tener al menos una opción'),
+              //             ));
+              //       });
+              // } else {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return QuickyAlertDialog(
+                        showNextButton: true,
+                        onNextClick: () async {
+                          if (surveyProvider.surveyAction ==
+                              SurveyAction.create) {
                             await surveyService.createSurvey(
                                 surveyProvider.survey,
                                 storeProvider.selectedStores,
                                 appProvider.brandDefault.id);
                             Navigator.pushNamed(context, '/home');
-                          },
-                          childContent: Column(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.only(
-                                    top: 10, bottom: 20, left: 20, right: 20),
-                                child: Text(
-                                    'Para que tiendas quieres esta encuesta?'),
-                              ),
-                              Expanded(child: StoreList())
-                            ],
-                          ));
-                    });
-              }
+                          } else {
+                            await surveyService
+                                .editSurvey(surveyProvider.survey);
+                            //Navigator.pushNamed(context, '/home');
+                          }
+                        },
+                        childContent: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.only(
+                                  top: 10, bottom: 20, left: 20, right: 20),
+                              child: Text(
+                                  'Para que tiendas quieres esta encuesta?'),
+                            ),
+                            Expanded(child: StoreList())
+                          ],
+                        ));
+                  });
+              //}
             },
             child: Icon(Icons.save),
           ),

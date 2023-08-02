@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
-import 'package:quickyshop/screens/app/goBackButton.dart';
+import 'package:quickyshop/widgets/app/goBackButton.dart';
 import 'package:quickyshop/services/storeService.dart';
 import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/widgets/app/ProfileUser.dart';

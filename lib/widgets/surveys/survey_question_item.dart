@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/models/survey/Question.dart';
 import 'package:quickyshop/models/survey/questions/CheckboxQuestion.dart';
-import 'package:quickyshop/models/survey/questions/options/MultipleSelectionOption.dart';
 import 'package:quickyshop/models/survey/questions/options/OptionQuestion.dart';
 import 'package:quickyshop/providers/survey/survey_provider.dart';
 import 'package:quickyshop/utils/Colors.dart';
@@ -121,10 +120,7 @@ class SurveyQuestionItem extends StatelessWidget {
         QuickyButton(
           type: QuickyButtonTypes.tertiary,
           onTap: () {
-            if (question.options!.length < question.minimumOptions ||
-                question.options!.length < question.maximumOptions) {
-              surveyProvider.addNewOptionToQuestion(indexQuestion);
-            }
+            surveyProvider.addNewOptionToQuestion(indexQuestion);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

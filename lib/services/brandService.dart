@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:quickyshop/models/Brand.dart';
 import 'package:quickyshop/models/Store.dart';
+import 'package:quickyshop/models/survey/Survey.dart';
+import 'package:quickyshop/services/surveyService.dart';
 import 'package:quickyshop/utils/api.dart';
 
 class BrandResponse {
@@ -44,5 +46,23 @@ class BrandService {
 
     storesResponse.map((e) => {stores.add(Store.fromJSONResponse(e))}).toList();
     return stores;
+  }
+
+  Future<BrandResponse> getSurveysByBrand(String brandId) async {
+    try {
+      List<Survey> surveys = [];
+
+      Response response =
+          await _dio.get(ApiUrl.LOCAL_API + '/brand/$brandId/surveys');
+
+      response.data['data'].forEach((element) {
+        surveys.add(Survey.fromJSONResponse(element));
+      });
+
+      return BrandResponse(message: 'Exito', data: surveys, status: true);
+    } catch (e) {
+      print(e);
+      return BrandResponse(message: 'Fallo', data: [], status: false);
+    }
   }
 }

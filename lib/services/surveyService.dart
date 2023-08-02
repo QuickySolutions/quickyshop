@@ -32,4 +32,13 @@ class SurveyService {
 
     return SurveyResponse.fromJSONResponse(response.data);
   }
+
+  Future<SurveyResponse> editSurvey(Survey survey) async {
+    Response response =
+        await _dio.put(ApiUrl.LOCAL_API + '/surveys/${survey.id}', data: {
+      'survey': survey.toJson(),
+    });
+
+    return SurveyResponse.fromJSONResponse(response.data);
+  }
 }

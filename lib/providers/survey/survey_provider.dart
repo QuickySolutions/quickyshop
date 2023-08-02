@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:quickyshop/models/survey/questions/CheckboxQuestion.dart';
 import 'package:quickyshop/models/survey/Question.dart';
@@ -6,20 +7,34 @@ import 'package:quickyshop/models/survey/questions/CloseQuestion.dart';
 import 'package:quickyshop/models/survey/questions/TemplateQuestion.dart';
 import 'package:quickyshop/models/survey/questions/options/MultipleSelectionOption.dart';
 import 'package:quickyshop/models/survey/questions/options/OptionQuestion.dart';
+import 'package:quickyshop/services/brandService.dart';
+import 'package:quickyshop/utils/survey_utils.dart';
 import 'package:uuid/uuid.dart';
 
 class SurveyProvider extends ChangeNotifier {
   late Survey _survey;
-  late String _surveyName;
-  late String _surveyDescription;
-  late String _initDate;
-  late String _finalDate;
+  late String _surveyName = "";
+  late String _surveyDescription = "";
+  late String _initDate = "";
+  late String _finalDate = "";
+  TextEditingController initDateController = TextEditingController();
+  TextEditingController finalDateController = TextEditingController();
+  late List<Survey> _surveys;
+  late File _selectedPhoto = File('');
+  bool _isLoadingRequest = false;
+  SurveyAction _surveyAction = SurveyAction.create;
+
+  BrandService _brandService = BrandService();
 
   Survey get survey => _survey;
   String get surveyName => _surveyName;
   String get surveyDescription => _surveyDescription;
   String get initDate => _initDate;
   String get finalDate => _finalDate;
+  List<Survey> get surveys => _surveys;
+  bool get isLoading => _isLoadingRequest;
+  File get selectedPhoto => _selectedPhoto;
+  SurveyAction get surveyAction => _surveyAction;
 
   bool get isValidForm {
     if (_surveyName.isEmpty ||
@@ -30,6 +45,11 @@ class SurveyProvider extends ChangeNotifier {
     } else {
       return true;
     }
+  }
+
+  void selectPicture(File picked) {
+    _selectedPhoto = picked;
+    notifyListeners();
   }
 
   void onChangeName(String value) {
@@ -63,7 +83,6 @@ class SurveyProvider extends ChangeNotifier {
   }
 
   void handleChangeSelectionTypeQuestion(int indexQuestion, String keyType) {
-    print(indexQuestion);
     Question oldQuestion = _survey.questions![indexQuestion];
     if (keyType == 'check') {
       _survey.questions![indexQuestion] = CheckBoxQuestion(
@@ -74,13 +93,13 @@ class SurveyProvider extends ChangeNotifier {
           id: oldQuestion.id,
           title: oldQuestion.title,
           type: keyType,
-          options: []);
+          options: []) as Question;
     } else if (keyType == 'close') {
       _survey.questions![indexQuestion] = CloseQuestion(
           id: oldQuestion.id,
           title: oldQuestion.title,
           type: keyType,
-          options: []);
+          options: []) as Question;
     } else if (keyType == 'combo-box') {
     } else if (keyType == 'mini-review') {
     } else if (keyType == 'large-review') {
@@ -92,7 +111,7 @@ class SurveyProvider extends ChangeNotifier {
         id: oldQuestion.id,
         title: oldQuestion.title,
         type: 'normal',
-      );
+      ) as Question;
     }
 
     notifyListeners();
@@ -111,6 +130,39 @@ class SurveyProvider extends ChangeNotifier {
       int indexQuestion, int indexOption, String value) {
     _survey.questions![indexQuestion].options![indexOption].titleOptionSurvey =
         value;
+    notifyListeners();
+  }
+
+  void setIsLoading(bool value) {
+    _isLoadingRequest = value;
+    notifyListeners();
+  }
+
+  void getAll() async {
+    setIsLoading(true);
+    BrandResponse surveyResponse =
+        await _brandService.getSurveysByBrand("64989445c41230ffd2539f89");
+    List<Survey> surveysResponseList = surveyResponse.data;
+
+    if (surveysResponseList.isNotEmpty) {
+      _surveys = surveysResponseList;
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+    }
+
+    notifyListeners();
+  }
+
+  void setSurvey(Survey survey) {
+    _surveyAction = SurveyAction.edit;
+    _surveyName = survey.name;
+    _surveyDescription = survey.description!;
+    _initDate = survey.initDate;
+    _finalDate = survey.finalDate;
+    initDateController.text = survey.initDate;
+    finalDateController.text = survey.finalDate;
+    _survey = survey;
     notifyListeners();
   }
 }

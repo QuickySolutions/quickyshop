@@ -22,3 +22,17 @@ class GoBackButton extends StatelessWidget {
     );
   }
 }
+
+class SecondaryGoBackButton extends StatelessWidget {
+  const SecondaryGoBackButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(context);
+      },
+      child: Image(height: 60, image: AssetImage('assets/images/go-back.png')),
+    );
+  }
+}

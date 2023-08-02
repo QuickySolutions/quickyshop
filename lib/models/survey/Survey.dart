@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:quickyshop/models/survey/Question.dart';
+import 'package:quickyshop/utils/survey_utils.dart';
 
 class Survey {
   String? id;
-  String photo;
+  String? photo;
   String name;
   String? description;
   bool active;
@@ -14,7 +13,7 @@ class Survey {
   String finalDate;
   Survey(
       {this.id,
-      required this.photo,
+      this.photo,
       required this.name,
       required this.initDate,
       required this.finalDate,
@@ -22,6 +21,19 @@ class Survey {
       this.description,
       this.active = true,
       this.questions});
+
+  factory Survey.fromJSONResponse(Map<String, dynamic> response) {
+    return Survey(
+        id: response['_id'],
+        name: response['name'],
+        description: response['description'],
+        active: response['active'],
+        photo: response['photo'],
+        initDate: response['initDate'],
+        finalDate: response['finalDate'],
+        secretPassword: response['secretPassword'],
+        questions: questionsFromJsonResponse(response['questions']));
+  }
 
   Map<String, dynamic> toJson() {
     var len = id ?? null;

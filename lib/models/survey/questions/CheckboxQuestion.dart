@@ -26,11 +26,15 @@ class CheckBoxQuestion implements Question {
       this.minimumOptions,
       this.maximumOptions,
       this.maxSelected,
+      required this.isNew,
       this.minimumSelected,
       this.isCompletedQuestion = false});
 
   @override
   String id;
+
+  @override
+  bool isNew;
 
   Map<String, dynamic> toJson() {
     return {
@@ -40,7 +44,8 @@ class CheckBoxQuestion implements Question {
       'options': options,
       'completedQuestion': isCompletedQuestion,
       'maxSelected': maxSelected,
-      'minimumSelected': minimumSelected
+      'minimumSelected': minimumSelected,
+      'isNew': isNew,
     };
   }
 }

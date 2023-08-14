@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/models/survey/Survey.dart';
+import 'package:quickyshop/providers/store/store_provider.dart';
 import 'package:quickyshop/providers/survey/survey_provider.dart';
 import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/widgets/app/customSwitch.dart';
@@ -19,6 +20,7 @@ class _SurveyCardState extends State<SurveyCard> {
   @override
   Widget build(BuildContext context) {
     final surveyProvider = Provider.of<SurveyProvider>(context);
+    final storeProvider = Provider.of<StoreProvider>(context);
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       height: 130,
@@ -49,8 +51,7 @@ class _SurveyCardState extends State<SurveyCard> {
                         image: AssetImage('assets/images/not-available.png'))
                     : Image(
                         fit: BoxFit.cover,
-                        image: NetworkImage(
-                            'https://images.pexels.com/photos/268533/pexels-photo-268533.jpeg?cs=srgb&dl=pexels-pixabay-268533.jpg&fm=jpg'),
+                        image: NetworkImage(widget.survey.photo!),
                       ),
               )),
           SizedBox(width: 8),
@@ -69,6 +70,9 @@ class _SurveyCardState extends State<SurveyCard> {
                           children: [
                             GestureDetector(
                               onTap: () {
+                                storeProvider
+                                    .setSelectedStores(widget.survey.stores!);
+                                surveyProvider.setPage(0);
                                 surveyProvider.setSurvey(widget.survey);
                                 Navigator.pushNamed(context, '/create/survey');
                               },
@@ -110,19 +114,19 @@ class _SurveyCardState extends State<SurveyCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Titulo ejemplo',
+                              widget.survey.name,
                               style: TextStyle(
                                   fontSize: 18,
                                   overflow: TextOverflow.ellipsis),
                             ),
                             SizedBox(height: 8),
                             Text(
-                              'Vence: 22/03/2001',
+                              'Vence: ${widget.survey.finalDate}',
                               style: TextStyle(fontSize: 12),
                             ),
                             SizedBox(height: 12),
                             SwitchControl(
-                              value: true,
+                              value: widget.survey.active,
                               onChanged: (value) {
                                 print(value);
                               },

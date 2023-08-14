@@ -8,7 +8,10 @@ class CouponProvider extends ChangeNotifier {
   List<Coupon> _coupons = [];
   late String _couponName = "";
   num _couponMonetization = 0.0;
-  late Coupon _selectedCoupon;
+  late Coupon _selectedCoupon =
+      Coupon(id: '', name: '', monetization: 0, brandId: '', active: false);
+  late Coupon _couponForSurvey =
+      Coupon(id: '', name: '', monetization: 0, brandId: '', active: false);
   int _addToStores = 0;
 
   bool get isLoading => _isLoadingRequest;
@@ -17,6 +20,32 @@ class CouponProvider extends ChangeNotifier {
   String get couponName => _couponName;
   int get addToStores => _addToStores;
   num get couponMonetization => _couponMonetization;
+  Coupon get couponForSurvey => _couponForSurvey;
+
+  bool get couponsAreDifferent {
+    if ((_couponForSurvey.id!.isNotEmpty && _selectedCoupon.id!.isNotEmpty) &&
+        (_couponForSurvey.id != _selectedCoupon.id)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool get areCouponSelectedOrCreated {
+    if (_couponForSurvey.id!.isEmpty && _selectedCoupon.id!.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  Coupon get getCoupon {
+    if (_couponForSurvey.id!.isEmpty) {
+      return _selectedCoupon;
+    } else {
+      return _couponForSurvey;
+    }
+  }
 
   bool get isValidForm {
     if (_couponName.isEmpty ||
@@ -89,6 +118,16 @@ class CouponProvider extends ChangeNotifier {
     _couponName = couponItem.name;
     _couponMonetization = couponItem.monetization;
     _selectedCoupon = couponItem;
+    notifyListeners();
+  }
+
+  void selectCoupon(Coupon coupon) {
+    _selectedCoupon = coupon;
+    notifyListeners();
+  }
+
+  void addCoupon(Coupon coupon) {
+    _couponForSurvey = coupon;
     notifyListeners();
   }
 }

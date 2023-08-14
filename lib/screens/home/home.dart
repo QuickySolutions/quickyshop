@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quickyshop/models/Brand.dart';
 import 'package:quickyshop/models/Store.dart';
-import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
-import 'package:quickyshop/providers/signup/signup_provider.dart';
+import 'package:quickyshop/providers/survey/survey_provider.dart';
 import 'package:quickyshop/services/brandService.dart';
 import 'package:quickyshop/widgets/brand/brand-mini-card.dart';
 
@@ -47,6 +45,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final appProvider = Provider.of<AppProvider>(context);
+    final surveyProvider = Provider.of<SurveyProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: isLoadingBrandInformation
@@ -328,6 +327,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             onPressed: () {
+                              surveyProvider.setPage(0);
                               Navigator.pushNamed(context, '/create/survey');
                             },
                             child: Row(

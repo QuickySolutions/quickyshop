@@ -20,6 +20,7 @@ class SurveyQuestionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final surveyProvider = Provider.of<SurveyProvider>(context);
     return Container(
+      margin: EdgeInsets.only(bottom: 10),
       padding: EdgeInsets.all(30),
       decoration: BoxDecoration(
           color: Colors.white,
@@ -32,12 +33,41 @@ class SurveyQuestionItem extends StatelessWidget {
           Container(
             child: Row(
               children: [
-                Icon(Icons.edit),
-                SizedBox(width: 5),
-                Text(
-                  question.title + ' - $indexQuestion',
-                  style: TextStyle(fontSize: 20),
+                GestureDetector(
+                  onTap: () {
+                    surveyProvider.changeTitleQuestion(indexQuestion);
+                  },
+                  child:
+                      surveyProvider.indexTitleToEditQuestion == indexQuestion
+                          ? Icon(Icons.check)
+                          : Icon(Icons.edit),
                 ),
+                SizedBox(width: 5),
+                surveyProvider.indexTitleToEditQuestion == indexQuestion
+                    ? Expanded(
+                        child: TextField(
+                        cursorColor: QuickyColors.primaryColor,
+                        onChanged: (String value) {
+                          surveyProvider.onChangeTitleQuetion(
+                              indexQuestion, value);
+                        },
+                        decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: QuickyColors.primaryColor),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: QuickyColors.primaryColor),
+                          ),
+                        ),
+                      ))
+                    : Expanded(
+                        child: Text(
+                          '${indexQuestion + 1}. ${question.title}',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
               ],
             ),
           ),
@@ -81,7 +111,9 @@ class SurveyQuestionItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                question.type!,
+                questionTypes
+                    .firstWhere((element) => element.keyType == question.type)
+                    .name,
               ),
               SizedBox(width: 20),
               Image(

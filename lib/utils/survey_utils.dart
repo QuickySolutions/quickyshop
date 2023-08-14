@@ -29,6 +29,7 @@ List<Question> questionsFromJsonResponse(List<dynamic> questionsResponse) {
       questions.add(CheckBoxQuestion(
           id: element['_id'],
           title: element['title'],
+          isNew: false,
           type: element['type'],
           maxSelected: element['maxSelected'],
           minimumSelected: element['minimumSelected'],

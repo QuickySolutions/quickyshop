@@ -41,7 +41,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    GoBackButton()
+                    GoBackButton(
+                      onTap: () {
+                        Navigator.pop(context, true);
+                      },
+                    )
                   ],
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quickyshop/firebase/uploadFilesToFirebase.dart';
 import 'package:quickyshop/models/survey/Question.dart';
 import 'package:quickyshop/models/survey/questions/TemplateQuestion.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
@@ -9,14 +10,15 @@ import 'package:quickyshop/utils/survey_utils.dart';
 import 'package:quickyshop/widgets/app/goBackButton.dart';
 import 'package:quickyshop/services/surveyService.dart';
 import 'package:quickyshop/utils/Colors.dart';
-import 'package:quickyshop/widgets/dialogs/QuickyAlertDialog.dart';
-import 'package:quickyshop/widgets/dialogs/stores/store_list.dart';
+import 'package:quickyshop/widgets/buttons/quickyButton.dart';
 import 'package:quickyshop/widgets/surveys/survey_question_item.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateSurveyQuestionsScreen extends StatelessWidget {
   final SurveyService surveyService = SurveyService();
+  UploadFilesToFirebase _uploadFilesToFirebase = UploadFilesToFirebase();
 
+  CreateSurveyQuestionsScreen({super.key});
   @override
   Widget build(BuildContext context) {
     final surveyProvider = Provider.of<SurveyProvider>(context);
@@ -29,84 +31,13 @@ class CreateSurveyQuestionsScreen extends StatelessWidget {
           FloatingActionButton(
             onPressed: () {
               Question newQuestion = TemplateQuestion(
-                  id: Uuid().v4(), title: 'hola', type: 'normal') as Question;
+                  isNew: true,
+                  id: Uuid().v4(),
+                  title: 'Pregunta...',
+                  type: 'normal') as Question;
               surveyProvider.addNewQuestion(newQuestion);
             },
             child: Icon(Icons.add),
-          ),
-          SizedBox(width: 20),
-          FloatingActionButton(
-            onPressed: () async {
-              // if (surveyProvider.survey.questions!.length < 3) {
-              //   showDialog(
-              //       context: context,
-              //       builder: (BuildContext context) {
-              //         return QuickyAlertDialog(
-              //             size: 'xs-small',
-              //             childContent: Center(
-              //               child: Text(
-              //                   'La encuesta debe de tener al menos 3 preguntas'),
-              //             ));
-              //       });
-              // } else if (surveyProvider.survey.questions!
-              //     .any((element) => element.type == 'normal')) {
-              //   showDialog(
-              //       context: context,
-              //       builder: (BuildContext context) {
-              //         return QuickyAlertDialog(
-              //             size: 'xs-small',
-              //             childContent: Center(
-              //               child: Text(
-              //                   'Alguna de tus preguntas no tiene un tipo valido de pregunta'),
-              //             ));
-              //       });
-              // } else if (surveyProvider.survey.questions!
-              //     .any((element) => element.options!.isEmpty)) {
-              //   showDialog(
-              //       context: context,
-              //       builder: (BuildContext context) {
-              //         return QuickyAlertDialog(
-              //             size: 'xs-small',
-              //             childContent: Center(
-              //               child: Text(
-              //                   'Todas las preguntas deben de tener al menos una opción'),
-              //             ));
-              //       });
-              // } else {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return QuickyAlertDialog(
-                        showNextButton: true,
-                        onNextClick: () async {
-                          if (surveyProvider.surveyAction ==
-                              SurveyAction.create) {
-                            await surveyService.createSurvey(
-                                surveyProvider.survey,
-                                storeProvider.selectedStores,
-                                appProvider.brandDefault.id);
-                            Navigator.pushNamed(context, '/home');
-                          } else {
-                            await surveyService
-                                .editSurvey(surveyProvider.survey);
-                            //Navigator.pushNamed(context, '/home');
-                          }
-                        },
-                        childContent: Column(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(
-                                  top: 10, bottom: 20, left: 20, right: 20),
-                              child: Text(
-                                  'Para que tiendas quieres esta encuesta?'),
-                            ),
-                            Expanded(child: StoreList())
-                          ],
-                        ));
-                  });
-              //}
-            },
-            child: Icon(Icons.save),
           ),
         ],
       ),
@@ -123,7 +54,11 @@ class CreateSurveyQuestionsScreen extends StatelessWidget {
                     children: [
                       Container(
                         alignment: Alignment.centerRight,
-                        child: GoBackButton(),
+                        child: GoBackButton(
+                          onTap: () {
+                            surveyProvider.goBackPage();
+                          },
+                        ),
                       ),
                       Container(
                         child: Column(
@@ -153,12 +88,68 @@ class CreateSurveyQuestionsScreen extends StatelessWidget {
                       question: question,
                     );
                   }).toList(),
-                )
+                ),
+                SizedBox(height: 20),
+                QuickyButton(
+                    disabled: surveyProvider.survey.questions!.isEmpty,
+                    type: QuickyButtonTypes.primary,
+                    child: Text('Finalizar'),
+                    onTap: () async {
+                      if (surveyProvider.surveyAction == SurveyAction.create) {
+                        if (surveyProvider.selectedPhoto.path.isEmpty) {
+                          createSurvey(surveyProvider, storeProvider,
+                              appProvider, context);
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/home', (_) => false);
+                        } else {
+                          String url =
+                              await _uploadFilesToFirebase.uploadSurveyPhoto(
+                                  surveyProvider.selectedPhoto,
+                                  'SURVEY_PHOTO_${Uuid().v4()}');
+                          surveyProvider.setPhoto(url);
+                          createSurvey(surveyProvider, storeProvider,
+                              appProvider, context);
+
+                          Navigator.pushNamed(context, '/home');
+                        }
+                      } else {
+                        if (surveyProvider.selectedPhoto.path.isNotEmpty) {
+                          String url =
+                              await _uploadFilesToFirebase.uploadSurveyPhoto(
+                                  surveyProvider.selectedPhoto,
+                                  'SURVEY_PHOTO_${surveyProvider.survey.id}');
+                          surveyProvider.setPhoto(url);
+                          await surveyService.editSurvey(
+                              surveyProvider.survey, storeProvider);
+                          surveyProvider.reset();
+                          storeProvider.reset();
+
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/home', (_) => false);
+                        } else {
+                          await surveyService.editSurvey(
+                              surveyProvider.survey, storeProvider);
+                          surveyProvider.reset();
+                          storeProvider.reset();
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/home', (_) => false);
+                        }
+                      }
+                    })
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  void createSurvey(SurveyProvider surveyProvider, StoreProvider storeProvider,
+      AppProvider appProvider, BuildContext context) async {
+    await surveyService.createSurvey(surveyProvider.survey,
+        storeProvider.selectedStores, appProvider.brandDefault.id);
+    surveyProvider.reset();
+    storeProvider.reset();
+    Navigator.pushNamed(context, '/home');
   }
 }

@@ -3,34 +3,111 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:quickyshop/models/Coupon.dart';
 import 'package:quickyshop/models/survey/Survey.dart';
+import 'package:quickyshop/providers/coupons/coupon_provider.dart';
 import 'package:quickyshop/providers/survey/survey_provider.dart';
+import 'package:quickyshop/screens/surveys/create_survey_questions_screen.dart';
+import 'package:quickyshop/screens/surveys/store_selection_screen.dart';
 import 'package:quickyshop/utils/survey_utils.dart';
 import 'package:quickyshop/widgets/app/goBackButton.dart';
 import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/widgets/buttons/quickyButton.dart';
+import 'package:quickyshop/widgets/dialogs/QuickyAlertDialog.dart';
+import 'package:quickyshop/widgets/dialogs/coupons/add.dart';
+import 'package:quickyshop/widgets/dialogs/coupons/list_coupons.dart';
 import 'package:quickyshop/widgets/inputs/quicky_textfield.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateSurveyScreen extends StatelessWidget {
-  CreateSurveyScreen({super.key});
+  final List<Widget> pages = [
+    FormSurveyScreen(),
+    StoreSelectionScreen(),
+    CreateSurveyQuestionsScreen()
+  ];
+  @override
+  Widget build(BuildContext context) {
+    bool _keyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
+    // TODO: implement build
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Consumer<SurveyProvider>(
+        builder: (context, value, child) {
+          return SafeArea(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: PageView.builder(
+                      controller: value.pageController,
+                      onPageChanged: (int page) {
+                        value.setPage(page);
+                      },
+                      itemCount: pages.length,
+                      itemBuilder: (context, index) {
+                        return pages[index];
+                      },
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: _buildPageIndicator(value),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  List<Widget> _buildPageIndicator(SurveyProvider surveyProvider) {
+    List<Widget> list = [];
+    for (int i = 0; i < pages.length; i++) {
+      list.add(i == surveyProvider.activePage
+          ? _indicator(true)
+          : _indicator(false));
+    }
+    return list;
+  }
+
+  Widget _indicator(bool isActive) {
+    return Container(
+      height: 10,
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 150),
+        margin: EdgeInsets.symmetric(horizontal: 4.0),
+        height: isActive ? 10 : 8.0,
+        width: isActive ? 12 : 8.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: isActive ? Color(0XFF6BC4C9) : Color(0XFFEAEAEA),
+        ),
+      ),
+    );
+  }
+}
+
+class FormSurveyScreen extends StatelessWidget {
+  FormSurveyScreen({super.key});
   @override
   Widget build(BuildContext context) {
     final surveyProvider = Provider.of<SurveyProvider>(context);
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                backgroundSurvey(surveyProvider),
-                principalFormSurvey(context, surveyProvider),
-                SizedBox(height: 20),
-                buttonsSurveys(context, surveyProvider)
-              ],
-            ),
-          ),
-        ),
+    final couponProvider = Provider.of<CouponProvider>(context);
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          backgroundSurvey(surveyProvider, context),
+          principalFormSurvey(context, surveyProvider),
+          SizedBox(height: 10),
+          buttonsSurveys(context, surveyProvider, couponProvider)
+        ],
       ),
     );
   }
@@ -48,14 +125,40 @@ _getFromGallery(SurveyProvider surveyProvider) async {
   }
 }
 
-Widget backgroundSurvey(SurveyProvider surveyProvider) {
-  return Container(
-    decoration: BoxDecoration(
+BoxDecoration setContainerBackground(SurveyProvider surveyProvider) {
+  bool userHasSelectImage = surveyProvider.selectedPhoto.path.isNotEmpty;
+  bool surveyHasNoPhoto = surveyProvider.survey.photo == "";
+
+  if (surveyProvider.surveyAction == SurveyAction.edit) {
+    if (surveyHasNoPhoto && !userHasSelectImage) {
+      return BoxDecoration(
         color: Color(0xff9C9FA0),
-        image: DecorationImage(
-          image: FileImage(surveyProvider.selectedPhoto),
-          fit: BoxFit.cover,
-        )),
+      );
+    } else {
+      return BoxDecoration(
+          image: userHasSelectImage
+              ? DecorationImage(
+                  image: FileImage(surveyProvider.selectedPhoto),
+                  fit: BoxFit.cover)
+              : DecorationImage(
+                  image: NetworkImage(surveyProvider.survey.photo!),
+                  fit: BoxFit.cover));
+    }
+  } else {
+    return BoxDecoration(
+        color: Color(0xff9C9FA0),
+        image: userHasSelectImage
+            ? DecorationImage(
+                image: FileImage(surveyProvider.selectedPhoto),
+                fit: BoxFit.cover,
+              )
+            : null);
+  }
+}
+
+Widget backgroundSurvey(SurveyProvider surveyProvider, BuildContext context) {
+  return Container(
+    decoration: setContainerBackground(surveyProvider),
     width: double.infinity,
     height: 180,
     child: Stack(
@@ -63,7 +166,12 @@ Widget backgroundSurvey(SurveyProvider surveyProvider) {
         Positioned(
           top: 20,
           right: 20,
-          child: GoBackButton(),
+          child: GoBackButton(
+            onTap: () {
+              surveyProvider.reset();
+              Navigator.pop(context, true);
+            },
+          ),
         ),
         Positioned(
           left: 40,
@@ -128,7 +236,7 @@ Widget principalFormSurvey(
           defaultValue: surveyProvider.surveyAction == SurveyAction.create
               ? ''
               : surveyProvider.surveyDescription,
-          maxLines: 5,
+          maxLines: 4,
           onChanged: (String value) {
             surveyProvider.onChangeDescription(value);
           },
@@ -198,7 +306,8 @@ Widget principalFormSurvey(
   );
 }
 
-Widget buttonsSurveys(BuildContext context, SurveyProvider surveyProvider) {
+Widget buttonsSurveys(BuildContext context, SurveyProvider surveyProvider,
+    CouponProvider couponProvider) {
   return Container(
     alignment: Alignment.center,
     child: Column(
@@ -206,7 +315,32 @@ Widget buttonsSurveys(BuildContext context, SurveyProvider surveyProvider) {
         QuickyButton(
           type: QuickyButtonTypes.tertiary,
           onTap: () {
-            print('hi');
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return QuickyAlertDialog(
+                    childContent: AddCouponForm(),
+                    showNextButton: true,
+                    onNextClick: () {
+                      if (couponProvider.isValidForm) {
+                        Coupon couponItem = Coupon(
+                            id: Uuid().v4(),
+                            active: true,
+                            brandId: '64989445c41230ffd2539f89',
+                            name: couponProvider.couponName,
+                            monetization: couponProvider.couponMonetization);
+                        couponProvider.addCoupon(couponItem);
+
+                        Navigator.pop(context);
+                      } else {
+                        const snackBar = SnackBar(
+                          content: Text('Rellena los datos'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    },
+                  );
+                });
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -233,17 +367,27 @@ Widget buttonsSurveys(BuildContext context, SurveyProvider surveyProvider) {
         QuickyButton(
             type: QuickyButtonTypes.secondary,
             onTap: () {
-              print('hi');
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return QuickyAlertDialog(
+                        childContent: Column(
+                      children: [Expanded(child: CouponList())],
+                    ));
+                  });
             },
-            child: Text(
-              'Escoge un cupón guardado',
-              style: TextStyle(
-                  fontSize: 17,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500),
-            )),
+            child: couponProvider.areCouponSelectedOrCreated
+                ? Text(couponProvider.getCoupon.name)
+                : Text(
+                    'Escoge un cupón guardado',
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500),
+                  )),
         SizedBox(height: 10),
         QuickyButton(
+            disabled: !surveyProvider.isValidForm,
             type: QuickyButtonTypes.primary,
             onTap: () {
               if (surveyProvider.surveyAction == SurveyAction.create) {
@@ -262,7 +406,12 @@ Widget buttonsSurveys(BuildContext context, SurveyProvider surveyProvider) {
                 Survey survey = Survey(
                     id: surveyProvider.survey.id,
                     name: surveyProvider.surveyName,
-                    questions: surveyProvider.survey.questions,
+                    photo: surveyProvider.survey.photo,
+                    questions: surveyProvider.survey.questions!.map((e) {
+                      e.isNew = false;
+                      return e;
+                    }).toList(),
+                    stores: surveyProvider.survey.stores,
                     description: surveyProvider.surveyDescription,
                     secretPassword: '1334444',
                     initDate: surveyProvider.initDate,
@@ -270,7 +419,7 @@ Widget buttonsSurveys(BuildContext context, SurveyProvider surveyProvider) {
 
                 surveyProvider.addSurvey(survey);
               }
-              Navigator.pushNamed(context, '/create/survey/questions');
+              surveyProvider.changePage();
             },
             child: Text(
               'Continuar',

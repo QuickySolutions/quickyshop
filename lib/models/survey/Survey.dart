@@ -11,6 +11,7 @@ class Survey {
   String secretPassword;
   String initDate;
   String finalDate;
+  List<String>? stores;
   Survey(
       {this.id,
       this.photo,
@@ -19,13 +20,17 @@ class Survey {
       required this.finalDate,
       required this.secretPassword,
       this.description,
+      this.stores,
       this.active = true,
       this.questions});
 
   factory Survey.fromJSONResponse(Map<String, dynamic> response) {
+    var storesResponse = response['stores']; // array is now List<dynamic>
+    List<String> stores = List<String>.from(storesResponse);
     return Survey(
         id: response['_id'],
         name: response['name'],
+        stores: stores,
         description: response['description'],
         active: response['active'],
         photo: response['photo'],

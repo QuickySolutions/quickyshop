@@ -12,29 +12,35 @@ import 'package:quickyshop/utils/survey_utils.dart';
 import 'package:uuid/uuid.dart';
 
 class SurveyProvider extends ChangeNotifier {
-  late Survey _survey;
+  late Survey _survey = Survey(
+      name: '', initDate: '', finalDate: '', secretPassword: '', questions: []);
   late String _surveyName = "";
   late String _surveyDescription = "";
   late String _initDate = "";
   late String _finalDate = "";
   TextEditingController initDateController = TextEditingController();
   TextEditingController finalDateController = TextEditingController();
-  late List<Survey> _surveys;
+  late List<Survey> _surveys = [];
   late File _selectedPhoto = File('');
   bool _isLoadingRequest = false;
   SurveyAction _surveyAction = SurveyAction.create;
-
-  BrandService _brandService = BrandService();
+  int _activePage = 0;
+  final PageController _pageController = PageController(initialPage: 0);
+  final BrandService _brandService = BrandService();
+  late int _indexTitleToEditQuestion = -1;
 
   Survey get survey => _survey;
   String get surveyName => _surveyName;
   String get surveyDescription => _surveyDescription;
   String get initDate => _initDate;
+  int get activePage => _activePage;
+  PageController get pageController => _pageController;
   String get finalDate => _finalDate;
   List<Survey> get surveys => _surveys;
   bool get isLoading => _isLoadingRequest;
   File get selectedPhoto => _selectedPhoto;
   SurveyAction get surveyAction => _surveyAction;
+  int get indexTitleToEditQuestion => _indexTitleToEditQuestion;
 
   bool get isValidForm {
     if (_surveyName.isEmpty ||
@@ -77,8 +83,30 @@ class SurveyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setPhoto(String photoValue) {
+    _survey.photo = photoValue;
+    notifyListeners();
+  }
+
   void addSurvey(Survey survey) {
     _survey = survey;
+    notifyListeners();
+  }
+
+  void setPage(int page) {
+    _activePage = page;
+    notifyListeners();
+  }
+
+  void changePage() {
+    _pageController.animateToPage(_activePage + 1,
+        duration: Duration(milliseconds: 500), curve: Curves.ease);
+    notifyListeners();
+  }
+
+  void goBackPage() {
+    _pageController.animateToPage(_activePage - 1,
+        duration: Duration(milliseconds: 500), curve: Curves.ease);
     notifyListeners();
   }
 
@@ -89,6 +117,7 @@ class SurveyProvider extends ChangeNotifier {
           maximumOptions: 6,
           minimumOptions: 3,
           maxSelected: 6,
+          isNew: true,
           minimumSelected: 2,
           id: oldQuestion.id,
           title: oldQuestion.title,
@@ -97,6 +126,7 @@ class SurveyProvider extends ChangeNotifier {
     } else if (keyType == 'close') {
       _survey.questions![indexQuestion] = CloseQuestion(
           id: oldQuestion.id,
+          isNew: true,
           title: oldQuestion.title,
           type: keyType,
           options: []) as Question;
@@ -109,6 +139,7 @@ class SurveyProvider extends ChangeNotifier {
       //option will be normal
       _survey.questions![indexQuestion] = TemplateQuestion(
         id: oldQuestion.id,
+        isNew: true,
         title: oldQuestion.title,
         type: 'normal',
       ) as Question;
@@ -154,15 +185,49 @@ class SurveyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void changeTitleQuestion(int indexQuestion) {
+    if (_indexTitleToEditQuestion < 0) {
+      _indexTitleToEditQuestion = indexQuestion;
+    } else {
+      _indexTitleToEditQuestion = -1;
+    }
+
+    notifyListeners();
+  }
+
+  void onChangeTitleQuetion(int indexQuestion, String value) {
+    _survey.questions![indexQuestion].title = value;
+    notifyListeners();
+  }
+
   void setSurvey(Survey survey) {
     _surveyAction = SurveyAction.edit;
     _surveyName = survey.name;
     _surveyDescription = survey.description!;
     _initDate = survey.initDate;
     _finalDate = survey.finalDate;
+    _survey.photo = survey.photo;
     initDateController.text = survey.initDate;
     finalDateController.text = survey.finalDate;
     _survey = survey;
+    notifyListeners();
+  }
+
+  void reset() {
+    _surveyAction = SurveyAction.create;
+    _surveyName = "";
+    _surveyDescription = "";
+    _initDate = "";
+    _finalDate = "";
+    initDateController.text = "";
+    finalDateController.text = "";
+    _survey = Survey(
+        name: '',
+        initDate: '',
+        finalDate: '',
+        secretPassword: '',
+        questions: []);
+    _selectedPhoto = File('');
     notifyListeners();
   }
 }

@@ -66,7 +66,6 @@ class MyApp extends StatelessWidget {
           '/profile': (context) => ProfileScreen(),
           '/surveys': (context) => SurveyListScreen(),
           '/create/survey': (context) => CreateSurveyScreen(),
-          '/create/survey/questions': (context) => CreateSurveyQuestionsScreen()
           // '/end/create/survey': (context) =>
         },
       ),

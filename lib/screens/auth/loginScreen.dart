@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import '../../services/storeService.dart';
 import '../../utils/Colors.dart';
 import '../../utils/general_methods.dart';
 import '../../widgets/inputs/quicky_textfield.dart';
@@ -14,7 +12,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  StoreService _storeService = StoreService();
   @override
   Widget build(BuildContext context) {
     return QuickyAuthScaffold(
@@ -62,9 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               borderRadius: BorderRadius.circular(100),
                             ),
                           ),
-                          onPressed: () {
-                            //_storeService.
-                          },
+                          onPressed: () {},
                           child: Text(
                             'Iniciar sesión',
                             style: TextStyle(

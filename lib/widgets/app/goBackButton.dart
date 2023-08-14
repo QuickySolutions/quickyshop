@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quickyshop/providers/survey/survey_provider.dart';
 
 enum BackButton { primary, secondary }
 
 class GoBackButton extends StatelessWidget {
-  const GoBackButton({super.key});
+  final void Function()? onTap;
+  GoBackButton({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
+    final surveyProvider = Provider.of<SurveyProvider>(context);
     return GestureDetector(
-      onTap: () {
-        Navigator.pop(context, true);
-      },
+      onTap: onTap,
       child: CircleAvatar(
         backgroundColor: Colors.white,
         radius: 30,

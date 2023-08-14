@@ -16,11 +16,9 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  //String _secondPassword = "";
   bool wantToSeePassword = false;
   bool wantToSeePassword2 = false;
 
-  final TextEditingController _nameStoreController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final signUpProvider = Provider.of<SignUpProvider>(context);

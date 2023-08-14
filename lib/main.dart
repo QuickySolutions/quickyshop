@@ -10,6 +10,7 @@ import 'package:quickyshop/screens/coupons/coupons-list.dart';
 import 'package:quickyshop/screens/profile/profile.dart';
 import 'package:quickyshop/screens/surveys/create_survey_questions_screen.dart';
 import 'package:quickyshop/screens/surveys/create_survey_screen.dart';
+import 'package:quickyshop/screens/surveys/survey_list_screen.dart';
 
 import 'providers/photo/photo_provider.dart';
 import 'providers/signup/signup_provider.dart';
@@ -63,8 +64,8 @@ class MyApp extends StatelessWidget {
           '/home': (context) => HomePage(),
           '/coupons': (context) => CouponsListScreeen(),
           '/profile': (context) => ProfileScreen(),
+          '/surveys': (context) => SurveyListScreen(),
           '/create/survey': (context) => CreateSurveyScreen(),
-          '/create/survey/questions': (context) => CreateSurveyQuestionsScreen()
           // '/end/create/survey': (context) =>
         },
       ),

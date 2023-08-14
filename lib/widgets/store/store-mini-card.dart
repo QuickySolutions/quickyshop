@@ -7,21 +7,23 @@ import '../../utils/Colors.dart';
 
 class StoreMiniCard extends StatelessWidget {
   final bool isSelected;
+  final bool showImage;
   final Store store;
+  final void Function()? onTap;
   const StoreMiniCard(
-      {super.key, this.isSelected = false, required this.store});
+      {super.key,
+      required this.showImage,
+      required this.onTap,
+      this.isSelected = false,
+      required this.store});
 
   @override
   Widget build(BuildContext context) {
-    final appProvider = Provider.of<AppProvider>(context);
     return GestureDetector(
-      onTap: () {
-        appProvider.selectStore(store);
-      },
+      onTap: onTap,
       child: Container(
+        width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.all(10),
-        width: 280,
-        margin: EdgeInsets.only(right: 20),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
@@ -43,14 +45,19 @@ class StoreMiniCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image(
-                  height: double.infinity,
-                  width: 100,
-                  fit: BoxFit.cover,
-                  image: NetworkImage(store.photo)),
-            ),
+            showImage
+                ? Container(
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image(
+                          height: 100,
+                          width: 100,
+                          fit: BoxFit.cover,
+                          image: NetworkImage(store.photo)),
+                    ),
+                  )
+                : Container(),
             SizedBox(width: 5),
             Expanded(
               child: Container(

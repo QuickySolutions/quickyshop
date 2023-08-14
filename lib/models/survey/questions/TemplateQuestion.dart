@@ -5,8 +5,6 @@ class TemplateQuestion implements Question {
   @override
   String title;
 
-  TemplateQuestion({required this.title, required this.type, required this.id});
-
   @override
   List<OptionQuestion>? options;
 
@@ -15,4 +13,19 @@ class TemplateQuestion implements Question {
 
   @override
   String id;
+
+  TemplateQuestion(
+      {required this.title,
+      required this.type,
+      required this.id,
+      required this.isNew});
+
+  @override
+  Map<String, dynamic>? toJson() {
+    // TODO: implement toJson
+    return {};
+  }
+
+  @override
+  bool isNew;
 }

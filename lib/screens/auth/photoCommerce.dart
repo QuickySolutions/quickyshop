@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/firebase/uploadFilesToFirebase.dart';
@@ -7,7 +5,6 @@ import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/providers/photo/photo_provider.dart';
 import 'package:quickyshop/services/brandService.dart';
-import 'package:quickyshop/services/pictureSelectionService.dart';
 import '../../providers/signup/signup_provider.dart';
 import '../../services/storeService.dart';
 import '../../utils/Colors.dart';
@@ -24,7 +21,6 @@ class DefinePhotoCommerceScreen extends StatefulWidget {
 
 class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
   StoreService _storeService = StoreService();
-  PictureSelectionService _pictureSelectionService = PictureSelectionService();
   BrandService _brandService = BrandService();
   bool isLoadingSaveData = false;
 

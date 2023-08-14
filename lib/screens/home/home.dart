@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quickyshop/models/Brand.dart';
 import 'package:quickyshop/models/Store.dart';
-import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
-import 'package:quickyshop/providers/signup/signup_provider.dart';
+import 'package:quickyshop/providers/survey/survey_provider.dart';
 import 'package:quickyshop/services/brandService.dart';
 import 'package:quickyshop/widgets/brand/brand-mini-card.dart';
 
@@ -47,6 +45,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final appProvider = Provider.of<AppProvider>(context);
+    final surveyProvider = Provider.of<SurveyProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: isLoadingBrandInformation
@@ -145,13 +144,21 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Row(
                                         children: snapshot.data!.map((e) {
-                                      return StoreMiniCard(
-                                          store: e,
-                                          isSelected: appProvider
-                                                  .hasSelectedStore
-                                              ? e.id ==
-                                                  appProvider.storeSelected.id
-                                              : false);
+                                      return Container(
+                                        width: 280,
+                                        margin: EdgeInsets.only(right: 20),
+                                        child: StoreMiniCard(
+                                            showImage: true,
+                                            onTap: () {
+                                              appProvider.selectStore(e);
+                                            },
+                                            store: e,
+                                            isSelected: appProvider
+                                                    .hasSelectedStore
+                                                ? e.id ==
+                                                    appProvider.storeSelected.id
+                                                : false),
+                                      );
                                     }).toList()),
                                   ],
                                 ),
@@ -201,7 +208,9 @@ class _HomePageState extends State<HomePage> {
                               width: 120,
                               height: 120,
                               child: GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/surveys');
+                                },
                                 child: Container(
                                   padding: EdgeInsets.only(bottom: 8),
                                   decoration: BoxDecoration(
@@ -318,6 +327,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             onPressed: () {
+                              surveyProvider.setPage(0);
                               Navigator.pushNamed(context, '/create/survey');
                             },
                             child: Row(

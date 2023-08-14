@@ -12,11 +12,13 @@ class QuickyButton extends StatelessWidget {
   QuickyButtonTypes type;
   Widget child;
   final void Function()? onTap;
+  bool disabled;
   QuickyButton(
       {super.key,
       required this.type,
       required this.child,
-      required this.onTap});
+      required this.onTap,
+      this.disabled = false});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class QuickyButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(100),
             ),
           ),
-          onPressed: () => onTap!(),
+          onPressed: disabled ? null : () => onTap!(),
           child: child),
     );
   }

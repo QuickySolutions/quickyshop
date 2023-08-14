@@ -39,7 +39,7 @@ class _QuickyAlertDialogState extends State<QuickyAlertDialog> {
                       top: 50, left: 20, right: 20, bottom: 20),
                   width: MediaQuery.of(context).size.width * 0.75,
                   height: widget.size == 'xs-small'
-                      ? 300
+                      ? 120
                       : widget.size == 'small'
                           ? 380
                           : 500,

@@ -22,5 +22,9 @@ class CloseQuestion implements Question {
       {required this.id,
       required this.title,
       required this.type,
-      required this.options});
+      required this.options,
+      required this.isNew});
+
+  @override
+  bool isNew;
 }

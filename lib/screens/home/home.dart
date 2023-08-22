@@ -66,9 +66,7 @@ class _HomePageState extends State<HomePage> {
               child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Container(
-                  padding: EdgeInsets.only(
-                    top: 50,
-                  ),
+                  padding: EdgeInsets.only(top: 50, bottom: 20),
                   child: Column(
                     children: [
                       appProvider.hasSelectedBrand

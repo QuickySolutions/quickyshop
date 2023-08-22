@@ -27,8 +27,6 @@ class CreateSurveyScreen extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    bool _keyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
-    // TODO: implement build
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Consumer<SurveyProvider>(
@@ -38,7 +36,8 @@ class CreateSurveyScreen extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
               child: Column(
                 children: [
-                  Expanded(
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.93,
                     child: PageView.builder(
                       controller: value.pageController,
                       onPageChanged: (int page) {
@@ -99,15 +98,16 @@ class FormSurveyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final surveyProvider = Provider.of<SurveyProvider>(context);
     final couponProvider = Provider.of<CouponProvider>(context);
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          backgroundSurvey(surveyProvider, context),
-          principalFormSurvey(context, surveyProvider),
-          SizedBox(height: 10),
-          buttonsSurveys(context, surveyProvider, couponProvider)
-        ],
+    return SingleChildScrollView(
+      child: Container(
+        child: Column(
+          children: [
+            backgroundSurvey(surveyProvider, context),
+            principalFormSurvey(context, surveyProvider),
+            SizedBox(height: 10),
+            buttonsSurveys(context, surveyProvider, couponProvider)
+          ],
+        ),
       ),
     );
   }

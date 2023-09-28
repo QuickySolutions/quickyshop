@@ -8,12 +8,14 @@ class AppProvider with ChangeNotifier {
   late Brand _brandDefault;
   bool _hasSelectedStore = false;
   bool _hasSelectedBrand = false;
+  int _currentPage = 0;
 
   bool get wantToAddNewStore => _wantToAddNewStore;
   Store get storeSelected => _storeSelected;
   Brand get brandDefault => _brandDefault;
   bool get hasSelectedStore => _hasSelectedStore;
   bool get hasSelectedBrand => _hasSelectedBrand;
+  int get currentPage => _currentPage;
 
   void setWantToAddNewStore(bool value) {
     _wantToAddNewStore = value;
@@ -37,6 +39,11 @@ class AppProvider with ChangeNotifier {
   void restoreBrandDefault() {
     _hasSelectedStore = false;
     _hasSelectedBrand = true;
+    notifyListeners();
+  }
+
+  void changePage(int nextPage) {
+    _currentPage = nextPage;
     notifyListeners();
   }
 }

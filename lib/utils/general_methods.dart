@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:quickyshop/providers/signup/signup_provider.dart';
 
 Widget getCustomIconToTextFieldInPrefx(String pathAssetImage) {
   return Padding(

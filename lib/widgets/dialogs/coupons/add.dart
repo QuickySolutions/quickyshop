@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/providers/coupons/coupon_provider.dart';
+import 'package:quickyshop/providers/store/store_provider.dart';
+import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/widgets/inputs/quicky_textfield.dart';
 
 class AddCouponForm extends StatelessWidget {
@@ -9,11 +14,36 @@ class AddCouponForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CouponProvider _couponProvider = Provider.of<CouponProvider>(context);
+    StoreProvider storeProvider = Provider.of<StoreProvider>(context);
     return Column(
       children: [
         Text(
           'Agrega un nuevo cupón',
           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+        ),
+        SizedBox(height: 20),
+        GestureDetector(
+          onTap: () async {
+            PickedFile? pickedFile = await ImagePicker().getImage(
+              source: ImageSource.gallery,
+              maxWidth: 1800,
+              maxHeight: 1800,
+            );
+            if (pickedFile != null) {
+              File imageFile = File(pickedFile.path);
+              _couponProvider.selectImage(imageFile);
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                image: _couponProvider.selectedFile.path.isEmpty
+                    ? DecorationImage(
+                        image: AssetImage('assets/images/not-available.png'))
+                    : DecorationImage(
+                        fit: BoxFit.cover,
+                        image: FileImage(_couponProvider.selectedFile))),
+            height: 120,
+          ),
         ),
         SizedBox(height: 20),
         QuickyTextField(
@@ -23,44 +53,35 @@ class AddCouponForm extends StatelessWidget {
             }),
         SizedBox(height: 15),
         QuickyTextField(
-            isNumeric: true,
+            keyboardType: TextInputType.number,
             onChanged: (String? value) {
               if (value!.isEmpty) {
                 _couponProvider.onChangeMonetization(0.0);
               } else {
-                double money = double.tryParse(value!)!;
+                double money = double.tryParse(value)!;
                 _couponProvider.onChangeMonetization(money);
               }
             },
             hintText: 'Valor monetario del cupón'),
         SizedBox(height: 25),
-        Text('Añadir a todas las subtiendas'),
-        SizedBox(height: 5),
-        Row(
-          children: [
-            Row(
-              children: [
-                Radio(
-                    value: 0,
-                    groupValue: _couponProvider.addToStores,
+        Container(
+          child: Row(
+            children: [
+              Transform.scale(
+                scale: 1.2,
+                child: Checkbox(
+                    checkColor: Colors.white,
+                    activeColor: QuickyColors.primaryColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    value: storeProvider.wantToSaveInAllStores,
                     onChanged: (value) {
-                      _couponProvider.addToStoresSelection(value!);
+                      storeProvider.onSaveInAllStores(value!);
                     }),
-                Text('Si')
-              ],
-            ),
-            Row(
-              children: [
-                Radio(
-                    value: 1,
-                    groupValue: _couponProvider.addToStores,
-                    onChanged: (value) {
-                      _couponProvider.addToStoresSelection(value!);
-                    }),
-                Text('No')
-              ],
-            ),
-          ],
+              ),
+              Expanded(child: Text('Enviar esta encuesta a todas las tiendas'))
+            ],
+          ),
         ),
       ],
     );

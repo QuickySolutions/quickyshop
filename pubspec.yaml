@@ -46,6 +46,8 @@ dependencies:
   firebase_storage: ^11.2.2
   shared_preferences: ^2.1.2
   uuid: ^3.0.7
+  flutter_dotenv: ^5.1.0
+  qr_code_scanner: ^1.0.1
 
 
 dev_dependencies:
@@ -80,6 +82,7 @@ flutter:
     - assets/icons/usability/medals/
     - assets/images/
     - assets/utils/
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,7 +1,7 @@
 import 'package:quickyshop/models/survey/Question.dart';
 import 'package:quickyshop/models/survey/questions/options/OptionQuestion.dart';
 
-class CloseQuestion implements Question {
+class ReviewQuestion implements Question {
   @override
   String id;
 
@@ -20,17 +20,24 @@ class CloseQuestion implements Question {
       'title': title,
       'type': type,
       'options': options,
-      'isNew': isNew
+      'isNew': isNew,
+      'maxCharacters': maxCharacters,
+      'review': review
     };
   }
 
-  CloseQuestion(
+  ReviewQuestion(
       {required this.id,
       required this.title,
       required this.type,
       required this.options,
-      required this.isNew});
+      required this.isNew,
+      required this.review,
+      required this.maxCharacters});
 
   @override
   bool isNew;
+
+  String review;
+  int maxCharacters;
 }

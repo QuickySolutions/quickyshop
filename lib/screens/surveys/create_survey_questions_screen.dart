@@ -25,21 +25,20 @@ class CreateSurveyQuestionsScreen extends StatelessWidget {
     final storeProvider = Provider.of<StoreProvider>(context);
     final appProvider = Provider.of<AppProvider>(context);
     return Scaffold(
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () {
-              Question newQuestion = TemplateQuestion(
-                  isNew: true,
-                  id: Uuid().v4(),
-                  title: 'Pregunta...',
-                  type: 'normal') as Question;
-              surveyProvider.addNewQuestion(newQuestion);
-            },
-            child: Icon(Icons.add),
-          ),
-        ],
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          Question newQuestion = TemplateQuestion(
+              isNew: true,
+              id: Uuid().v4(),
+              title: 'Pregunta...',
+              type: 'normal') as Question;
+          surveyProvider.addNewQuestion(newQuestion);
+        },
+        child: Image(
+          height: 80,
+          width: 80,
+          image: AssetImage('assets/icons/usability/buttonplus.png'),
+        ),
       ),
       backgroundColor: Color(0xffF4F4F4),
       body: SafeArea(
@@ -150,6 +149,5 @@ class CreateSurveyQuestionsScreen extends StatelessWidget {
         storeProvider.selectedStores, appProvider.brandDefault.id);
     surveyProvider.reset();
     storeProvider.reset();
-    Navigator.pushNamed(context, '/home');
   }
 }

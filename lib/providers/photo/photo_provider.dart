@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class PhotoProvider with ChangeNotifier {
-  File? _photo;
+  File? _photo = File('');
   late bool _pickedPicture = false;
   late bool _uploadedPhoto = false;
 

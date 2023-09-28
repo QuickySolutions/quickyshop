@@ -75,7 +75,9 @@ class _DefineCategoryScreenState extends State<DefineCategoryScreen> {
             ),
             Expanded(
               child: isLoading
-                  ? CircularProgressIndicator()
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
                   : signUpProvider.principalCategorySelected.isEmpty
                       ? showGridCategories(signUpProvider)
                       : signUpProvider.subLevelSelected.isEmpty

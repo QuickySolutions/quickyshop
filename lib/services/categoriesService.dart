@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:quickyshop/utils/api.dart';
 
 import '../models/Category.dart';
 import '../models/SubLevel.dart';
@@ -10,8 +11,8 @@ class CategoriesService {
     late Map<String, dynamic> responseMap;
 
     try {
-      Response response = await _dio
-          .get("http://localhost:3000/categories?name=${categoryName}");
+      Response response =
+          await _dio.get("${ApiUrl.API}/categories?name=${categoryName}");
 
       if (response.data['data'] == null) {
         responseMap = {"status": false, "category": null};
@@ -32,8 +33,13 @@ class CategoriesService {
     List<Category> categories = [];
 
     try {
-      Response response = await _dio.get("http://localhost:3000/categories/");
+      String route = "${ApiUrl.API}/categories";
+
+      print(route);
+      Response response = await _dio.get("${ApiUrl.API}/categories");
+      print(response);
       List<dynamic> res = response.data['data'];
+      print(res);
       res.forEach((element) {
         categories.add(Category.fromResponse(element));
       });
@@ -50,7 +56,7 @@ class CategoriesService {
 
     try {
       Response response = await _dio.get(
-          "http://localhost:3000/categories/category?name=${principalCategory}&subLevel=${subLevelName}");
+          "${ApiUrl.API}/categories/category?name=${principalCategory}&subLevel=${subLevelName}");
 
       if (response.data['status']) {
         responseMap = {

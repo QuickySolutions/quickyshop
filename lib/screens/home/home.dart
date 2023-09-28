@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/models/Store.dart';
+import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
+import 'package:quickyshop/providers/statistics/statisticsProvider.dart';
 import 'package:quickyshop/providers/survey/survey_provider.dart';
 import 'package:quickyshop/services/brandService.dart';
 import 'package:quickyshop/widgets/brand/brand-mini-card.dart';
@@ -27,7 +29,7 @@ class _HomePageState extends State<HomePage> {
     //final signupProvider = Provider.of<SignUpProvider>(context, listen: false);
     final appProvider = Provider.of<AppProvider>(context, listen: false);
     final Map<String, dynamic> brand =
-        await _brandService.getBrandInformation("64989445c41230ffd2539f89");
+        await _brandService.getBrandInformation(AppPreferences().brandId);
     appProvider.setDefaultBrand(brand['data']);
 
     setState(() {
@@ -38,6 +40,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     getBrandInformation();
+
     // TODO: implement initState
     super.initState();
   }
@@ -46,6 +49,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final appProvider = Provider.of<AppProvider>(context);
     final surveyProvider = Provider.of<SurveyProvider>(context);
+    final statisticProvider = Provider.of<StatisticProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: isLoadingBrandInformation
@@ -123,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(height: 20),
                       FutureBuilder(
                           future: _brandService
-                              .branchOfficesByBrand("64989445c41230ffd2539f89"),
+                              .branchOfficesByBrand(AppPreferences().brandId),
                           builder:
                               (context, AsyncSnapshot<List<Store>> snapshot) {
                             if (snapshot.hasData) {
@@ -279,7 +283,14 @@ class _HomePageState extends State<HomePage> {
                               width: 120,
                               height: 120,
                               child: GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  if (appProvider.hasSelectedBrand) {
+                                    statisticProvider.setBrandId(
+                                        appProvider.brandDefault.id);
+                                    Navigator.pushNamed(
+                                        context, '/profile/statistics');
+                                  }
+                                },
                                 child: Container(
                                   padding: EdgeInsets.only(bottom: 8),
                                   decoration: BoxDecoration(

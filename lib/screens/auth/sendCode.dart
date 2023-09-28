@@ -46,7 +46,7 @@ class _SendCodeScreenState extends State<SendCodeScreen> {
                     ),
                     SizedBox(height: 30),
                     QuickyTextField(
-                      isNumeric: true,
+                      keyboardType: TextInputType.phone,
                       onChanged: (value) {
                         setState(() {
                           numericPhone = value;
@@ -71,28 +71,27 @@ class _SendCodeScreenState extends State<SendCodeScreen> {
                             ),
                           ),
                           onPressed: () async {
-                            // signUpProvider.setNumberCellPhone(numericPhone);
-                            // Navigator.pushNamed(context, '/confirm-code');
-                            int min =
-                                1000; //min and max values act as your 6 digit range
-                            int max = 9999;
-                            var randomizer = new Random();
-                            var code = min + randomizer.nextInt(max - min);
+                            // int min = 1000;
+                            // int max = 9999;
+                            // var randomizer = new Random();
+                            // var code = min + randomizer.nextInt(max - min);
 
-                            var data = {
-                              'cellphone': numericPhone,
-                              'code': code
-                            };
-                            Map<String, dynamic> response = await _storeService
-                                .verifyNumberStoreToSendSMS(data);
+                            // var data = {
+                            //   'cellphone': numericPhone,
+                            //   'code': code
+                            // };
+                            // Map<String, dynamic> response = await _storeService
+                            //     .verifyNumberStoreToSendSMS(data);
 
-                            if (!response['exist']) {
-                              signUpProvider.setNumberCellPhone(numericPhone);
-                              Navigator.pushNamed(context, '/confirm-code',
-                                  arguments: {'code': code});
-                            } else {
-                              print('existe');
-                            }
+                            // if (!response['exist']) {
+                            //   signUpProvider.setNumberCellPhone(numericPhone);
+                            //   Navigator.pushNamed(context, '/confirm-code',
+                            //       arguments: {'code': code});
+                            // } else {
+                            //   print('existe');
+                            // }
+                            Navigator.pushNamed(context, '/confirm-code',
+                                arguments: {'code': 1234});
                           },
                           child: Text(
                             'Enviarme un codigo SMS',

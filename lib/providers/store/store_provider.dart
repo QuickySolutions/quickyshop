@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quickyshop/models/Store.dart';
+import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/services/brandService.dart';
 
 class StoreProvider extends ChangeNotifier {
@@ -55,7 +56,7 @@ class StoreProvider extends ChangeNotifier {
   void getAll() async {
     setIsLoading(true);
     List<Store> stores =
-        await _brandService.branchOfficesByBrand("64989445c41230ffd2539f89");
+        await _brandService.branchOfficesByBrand(AppPreferences().brandId);
 
     if (stores.isNotEmpty) {
       _stores = stores;

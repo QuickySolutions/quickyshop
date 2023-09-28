@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:quickyshop/models/Store.dart';
 import 'package:quickyshop/models/survey/Survey.dart';
 import 'package:quickyshop/providers/store/store_provider.dart';
 import 'package:quickyshop/utils/api.dart';
-import 'package:quickyshop/utils/survey_utils.dart';
 
 class SurveyResponse {
   String message;
@@ -26,7 +24,7 @@ class SurveyService {
 
   Future<SurveyResponse> createSurvey(
       Survey survey, List<String> storeList, String brandId) async {
-    Response response = await _dio.post(ApiUrl.LOCAL_API + '/surveys', data: {
+    Response response = await _dio.post(ApiUrl.API + '/surveys', data: {
       'survey': survey.toJson(),
       'stores': storeList,
       'brandId': brandId
@@ -37,11 +35,25 @@ class SurveyService {
 
   Future<SurveyResponse> editSurvey(
       Survey survey, StoreProvider storeProvider) async {
-    Response response = await _dio
-        .put(ApiUrl.LOCAL_API + '/surveys/${survey.id}', data: {
-      'survey': survey.toJson(),
-      'stores': storeProvider.selectedStores
-    });
+    Response response = await _dio.put(ApiUrl.API + '/surveys/${survey.id}',
+        data: {
+          'survey': survey.toJson(),
+          'stores': storeProvider.selectedStores
+        });
     return SurveyResponse.fromJSONResponse(response.data);
+  }
+
+  Future<Map<String, dynamic>> uploadResponse(payload) async {
+    late Map<String, dynamic> responseMap;
+    try {
+      Response response =
+          await _dio.post("${ApiUrl.API}/question/saveResponse", data: payload);
+
+      responseMap = response.data;
+    } catch (e) {
+      print(e);
+    }
+
+    return responseMap;
   }
 }

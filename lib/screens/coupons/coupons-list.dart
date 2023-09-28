@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/models/Coupon.dart';
+import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/providers/coupons/coupon_provider.dart';
+import 'package:quickyshop/providers/store/store_provider.dart';
 import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/widgets/coupons/coupon-card.dart';
 import 'package:quickyshop/widgets/dialogs/QuickyAlertDialog.dart';
@@ -28,10 +30,11 @@ class _CouponsListScreeenState extends State<CouponsListScreeen> {
   @override
   Widget build(BuildContext context) {
     CouponProvider couponProvider = Provider.of<CouponProvider>(context);
+    StoreProvider storeProvider = Provider.of<StoreProvider>(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: QuickyColors.primaryColor,
-        onPressed: () => addNewCoupon(couponProvider),
+        onPressed: () => addNewCoupon(couponProvider, storeProvider),
         child: Icon(Icons.add),
       ),
       backgroundColor: Colors.white,
@@ -82,20 +85,26 @@ class _CouponsListScreeenState extends State<CouponsListScreeen> {
     );
   }
 
-  void addNewCoupon(CouponProvider couponProvider) {
+  void addNewCoupon(
+      CouponProvider couponProvider, StoreProvider storeProvider) {
     showDialog(
         context: context,
         builder: (context) {
           return QuickyAlertDialog(
               onNextClick: () {
-                if (couponProvider.isValidForm) {
+                if (couponProvider.isValidForm &&
+                    !storeProvider.wantToSaveInAllStores) {
                   Coupon couponItem = Coupon(
                       active: true,
-                      brandId: '64989445c41230ffd2539f89',
+                      brandId: AppPreferences().brandId,
                       name: couponProvider.couponName,
                       monetization: couponProvider.couponMonetization);
+
                   couponProvider.create(couponItem);
                   Navigator.pop(context);
+                } else if (couponProvider.isValidForm &&
+                    storeProvider.wantToSaveInAllStores) {
+                  couponProvider.changePageContent();
                 } else {
                   const snackBar = SnackBar(
                     content: Text('Rellena los datos'),
@@ -105,8 +114,19 @@ class _CouponsListScreeenState extends State<CouponsListScreeen> {
               },
               showNextButton: true,
               size: 'md',
-              childContent: ContentAlertCoupon(
-                operationType: OperationType.add,
+              childContent: PageView(
+                onPageChanged: (value) {
+                  couponProvider.setPage(value);
+                },
+                controller: couponProvider.pageController,
+                children: [
+                  ContentAlertCoupon(
+                    operationType: OperationType.add,
+                  ),
+                  ContentAlertCoupon(
+                    operationType: OperationType.storeslist,
+                  ),
+                ],
               ));
         });
   }

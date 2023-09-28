@@ -55,3 +55,8 @@ List<OptionQuestion> optionsFromJsonResponse(
 
   return options;
 }
+
+String getEmojiByPosition(int position) {
+  List<dynamic> emojis = ['🤢', '😡', '🤷🏽‍♂️', '🤩', '🥳'];
+  return emojis.elementAt(position);
+}

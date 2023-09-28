@@ -53,9 +53,7 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
     if (!appProvider.wantToAddNewStore) {
       final response = await _storeService.createBranch(storeData);
 
-      AppPreferences.setIsLogin('isLogged', true);
-      AppPreferences.setIdBrand('idBrand', response['data']['_id']);
-      signUpProvider.setPhotoProfile(photoUrl);
+      AppPreferences().setIdBrand(response['data']['_id']);
     } else {
       await _brandService.createBranchOffice(
           appProvider.brandDefault.id, storeData);

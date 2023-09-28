@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/providers/coupons/coupon_provider.dart';
 import 'package:quickyshop/widgets/inputs/quicky_textfield.dart';
@@ -12,8 +15,32 @@ class EditCouponForm extends StatelessWidget {
     return Column(
       children: [
         Text(
-          'Agrega un nuevo cupón',
+          'Editar un cupón',
           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+        ),
+        SizedBox(height: 20),
+        GestureDetector(
+          onTap: () async {
+            PickedFile? pickedFile = await ImagePicker().getImage(
+              source: ImageSource.gallery,
+              maxWidth: 1800,
+              maxHeight: 1800,
+            );
+            if (pickedFile != null) {
+              File imageFile = File(pickedFile.path);
+              _couponProvider.selectImage(imageFile);
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                image: _couponProvider.selectedFile.path.isEmpty
+                    ? DecorationImage(
+                        image: AssetImage('assets/images/not-available.png'))
+                    : DecorationImage(
+                        fit: BoxFit.cover,
+                        image: FileImage(_couponProvider.selectedFile))),
+            height: 120,
+          ),
         ),
         SizedBox(height: 20),
         QuickyTextField(
@@ -25,7 +52,7 @@ class EditCouponForm extends StatelessWidget {
         SizedBox(height: 15),
         QuickyTextField(
             defaultValue: _couponProvider.couponMonetization.toString(),
-            isNumeric: true,
+            keyboardType: TextInputType.number,
             onChanged: (String value) {
               if (value.isNotEmpty) {
                 double money = double.tryParse(value)!;
@@ -33,35 +60,6 @@ class EditCouponForm extends StatelessWidget {
               }
             },
             hintText: 'Valor monetario del cupón'),
-        SizedBox(height: 25),
-        Text('Añadir a todas las subtiendas'),
-        SizedBox(height: 5),
-        Row(
-          children: [
-            Row(
-              children: [
-                Radio(
-                    value: 0,
-                    groupValue: _couponProvider.addToStores,
-                    onChanged: (value) {
-                      _couponProvider.addToStoresSelection(value!);
-                    }),
-                Text('Si')
-              ],
-            ),
-            Row(
-              children: [
-                Radio(
-                    value: 1,
-                    groupValue: _couponProvider.addToStores,
-                    onChanged: (value) {
-                      _couponProvider.addToStoresSelection(value!);
-                    }),
-                Text('No')
-              ],
-            ),
-          ],
-        ),
       ],
     );
   }

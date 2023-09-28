@@ -24,9 +24,11 @@ class CouponsService {
   Future<CouponResponse> getAllCoupons(String brandId) async {
     try {
       List<Coupon> couponsResponse = [];
-
-      String route = ApiUrl.LOCAL_API + '/brand/$brandId/coupons';
+      print(ApiUrl.API);
+      String route = ApiUrl.API + '/brands/$brandId/coupons';
       Response response = await _dio.get(route);
+
+      print(response);
 
       response.data['data'].forEach((element) {
         couponsResponse.add(Coupon.fromJSONResponse(element));
@@ -42,30 +44,28 @@ class CouponsService {
 
   Future<CouponResponse> createCoupon(Coupon coupon) async {
     Response response =
-        await _dio.post(ApiUrl.LOCAL_API + '/coupons', data: coupon.toJson());
+        await _dio.post(ApiUrl.API + '/coupons', data: coupon.toJson());
 
     return CouponResponse.fromJSONResponse(response.data);
   }
 
   Future<CouponResponse> desactiveCoupon(String id) async {
-    Response response =
-        await _dio.put(ApiUrl.LOCAL_API + '/coupons/$id/desactive');
+    Response response = await _dio.put(ApiUrl.API + '/coupons/$id/desactive');
 
     return CouponResponse.fromJSONResponse(response.data);
   }
 
-  // Future<CouponResponse> editCoupon() async {
-  //   try {
-  //     Response response = await _dio.post(ApiUrl.LOCAL_API + '/stores');
-  //     return
-  //   } catch (e) {
-
-  //   }
-  // }
+  Future<CouponResponse> editCoupon(Coupon updatedCoupon) async {
+    Response response = await _dio.put(
+        ApiUrl.API + '/coupons/${updatedCoupon.id}',
+        data: updatedCoupon.toJson());
+    print(response.data);
+    return CouponResponse.fromJSONResponse(response.data);
+  }
 
   // Future<CouponResponse> deleteCoupon() async {
   //   try {
-  //     Response response = await _dio.post(ApiUrl.LOCAL_API + '/stores');
+  //     Response response = await _dio.post(ApiUrl.API + '/stores');
   //     return
   //   } catch (e) {
 

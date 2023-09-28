@@ -11,6 +11,7 @@ class SignUpProvider extends ChangeNotifier {
   String _storeLocation = "";
   String _emailStore = "";
   String _passwordStore = "";
+  String _confirmPasswordStore = "";
   String _photoProfile = "no_photo";
   String _cellPhoneStore = "";
 
@@ -68,6 +69,13 @@ class SignUpProvider extends ChangeNotifier {
 
   void setPasswordStore(String valuePasswordStore) {
     _passwordStore = valuePasswordStore;
+    notifyListeners();
+  }
+
+  void setPasswordConfirmStore(String valuePasswordStore) {
+    if (_passwordStore == valuePasswordStore) {
+      _confirmPasswordStore = valuePasswordStore;
+    }
     notifyListeners();
   }
 

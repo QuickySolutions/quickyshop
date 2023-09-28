@@ -27,8 +27,6 @@ class CreateSurveyScreen extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    bool _keyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
-    // TODO: implement build
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Consumer<SurveyProvider>(
@@ -38,7 +36,8 @@ class CreateSurveyScreen extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
               child: Column(
                 children: [
-                  Expanded(
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.88,
                     child: PageView.builder(
                       controller: value.pageController,
                       onPageChanged: (int page) {
@@ -99,15 +98,16 @@ class FormSurveyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final surveyProvider = Provider.of<SurveyProvider>(context);
     final couponProvider = Provider.of<CouponProvider>(context);
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          backgroundSurvey(surveyProvider, context),
-          principalFormSurvey(context, surveyProvider),
-          SizedBox(height: 10),
-          buttonsSurveys(context, surveyProvider, couponProvider)
-        ],
+    return SingleChildScrollView(
+      child: Container(
+        child: Column(
+          children: [
+            backgroundSurvey(surveyProvider, context),
+            principalFormSurvey(context, surveyProvider),
+            SizedBox(height: 10),
+            buttonsSurveys(context, surveyProvider, couponProvider)
+          ],
+        ),
       ),
     );
   }
@@ -256,17 +256,32 @@ Widget principalFormSurvey(
                       controller: surveyProvider.initDateController,
                       readOnly: true,
                       onTap: () async {
+                        // DateTime? pickedDate = await showDatePicker(
+                        //     context: context,
+                        //     initialDate: DateTime.now(),
+                        //     firstDate: DateTime(1950),
+                        //     lastDate: DateTime(2100));
+                        // var date = DateTime.parse(pickedDate.toString());
+
+                        // var formattedDate =
+                        //     "${date.year}-${date.month}-${date.day}";
+
                         DateTime? pickedDate = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
                             firstDate: DateTime(1950),
                             lastDate: DateTime(2100));
-                        var date = DateTime.parse(pickedDate.toString());
 
-                        var formattedDate =
-                            "${date.year}-${date.month}-${date.day}";
-                        surveyProvider.onChangeInitDate(formattedDate);
-                        surveyProvider.initDateController.text = formattedDate;
+                        if (pickedDate != null) {
+                          var formattedDate =
+                              "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+
+                          surveyProvider.onChangeInitDate(formattedDate);
+                          surveyProvider.initDateController.text =
+                              formattedDate;
+                        } else {
+                          // Handle the case when the user cancels the date picker.
+                        }
                       },
                       isDate: true,
                     ))
@@ -288,12 +303,17 @@ Widget principalFormSurvey(
                             initialDate: DateTime.now(),
                             firstDate: DateTime(1950),
                             lastDate: DateTime(2100));
-                        var date = DateTime.parse(pickedDate.toString());
 
-                        var formattedDate =
-                            "${date.year}-${date.month}-${date.day}";
-                        surveyProvider.onChangeFinalDate(formattedDate);
-                        surveyProvider.finalDateController.text = formattedDate;
+                        if (pickedDate != null) {
+                          var formattedDate =
+                              "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+
+                          surveyProvider.onChangeFinalDate(formattedDate);
+                          surveyProvider.finalDateController.text =
+                              formattedDate;
+                        } else {
+                          // Handle the case when the user cancels the date picker.
+                        }
                       },
                       isDate: true,
                     ))

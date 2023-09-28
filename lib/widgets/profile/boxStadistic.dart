@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quickyshop/providers/app/appProvider.dart';
+import 'package:quickyshop/providers/statistics/statisticsProvider.dart';
 import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/widgets/medals/quickyMedal.dart';
 
@@ -7,6 +10,8 @@ class BoxStadistic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appProvider = Provider.of<AppProvider>(context);
+    final statisticProvider = Provider.of<StatisticProvider>(context);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -151,7 +156,10 @@ class BoxStadistic extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/me/activity');
+                  if (appProvider.hasSelectedBrand) {
+                    statisticProvider.setBrandId(appProvider.brandDefault.id);
+                    Navigator.pushNamed(context, '/profile/statistics');
+                  }
                 },
                 child: Text(
                   'Ver actividad',

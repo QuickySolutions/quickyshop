@@ -4,9 +4,18 @@ import 'package:quickyshop/models/survey/questions/CheckboxQuestion.dart';
 import 'package:quickyshop/models/survey/Question.dart';
 import 'package:quickyshop/models/survey/Survey.dart';
 import 'package:quickyshop/models/survey/questions/CloseQuestion.dart';
+import 'package:quickyshop/models/survey/questions/ComboBoxQuestion.dart';
+import 'package:quickyshop/models/survey/questions/RadioQuestion.dart';
+import 'package:quickyshop/models/survey/questions/ReviewQuestion.dart';
+import 'package:quickyshop/models/survey/questions/ScaleQuestion.dart';
 import 'package:quickyshop/models/survey/questions/TemplateQuestion.dart';
+import 'package:quickyshop/models/survey/questions/options/CloseOption.dart';
+import 'package:quickyshop/models/survey/questions/options/ComboBoxOption.dart';
 import 'package:quickyshop/models/survey/questions/options/MultipleSelectionOption.dart';
 import 'package:quickyshop/models/survey/questions/options/OptionQuestion.dart';
+import 'package:quickyshop/models/survey/questions/options/RadioOption.dart';
+import 'package:quickyshop/models/survey/questions/options/ScaleOption.dart';
+import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/services/brandService.dart';
 import 'package:quickyshop/utils/survey_utils.dart';
 import 'package:uuid/uuid.dart';
@@ -131,10 +140,46 @@ class SurveyProvider extends ChangeNotifier {
           type: keyType,
           options: []) as Question;
     } else if (keyType == 'combo-box') {
+      _survey.questions![indexQuestion] = ComboBoxQuestion(
+          id: oldQuestion.id,
+          title: oldQuestion.title,
+          type: keyType,
+          options: [],
+          isNew: true) as Question;
     } else if (keyType == 'mini-review') {
+      _survey.questions![indexQuestion] = ReviewQuestion(
+          id: oldQuestion.id,
+          title: oldQuestion.title,
+          review: "",
+          type: keyType,
+          maxCharacters: 100,
+          options: [],
+          isNew: true) as Question;
     } else if (keyType == 'large-review') {
+      _survey.questions![indexQuestion] = ReviewQuestion(
+          id: oldQuestion.id,
+          title: oldQuestion.title,
+          review: "",
+          type: keyType,
+          maxCharacters: -1,
+          options: [],
+          isNew: true) as Question;
     } else if (keyType == 'radio') {
+      _survey.questions![indexQuestion] = RadioQuestion(
+          id: oldQuestion.id,
+          title: oldQuestion.title,
+          type: keyType,
+          options: [],
+          selected: "",
+          isNew: true) as Question;
     } else if (keyType == 'scale') {
+      _survey.questions![indexQuestion] = ScaleQuestion(
+          id: oldQuestion.id,
+          title: oldQuestion.title,
+          type: keyType,
+          options: [],
+          maxOptions: 5,
+          isNew: true) as Question;
     } else {
       //option will be normal
       _survey.questions![indexQuestion] = TemplateQuestion(
@@ -148,11 +193,28 @@ class SurveyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addNewOptionToQuestion(int indexQuestion) {
-    OptionQuestion newOption = MultipleSelectionOption(
-        id: Uuid().v4(),
-        titleOptionSurvey: 'titulo de la opción...',
-        value: false);
+  void addNewOptionToQuestion(String type, int indexQuestion) {
+    late OptionQuestion newOption;
+
+    if (type == 'check') {
+      newOption = MultipleSelectionOption(
+          id: Uuid().v4(),
+          titleOptionSurvey: 'titulo de la opción...',
+          value: false);
+    } else if (type == 'close') {
+      newOption = CloseOption(
+          id: Uuid().v4(), titleOptionSurvey: 'titulo de la opción...');
+    } else if (type == 'combo-box') {
+      newOption = ComboBoxOption(
+          id: Uuid().v4(), titleOptionSurvey: 'titulo de la opción...');
+    } else if (type == 'radio') {
+      newOption = RadioOption(
+          id: Uuid().v4(), titleOptionSurvey: 'titulo de la opción...');
+    } else if (type == 'scale') {
+      newOption = ScaleOption(
+          id: Uuid().v4(), titleOptionSurvey: 'titulo de la opción...');
+    }
+
     _survey.questions![indexQuestion].options!.add(newOption);
     notifyListeners();
   }
@@ -172,7 +234,7 @@ class SurveyProvider extends ChangeNotifier {
   void getAll() async {
     setIsLoading(true);
     BrandResponse surveyResponse =
-        await _brandService.getSurveysByBrand("64989445c41230ffd2539f89");
+        await _brandService.getSurveysByBrand(AppPreferences().brandId);
     List<Survey> surveysResponseList = surveyResponse.data;
 
     if (surveysResponseList.isNotEmpty) {
@@ -229,5 +291,16 @@ class SurveyProvider extends ChangeNotifier {
         questions: []);
     _selectedPhoto = File('');
     notifyListeners();
+  }
+
+  void deleteQuestion(int indexQuestion, SurveyAction action) {
+    switch (action) {
+      case SurveyAction.create:
+        _survey.questions!.removeAt(indexQuestion);
+        break;
+      case SurveyAction.edit:
+        break;
+      default:
+    }
   }
 }

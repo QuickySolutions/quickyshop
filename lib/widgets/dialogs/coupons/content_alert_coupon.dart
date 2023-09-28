@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quickyshop/widgets/dialogs/coupons/add.dart';
 import 'package:quickyshop/widgets/dialogs/coupons/edit.dart';
+import 'package:quickyshop/widgets/dialogs/stores/store_list.dart';
 
 enum OperationType { add, edit, storeslist }
 
@@ -20,8 +21,8 @@ class ContentAlertCoupon extends StatelessWidget {
         return AddCouponForm();
       case OperationType.edit:
         return EditCouponForm();
-      case OperationType.add:
-        return Container();
+      case OperationType.storeslist:
+        return StoreList();
       default:
         {
           return Container();

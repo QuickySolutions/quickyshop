@@ -36,12 +36,22 @@ class CouponCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image(
-                      height: 130,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      image: NetworkImage(
-                          'https://fingerprint.com/static/e972d7a2b37a5ca2e40f47af17c3abf3/45e84/what-is-coupon-glittering-how-can-it-harm-your-business_.jpg')),
+                  child: coupon.photo!.isEmpty
+                      ? Image(
+                          height: 130,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image(
+                                image: AssetImage(
+                                    'assets/images/not-available.png'));
+                          },
+                          image: AssetImage('assets/images/not-available.png'))
+                      : Image(
+                          width: double.infinity,
+                          height: 130,
+                          fit: BoxFit.cover,
+                          image: NetworkImage(coupon.photo!)),
                 ),
                 Container(
                   padding: EdgeInsets.all(12),

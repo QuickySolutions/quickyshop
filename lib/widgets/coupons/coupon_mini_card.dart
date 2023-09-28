@@ -21,61 +21,6 @@ class CouponMiniCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        // width: MediaQuery.of(context).size.width,
-        // padding: EdgeInsets.all(10),
-        // decoration: BoxDecoration(
-        //     borderRadius: BorderRadius.circular(10),
-        //     color: Colors.white,
-        //     boxShadow: [
-        //       isSelected
-        //           ? BoxShadow(
-        //               color: QuickyColors.primaryColor,
-        //               spreadRadius: 1,
-        //               blurRadius: 1,
-        //               offset: Offset(0, 1),
-        //             )
-        //           : BoxShadow(
-        //               color: Colors.grey.withOpacity(0.5),
-        //               spreadRadius: 1,
-        //               blurRadius: 1,
-        //               offset: Offset(0, 1),
-        //             )
-        //     ]),
-        // child: Column(
-        //   crossAxisAlignment: CrossAxisAlignment.start,
-        //   children: [
-        //     showImage
-        //         ? Container(
-        //             width: MediaQuery.of(context).size.width * 0.25,
-        //             child: ClipRRect(
-        //               borderRadius: BorderRadius.circular(10),
-        //               child: Image(
-        //                   height: 100,
-        //                   width: 100,
-        //                   fit: BoxFit.cover,
-        //                   image: NetworkImage(
-        //                       'https://images.prismic.io/getcircuit/e7817724-dae2-4ff5-937d-a789e8249bff_Header+%2867%29.jpg?auto=compress,format')),
-        //             ),
-        //           )
-        //         : Container(),
-        //     SizedBox(width: 5),
-        //     Expanded(
-        //       child: Container(
-        //         padding: EdgeInsets.only(top: 10),
-        //         child: Column(
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           children: [
-        //             Text(
-        //               coupon.name,
-        //               overflow: TextOverflow.ellipsis,
-        //               style: TextStyle(fontWeight: FontWeight.w700),
-        //             ),
-        //           ],
-        //         ),
-        //       ),
-        //     )
-        //   ],
-        // ),
         decoration: BoxDecoration(color: Colors.white, boxShadow: [
           isSelected
               ? BoxShadow(
@@ -91,13 +36,12 @@ class CouponMiniCard extends StatelessWidget {
                   offset: Offset(0, 1),
                 )
         ]),
-
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image(
                 image: NetworkImage(
-                    'https://images.prismic.io/getcircuit/e7817724-dae2-4ff5-937d-a789e8249bff_Header+%2867%29.jpg?auto=compress,format')),
+                    'https://fingerprint.com/static/e972d7a2b37a5ca2e40f47af17c3abf3/45e84/what-is-coupon-glittering-how-can-it-harm-your-business_.jpg')),
             Container(
               padding: EdgeInsets.all(16),
               child: Column(

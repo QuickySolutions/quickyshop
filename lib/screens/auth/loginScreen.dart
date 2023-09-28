@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quickyshop/models/Brand.dart';
+import 'package:quickyshop/preferences/appPreferences.dart';
+import 'package:quickyshop/providers/auth/loginProvider.dart';
 import '../../utils/Colors.dart';
 import '../../utils/general_methods.dart';
 import '../../widgets/inputs/quicky_textfield.dart';
@@ -14,6 +18,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
+    final loginProvider = Provider.of<LoginProvider>(context);
     return QuickyAuthScaffold(
         currentScreenType: 'register',
         contentScreen: Scaffold(
@@ -29,8 +34,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(height: 40),
                     QuickyTextField(
-                      isNumeric: true,
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        loginProvider.onChangeEmail(value);
+                      },
                       hintText: 'Ingrese email',
                       prefixIcon: Padding(
                           padding: EdgeInsets.only(left: 10),
@@ -39,9 +45,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(height: 20),
                     QuickyTextField(
-                      isNumeric: true,
-                      onChanged: (value) {},
-                      hintText: 'Ingrese email',
+                      onChanged: (value) {
+                        loginProvider.onChangePassword(value);
+                      },
+                      hintText: 'Ingrese contraseña',
+                      hideText: true,
                       prefixIcon: Padding(
                           padding: EdgeInsets.only(left: 10),
                           child: getCustomIconToTextFieldInPrefx(
@@ -59,7 +67,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               borderRadius: BorderRadius.circular(100),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: loginProvider.isValidForm
+                              ? () async {
+                                  var responseLogin =
+                                      await loginProvider.login();
+                                  AppPreferences()
+                                      .setIdBrand(responseLogin.data['_id']);
+
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context, "/home", (r) => false);
+                                }
+                              : null,
                           child: Text(
                             'Iniciar sesión',
                             style: TextStyle(

@@ -66,7 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       'assets/icons/usability/mail.png'),
                 ),
                 onChanged: (String value) {
-                  signUpProvider.setNameStore(value);
+                  signUpProvider.setEmailStore(value);
                 },
               ),
               SizedBox(height: 15),
@@ -94,7 +94,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 'assets/icons/usability/key.png'),
                           ),
                           hideText: true,
-                          onChanged: (String value) {},
+                          onChanged: (String value) {
+                            signUpProvider.setPasswordStore(value);
+                          },
                         ),
                         SizedBox(height: 15),
                         QuickyTextField(
@@ -105,7 +107,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             child: getCustomIconToTextFieldInPrefx(
                                 'assets/icons/usability/key.png'),
                           ),
-                          onChanged: (String value) {},
+                          onChanged: (String value) {
+                            signUpProvider.setPasswordConfirmStore(value);
+                          },
                         ),
                       ],
                     )

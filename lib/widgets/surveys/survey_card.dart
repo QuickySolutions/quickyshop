@@ -31,7 +31,7 @@ class _SurveyCardState extends State<SurveyCard> {
               color: Colors.grey.withOpacity(0.4),
               spreadRadius: 1,
               blurRadius: 1,
-              offset: Offset(0, 1), // changes position of shadow
+              offset: Offset(0, 1),
             ),
           ],
           color: Colors.white),
@@ -113,11 +113,14 @@ class _SurveyCardState extends State<SurveyCard> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              widget.survey.name,
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  overflow: TextOverflow.ellipsis),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              child: Text(
+                                widget.survey.name,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
                             ),
                             SizedBox(height: 8),
                             Text(

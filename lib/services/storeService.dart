@@ -8,7 +8,7 @@ class StoreService {
   Future<Map<String, dynamic>> createBranch(
       Map<String, dynamic> storeData) async {
     Response response =
-        await _dio.post(ApiUrl.LOCAL_API + '/stores/brand', data: storeData);
+        await _dio.post(ApiUrl.API + '/stores/brand', data: storeData);
 
     return response.data;
   }
@@ -17,8 +17,8 @@ class StoreService {
       Map<String, dynamic> storeData) async {
     late Map<String, dynamic> responseMap = {};
 
-    Response response = await _dio
-        .post(ApiUrl.LOCAL_API + '/stores/exist/cellhone', data: storeData);
+    Response response =
+        await _dio.post(ApiUrl.API + '/stores/exist/cellhone', data: storeData);
 
     if (!response.data['exist']) {
       responseMap = {'exist': false, 'message': 'Telefono no existente.'};
@@ -31,7 +31,7 @@ class StoreService {
 
   Future<void> changeStatusStore(String id, bool status) async {
     try {
-      await _dio.put(ApiUrl.LOCAL_API + '/stores/${id}/change/status',
+      await _dio.put(ApiUrl.API + '/stores/${id}/change/status',
           data: {'status': status});
     } catch (e) {
       print(e);

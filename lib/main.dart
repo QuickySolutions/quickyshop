@@ -1,14 +1,19 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/firebase_options.dart';
 import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
+import 'package:quickyshop/providers/auth/loginProvider.dart';
 import 'package:quickyshop/providers/coupons/coupon_provider.dart';
+import 'package:quickyshop/providers/statistics/statisticsProvider.dart';
 import 'package:quickyshop/providers/survey/survey_provider.dart';
+import 'package:quickyshop/screens/QR/QR_view.dart';
 import 'package:quickyshop/screens/coupons/coupons-list.dart';
+import 'package:quickyshop/screens/home/base.dart';
 import 'package:quickyshop/screens/profile/profile.dart';
-import 'package:quickyshop/screens/surveys/create_survey_questions_screen.dart';
+import 'package:quickyshop/screens/statistics/statisticsScreen.dart';
 import 'package:quickyshop/screens/surveys/create_survey_screen.dart';
 import 'package:quickyshop/screens/surveys/survey_list_screen.dart';
 
@@ -26,10 +31,11 @@ import 'screens/home/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AppPreferences.init();
+  await AppPreferences().initialize();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -38,6 +44,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(AppPreferences().brandId);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => SignUpProvider()),
@@ -45,14 +52,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => StoreProvider()),
         ChangeNotifierProvider(create: (_) => CouponProvider()),
         ChangeNotifierProvider(create: (_) => SurveyProvider()),
-        ChangeNotifierProvider(create: (_) => AppProvider())
+        ChangeNotifierProvider(create: (_) => AppProvider()),
+        ChangeNotifierProvider(create: (_) => LoginProvider()),
+        ChangeNotifierProvider(create: (_) => StatisticProvider())
       ],
       child: MaterialApp(
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        //initialRoute: AppPreferences.getIsLogin('isLogged')! ? '/home' : '/',
-        initialRoute: '/home',
+        initialRoute: AppPreferences().brandId.isNotEmpty ? '/base' : '/qr',
         routes: {
           '/': (context) => const PrincipalScreen(),
           '/send-code': (context) => SendCodeScreen(),
@@ -61,12 +69,15 @@ class MyApp extends StatelessWidget {
           '/select/category': (context) => DefineCategoryScreen(),
           '/select/photo': (context) => DefinePhotoCommerceScreen(),
           '/login': (context) => const LoginScreen(),
+          '/base': (context) => BaseHomePage(),
           '/home': (context) => HomePage(),
           '/coupons': (context) => CouponsListScreeen(),
           '/profile': (context) => ProfileScreen(),
+          '/profile/statistics': (context) => StatisticsScreen(),
           '/surveys': (context) => SurveyListScreen(),
           '/create/survey': (context) => CreateSurveyScreen(),
-          // '/end/create/survey': (context) =>
+          //'/end/create/survey': (context) =>
+          '/qr': (context) => QRViewScreen()
         },
       ),
     );

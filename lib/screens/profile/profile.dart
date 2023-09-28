@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/widgets/app/goBackButton.dart';
 import 'package:quickyshop/services/storeService.dart';
@@ -122,6 +123,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       },
                       child: Text(
                         'Deshabilitar',
+                        style: TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    child: FilledButton.tonal(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            Color.fromARGB(255, 255, 192, 192)),
+                      ),
+                      onPressed: () {
+                        AppPreferences().setIdBrand("");
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, "/", (r) => false);
+                      },
+                      child: Text(
+                        'Cerrar sesión',
                         style: TextStyle(
                             color: Colors.red, fontWeight: FontWeight.w700),
                       ),

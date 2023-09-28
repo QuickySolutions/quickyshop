@@ -15,7 +15,13 @@ class CloseQuestion implements Question {
   String? type;
 
   Map<String, dynamic> toJson() {
-    return {'id': id, 'title': title, 'type': type, 'options': options};
+    return {
+      'id': id,
+      'title': title,
+      'type': type,
+      'options': options,
+      'isNew': isNew
+    };
   }
 
   CloseQuestion(

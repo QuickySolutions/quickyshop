@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/screens/QR/QR_view.dart';
 import 'package:quickyshop/screens/home/home.dart';
 import 'package:quickyshop/utils/Colors.dart';
@@ -15,6 +17,7 @@ class _BaseHomePageState extends State<BaseHomePage> {
   PageController _pageController = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
+    final appProvider = Provider.of<AppProvider>(context);
     return Scaffold(
       bottomNavigationBar: Container(
           height: 130,
@@ -39,8 +42,9 @@ class _BaseHomePageState extends State<BaseHomePage> {
               child: BottomNavigationBar(
                 selectedItemColor: QuickyColors.primaryColor,
                 unselectedItemColor: Colors.grey,
-                currentIndex: 0,
+                currentIndex: appProvider.currentPage,
                 onTap: (index) {
+                  appProvider.changePage(index);
                   _pageController.jumpToPage(index);
                 },
                 items: [

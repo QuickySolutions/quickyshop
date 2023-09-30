@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       .setIdBrand(responseLogin.data['_id']);
 
                                   Navigator.pushNamedAndRemoveUntil(
-                                      context, "/home", (r) => false);
+                                      context, "/base", (r) => false);
                                 }
                               : null,
                           child: Text(

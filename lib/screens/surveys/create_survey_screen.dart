@@ -37,7 +37,7 @@ class CreateSurveyScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.88,
+                    height: MediaQuery.of(context).size.height * 0.86,
                     child: PageView.builder(
                       controller: value.pageController,
                       onPageChanged: (int page) {

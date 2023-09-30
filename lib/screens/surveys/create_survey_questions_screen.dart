@@ -99,7 +99,7 @@ class CreateSurveyQuestionsScreen extends StatelessWidget {
                           createSurvey(surveyProvider, storeProvider,
                               appProvider, context);
                           Navigator.pushNamedAndRemoveUntil(
-                              context, '/home', (_) => false);
+                              context, '/base', (_) => false);
                         } else {
                           String url =
                               await _uploadFilesToFirebase.uploadSurveyPhoto(
@@ -109,7 +109,7 @@ class CreateSurveyQuestionsScreen extends StatelessWidget {
                           createSurvey(surveyProvider, storeProvider,
                               appProvider, context);
 
-                          Navigator.pushNamed(context, '/home');
+                          Navigator.pushNamed(context, '/base');
                         }
                       } else {
                         if (surveyProvider.selectedPhoto.path.isNotEmpty) {
@@ -124,14 +124,14 @@ class CreateSurveyQuestionsScreen extends StatelessWidget {
                           storeProvider.reset();
 
                           Navigator.pushNamedAndRemoveUntil(
-                              context, '/home', (_) => false);
+                              context, '/base', (_) => false);
                         } else {
                           await surveyService.editSurvey(
                               surveyProvider.survey, storeProvider);
                           surveyProvider.reset();
                           storeProvider.reset();
                           Navigator.pushNamedAndRemoveUntil(
-                              context, '/home', (_) => false);
+                              context, '/base', (_) => false);
                         }
                       }
                     })

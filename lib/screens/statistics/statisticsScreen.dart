@@ -102,36 +102,47 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 10,
                                 mainAxisSpacing: 10,
-                                mainAxisExtent: 140),
+                                mainAxisExtent: 150),
                         itemCount: data.surveys.length,
                         itemBuilder: (BuildContext context, int index) {
                           Survey survey = data.surveys[index];
-                          return Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.white,
-                            ),
+                          return GestureDetector(
+                            onTap: () {
+                              statisticProvider.setSurveyId(survey.id!);
+                              Navigator.pushNamed(
+                                context,
+                                '/survey/stadistic',
+                              );
+                            },
                             child: Container(
-                              padding: EdgeInsets.all(15),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(survey.name,
-                                      overflow: TextOverflow.ellipsis),
-                                  SizedBox(height: 15),
-                                  Text("Vence: ${survey.finalDate}"),
-                                  SizedBox(height: 15),
-                                  Row(
-                                    children: [
-                                      SwitchControl(
-                                        value: survey.active,
-                                        onChanged: (bool value) {},
-                                      ),
-                                      Text(
-                                          '${survey.active ? "Activa" : "No Activa"}')
-                                    ],
-                                  )
-                                ],
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.white,
+                              ),
+                              child: Container(
+                                padding: EdgeInsets.all(15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(survey.name,
+                                        overflow: TextOverflow.ellipsis),
+                                    SizedBox(height: 15),
+                                    Text("Vence: ${survey.finalDate}"),
+                                    SizedBox(height: 15),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SwitchControl(
+                                          value: survey.active,
+                                          onChanged: (bool value) {},
+                                        ),
+                                        Text(
+                                            '${survey.active ? "Activa" : "No Activa"}')
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           );

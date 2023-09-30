@@ -57,6 +57,7 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
     } else {
       await _brandService.createBranchOffice(
           appProvider.brandDefault.id, storeData);
+      appProvider.setWantToAddNewStore(false);
     }
   }
 
@@ -121,7 +122,8 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
                     createBranchOrBranchOffice(
                         signUpProvider, appProvider, url);
                     signUpProvider.setPhotoProfile(url);
-                    Navigator.pushNamed(context, '/home');
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, "/base", (r) => false);
                     photoProvider.uploadPicToFirebase(false);
                   },
                   child: Text(

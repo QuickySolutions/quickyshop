@@ -206,116 +206,125 @@ class _HomePageState extends State<HomePage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(
-                              width: 120,
-                              height: 120,
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pushNamed(context, '/surveys');
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.only(bottom: 8),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.2),
-                                        spreadRadius: 2,
-                                        blurRadius: 2,
-                                        offset: Offset(
-                                            0, 3), // changes position of shadow
-                                      ),
-                                    ],
-                                    color: Colors.white,
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      SizedBox(height: 10),
-                                      Text('Ver encuestas',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700,
-                                              overflow: TextOverflow.ellipsis))
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 120,
-                              height: 120,
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pushNamed(context, '/coupons');
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.only(bottom: 8),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.2),
-                                        spreadRadius: 2,
-                                        blurRadius: 2,
-                                        offset: Offset(0, 3),
-                                      ),
-                                    ],
-                                    color: Colors.white,
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      SizedBox(height: 10),
-                                      Text('Cupones',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700,
-                                              overflow: TextOverflow.ellipsis))
-                                    ],
+                            Expanded(
+                              child: SizedBox(
+                                height: 120,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, '/surveys');
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.only(bottom: 8),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.2),
+                                          spreadRadius: 2,
+                                          blurRadius: 2,
+                                          offset: Offset(0,
+                                              3), // changes position of shadow
+                                        ),
+                                      ],
+                                      color: Colors.white,
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        SizedBox(height: 10),
+                                        Text('Ver encuestas',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700,
+                                                overflow:
+                                                    TextOverflow.ellipsis))
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              width: 120,
-                              height: 120,
-                              child: GestureDetector(
-                                onTap: () {
-                                  if (appProvider.hasSelectedBrand) {
-                                    statisticProvider.setBrandId(
-                                        appProvider.brandDefault.id);
-                                    Navigator.pushNamed(
-                                        context, '/profile/statistics');
-                                  }
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.only(bottom: 8),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.2),
-                                        spreadRadius: 2,
-                                        blurRadius: 2,
-                                        offset: Offset(0, 3),
-                                      ),
-                                    ],
-                                    color: Colors.white,
+                            SizedBox(width: 15),
+                            Expanded(
+                              child: SizedBox(
+                                height: 120,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, '/coupons');
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.only(bottom: 8),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.2),
+                                          spreadRadius: 2,
+                                          blurRadius: 2,
+                                          offset: Offset(0, 3),
+                                        ),
+                                      ],
+                                      color: Colors.white,
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        SizedBox(height: 10),
+                                        Text('Cupones',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700,
+                                                overflow:
+                                                    TextOverflow.ellipsis))
+                                      ],
+                                    ),
                                   ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      SizedBox(height: 10),
-                                      Text('Estadisticas',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700,
-                                              overflow: TextOverflow.ellipsis))
-                                    ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 15),
+                            Expanded(
+                              child: SizedBox(
+                                width: 100,
+                                height: 120,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (appProvider.hasSelectedBrand) {
+                                      statisticProvider.setBrandId(
+                                          appProvider.brandDefault.id);
+                                      Navigator.pushNamed(
+                                          context, '/profile/statistics');
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.only(bottom: 8),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.2),
+                                          spreadRadius: 2,
+                                          blurRadius: 2,
+                                          offset: Offset(0, 3),
+                                        ),
+                                      ],
+                                      color: Colors.white,
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        SizedBox(height: 10),
+                                        Text('Estadisticas',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700,
+                                                overflow:
+                                                    TextOverflow.ellipsis))
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

@@ -14,6 +14,7 @@ import 'package:quickyshop/screens/coupons/coupons-list.dart';
 import 'package:quickyshop/screens/home/base.dart';
 import 'package:quickyshop/screens/profile/profile.dart';
 import 'package:quickyshop/screens/statistics/statisticsScreen.dart';
+import 'package:quickyshop/screens/statistics/surveyStatistic.dart';
 import 'package:quickyshop/screens/surveys/create_survey_screen.dart';
 import 'package:quickyshop/screens/surveys/survey_list_screen.dart';
 
@@ -60,7 +61,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: AppPreferences().brandId.isNotEmpty ? '/base' : '/qr',
+        initialRoute: AppPreferences().brandId.isNotEmpty ? '/base' : '/',
         routes: {
           '/': (context) => const PrincipalScreen(),
           '/send-code': (context) => SendCodeScreen(),
@@ -74,9 +75,9 @@ class MyApp extends StatelessWidget {
           '/coupons': (context) => CouponsListScreeen(),
           '/profile': (context) => ProfileScreen(),
           '/profile/statistics': (context) => StatisticsScreen(),
+          '/survey/stadistic': (context) => SurveyStatistic(),
           '/surveys': (context) => SurveyListScreen(),
           '/create/survey': (context) => CreateSurveyScreen(),
-          //'/end/create/survey': (context) =>
           '/qr': (context) => QRViewScreen()
         },
       ),

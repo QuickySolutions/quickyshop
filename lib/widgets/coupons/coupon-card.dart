@@ -113,6 +113,7 @@ class CouponCard extends StatelessWidget {
                   Coupon couponItem = Coupon(
                       id: couponProvider.selectedCoupon.id,
                       active: true,
+                      photo: couponProvider.selectedCoupon.photo,
                       brandId: '64989445c41230ffd2539f89',
                       name: couponProvider.couponName,
                       monetization: couponProvider.couponMonetization);

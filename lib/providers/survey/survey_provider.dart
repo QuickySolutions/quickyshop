@@ -32,6 +32,7 @@ class SurveyProvider extends ChangeNotifier {
   late List<Survey> _surveys = [];
   late File _selectedPhoto = File('');
   bool _isLoadingRequest = false;
+  bool _isLoadingCreateOrEditSurvey = false;
   SurveyAction _surveyAction = SurveyAction.create;
   int _activePage = 0;
   final PageController _pageController = PageController(initialPage: 0);
@@ -47,6 +48,7 @@ class SurveyProvider extends ChangeNotifier {
   String get finalDate => _finalDate;
   List<Survey> get surveys => _surveys;
   bool get isLoading => _isLoadingRequest;
+  bool get isLoadingCreateOrEditSurvey => _isLoadingCreateOrEditSurvey;
   File get selectedPhoto => _selectedPhoto;
   SurveyAction get surveyAction => _surveyAction;
   int get indexTitleToEditQuestion => _indexTitleToEditQuestion;
@@ -64,6 +66,11 @@ class SurveyProvider extends ChangeNotifier {
 
   void selectPicture(File picked) {
     _selectedPhoto = picked;
+    notifyListeners();
+  }
+
+  void setLoadCreateOrEditSurvey(bool value) {
+    _isLoadingCreateOrEditSurvey = value;
     notifyListeners();
   }
 
@@ -138,7 +145,10 @@ class SurveyProvider extends ChangeNotifier {
           isNew: true,
           title: oldQuestion.title,
           type: keyType,
-          options: []) as Question;
+          options: [
+            CloseOption(id: Uuid().v4(), titleOptionSurvey: 'Si'),
+            CloseOption(id: Uuid().v4(), titleOptionSurvey: 'No')
+          ]) as Question;
     } else if (keyType == 'combo-box') {
       _survey.questions![indexQuestion] = ComboBoxQuestion(
           id: oldQuestion.id,
@@ -302,5 +312,10 @@ class SurveyProvider extends ChangeNotifier {
         break;
       default:
     }
+  }
+
+  void resetCurrentPage() {
+    _activePage = 0;
+    notifyListeners();
   }
 }

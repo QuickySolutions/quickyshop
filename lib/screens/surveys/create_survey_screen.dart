@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/models/Coupon.dart';
 import 'package:quickyshop/models/survey/Survey.dart';
+import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/providers/coupons/coupon_provider.dart';
 import 'package:quickyshop/providers/survey/survey_provider.dart';
 import 'package:quickyshop/screens/surveys/create_survey_questions_screen.dart';
@@ -37,7 +38,7 @@ class CreateSurveyScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.86,
+                    height: MediaQuery.of(context).size.height * 0.878,
                     child: PageView.builder(
                       controller: value.pageController,
                       onPageChanged: (int page) {
@@ -98,6 +99,7 @@ class FormSurveyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final surveyProvider = Provider.of<SurveyProvider>(context);
     final couponProvider = Provider.of<CouponProvider>(context);
+    final appProvider = Provider.of<AppProvider>(context);
     return SingleChildScrollView(
       child: Container(
         child: Column(
@@ -105,7 +107,7 @@ class FormSurveyScreen extends StatelessWidget {
             backgroundSurvey(surveyProvider, context),
             principalFormSurvey(context, surveyProvider),
             SizedBox(height: 10),
-            buttonsSurveys(context, surveyProvider, couponProvider)
+            buttonsSurveys(context, surveyProvider, couponProvider, appProvider)
           ],
         ),
       ),
@@ -256,16 +258,6 @@ Widget principalFormSurvey(
                       controller: surveyProvider.initDateController,
                       readOnly: true,
                       onTap: () async {
-                        // DateTime? pickedDate = await showDatePicker(
-                        //     context: context,
-                        //     initialDate: DateTime.now(),
-                        //     firstDate: DateTime(1950),
-                        //     lastDate: DateTime(2100));
-                        // var date = DateTime.parse(pickedDate.toString());
-
-                        // var formattedDate =
-                        //     "${date.year}-${date.month}-${date.day}";
-
                         DateTime? pickedDate = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
@@ -279,8 +271,6 @@ Widget principalFormSurvey(
                           surveyProvider.onChangeInitDate(formattedDate);
                           surveyProvider.initDateController.text =
                               formattedDate;
-                        } else {
-                          // Handle the case when the user cancels the date picker.
                         }
                       },
                       isDate: true,
@@ -311,8 +301,6 @@ Widget principalFormSurvey(
                           surveyProvider.onChangeFinalDate(formattedDate);
                           surveyProvider.finalDateController.text =
                               formattedDate;
-                        } else {
-                          // Handle the case when the user cancels the date picker.
                         }
                       },
                       isDate: true,
@@ -327,7 +315,7 @@ Widget principalFormSurvey(
 }
 
 Widget buttonsSurveys(BuildContext context, SurveyProvider surveyProvider,
-    CouponProvider couponProvider) {
+    CouponProvider couponProvider, AppProvider appProvider) {
   return Container(
     alignment: Alignment.center,
     child: Column(
@@ -346,9 +334,10 @@ Widget buttonsSurveys(BuildContext context, SurveyProvider surveyProvider,
                         Coupon couponItem = Coupon(
                             id: Uuid().v4(),
                             active: true,
-                            brandId: '64989445c41230ffd2539f89',
+                            brandId: appProvider.brandDefault.id,
                             name: couponProvider.couponName,
                             monetization: couponProvider.couponMonetization);
+                        couponProvider.resetSelectedCoupon();
                         couponProvider.addCoupon(couponItem);
 
                         Navigator.pop(context);
@@ -362,26 +351,31 @@ Widget buttonsSurveys(BuildContext context, SurveyProvider surveyProvider,
                   );
                 });
           },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '+',
-                style: TextStyle(
-                    fontSize: 17,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500),
-              ),
-              SizedBox(width: 10),
-              Text(
-                'Crear un cupón',
-                style: TextStyle(
-                    fontSize: 17,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500),
-              )
-            ],
-          ),
+          child: couponProvider.getCreatedCoupon().id!.isNotEmpty
+              ? Text(
+                  couponProvider.getCreatedCoupon().name,
+                  style: TextStyle(color: Colors.black),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '+',
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Crear un cupón',
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500),
+                    )
+                  ],
+                ),
         ),
         SizedBox(height: 10),
         QuickyButton(
@@ -396,15 +390,25 @@ Widget buttonsSurveys(BuildContext context, SurveyProvider surveyProvider,
                     ));
                   });
             },
-            child: couponProvider.areCouponSelectedOrCreated
-                ? Text(couponProvider.getCoupon.name)
-                : Text(
-                    'Escoge un cupón guardado',
-                    style: TextStyle(
-                        fontSize: 17,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500),
-                  )),
+            // child: couponProvider.areCouponSelectedOrCreated
+            //     ? Text(couponProvider.getCoupon.name)
+            //     : Text(
+            //         'Escoge un cupón guardado',
+            //         style: TextStyle(
+            //             fontSize: 17,
+            //             color: Colors.white,
+            //             fontWeight: FontWeight.w500),
+            //       )),
+
+            child: Text(
+              couponProvider.getSelectedCoupon().id!.isNotEmpty
+                  ? couponProvider.getSelectedCoupon().name
+                  : 'Escoge un cupón guardado',
+              style: TextStyle(
+                  fontSize: 17,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500),
+            )),
         SizedBox(height: 10),
         QuickyButton(
             disabled: !surveyProvider.isValidForm,

@@ -46,4 +46,9 @@ class AppProvider with ChangeNotifier {
     _currentPage = nextPage;
     notifyListeners();
   }
+
+  void removePhoto() {
+    _brandDefault.photo = "";
+    notifyListeners();
+  }
 }

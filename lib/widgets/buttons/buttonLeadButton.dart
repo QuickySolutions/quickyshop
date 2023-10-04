@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
+import 'package:quickyshop/providers/photo/photo_provider.dart';
 
 class ButtonLeadButton extends StatelessWidget {
   const ButtonLeadButton({super.key});
@@ -8,6 +11,7 @@ class ButtonLeadButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appProvider = Provider.of<AppProvider>(context);
+    final providerPhoto = Provider.of<PhotoProvider>(context, listen: false);
     return Container(
         width: MediaQuery.of(context).size.width * 0.90,
         child: Stack(

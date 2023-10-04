@@ -27,18 +27,24 @@ class EditCouponForm extends StatelessWidget {
               maxHeight: 1800,
             );
             if (pickedFile != null) {
+              _couponProvider.setPhoto("");
               File imageFile = File(pickedFile.path);
               _couponProvider.selectImage(imageFile);
             }
           },
           child: Container(
             decoration: BoxDecoration(
-                image: _couponProvider.selectedFile.path.isEmpty
+                image: _couponProvider.photo.isNotEmpty
                     ? DecorationImage(
-                        image: AssetImage('assets/images/not-available.png'))
-                    : DecorationImage(
                         fit: BoxFit.cover,
-                        image: FileImage(_couponProvider.selectedFile))),
+                        image: NetworkImage(_couponProvider.photo))
+                    : _couponProvider.selectedFile.path.isEmpty
+                        ? DecorationImage(
+                            image:
+                                AssetImage('assets/images/not-available.png'))
+                        : DecorationImage(
+                            fit: BoxFit.cover,
+                            image: FileImage(_couponProvider.selectedFile))),
             height: 120,
           ),
         ),

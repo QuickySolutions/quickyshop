@@ -63,26 +63,6 @@ class AddCouponForm extends StatelessWidget {
               }
             },
             hintText: 'Valor monetario del cupón'),
-        SizedBox(height: 25),
-        Container(
-          child: Row(
-            children: [
-              Transform.scale(
-                scale: 1.2,
-                child: Checkbox(
-                    checkColor: Colors.white,
-                    activeColor: QuickyColors.primaryColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    value: storeProvider.wantToSaveInAllStores,
-                    onChanged: (value) {
-                      storeProvider.onSaveInAllStores(value!);
-                    }),
-              ),
-              Expanded(child: Text('Enviar esta encuesta a todas las tiendas'))
-            ],
-          ),
-        ),
       ],
     );
   }

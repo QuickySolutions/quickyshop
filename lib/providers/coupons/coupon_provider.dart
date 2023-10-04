@@ -5,6 +5,7 @@ import 'package:quickyshop/firebase/uploadFilesToFirebase.dart';
 import 'package:quickyshop/models/Coupon.dart';
 import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/services/couponsService.dart';
+import 'package:uuid/uuid.dart';
 
 class CouponProvider extends ChangeNotifier {
   File _selectedFile = File('');
@@ -15,6 +16,7 @@ class CouponProvider extends ChangeNotifier {
   List<Coupon> _coupons = [];
   late String _couponName = "";
   num _couponMonetization = 0.0;
+  String _photo = "";
 
   late Coupon _selectedCoupon =
       Coupon(id: '', name: '', monetization: 0, brandId: '', active: false);
@@ -27,36 +29,40 @@ class CouponProvider extends ChangeNotifier {
   Coupon get selectedCoupon => _selectedCoupon;
   String get couponName => _couponName;
   int get addToStores => _addToStores;
+  String get photo => _photo;
   num get couponMonetization => _couponMonetization;
   Coupon get couponForSurvey => _couponForSurvey;
   File get selectedFile => _selectedFile;
   PageController get pageController => _pageController;
   int get activePage => _activePage;
 
-  bool get couponsAreDifferent {
-    if ((_couponForSurvey.id!.isNotEmpty && _selectedCoupon.id!.isNotEmpty) &&
-        (_couponForSurvey.id != _selectedCoupon.id)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // bool get couponsAreDifferent {
+  //   if ((_couponForSurvey.id!.isNotEmpty && _selectedCoupon.id!.isNotEmpty) &&
+  //       (_couponForSurvey.id != _selectedCoupon.id)) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
-  bool get areCouponSelectedOrCreated {
-    if (_couponForSurvey.id!.isEmpty && _selectedCoupon.id!.isEmpty) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+  // bool get areCouponSelectedOrCreated {
+  //   if (_couponForSurvey.id!.isEmpty && _selectedCoupon.id!.isEmpty) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // }
 
-  Coupon get getCoupon {
-    if (_couponForSurvey.id!.isEmpty) {
-      return _selectedCoupon;
-    } else {
-      return _couponForSurvey;
-    }
-  }
+  // Coupon get getCoupon {
+  //   if (_couponForSurvey.id!.isEmpty) {
+  //     return _selectedCoupon;
+  //   } else {
+  //     return _couponForSurvey;
+  //   }
+  // }
+
+  Coupon getSelectedCoupon() => _selectedCoupon;
+  Coupon getCreatedCoupon() => _couponForSurvey;
 
   bool get isValidForm {
     if (_couponName.isEmpty ||
@@ -79,6 +85,11 @@ class CouponProvider extends ChangeNotifier {
 
   void addToStoresSelection(int value) {
     _addToStores = value;
+    notifyListeners();
+  }
+
+  void setPhoto(String value) {
+    _photo = value;
     notifyListeners();
   }
 
@@ -118,7 +129,7 @@ class CouponProvider extends ChangeNotifier {
       _coupons.add(newCoupon);
       clear();
     } else {
-      String urlPicture = await uploadCouponCover(selectedFile, coupon.id!);
+      String urlPicture = await uploadCouponCover(selectedFile, Uuid().v4());
       coupon.photo = urlPicture;
       CouponResponse response = await _couponsService.createCoupon(coupon);
       Coupon newCoupon = Coupon.fromJSONResponse(response.data);
@@ -135,15 +146,15 @@ class CouponProvider extends ChangeNotifier {
 
     if (selectedFile.path.isEmpty) {
       CouponResponse response = await _couponsService.editCoupon(updatedCoupon);
-      print(response);
       coupon = Coupon.fromJSONResponse(response.data);
       clear();
     } else {
       String urlPicture =
-          await uploadCouponCover(selectedFile, updatedCoupon.id!);
+          await uploadCouponCover(selectedFile, updatedCoupon.photo!);
       updatedCoupon.photo = urlPicture;
       CouponResponse response = await _couponsService.editCoupon(updatedCoupon);
       coupon = Coupon.fromJSONResponse(response.data);
+      print(updatedCoupon.photo);
     }
 
     int indexOfItem =
@@ -169,10 +180,17 @@ class CouponProvider extends ChangeNotifier {
     _couponName = couponItem.name;
     _couponMonetization = couponItem.monetization;
     _selectedCoupon = couponItem;
+
+    if (couponItem.photo!.isEmpty) {
+      _photo = "";
+    } else {
+      _photo = couponItem.photo!;
+    }
     notifyListeners();
   }
 
   void selectCoupon(Coupon coupon) {
+    resetCreatedCoupon();
     _selectedCoupon = coupon;
     notifyListeners();
   }
@@ -197,6 +215,18 @@ class CouponProvider extends ChangeNotifier {
     _activePage = page;
     _pageController.animateToPage(_activePage,
         duration: Duration(milliseconds: 500), curve: Curves.ease);
+    notifyListeners();
+  }
+
+  void resetCreatedCoupon() {
+    _couponForSurvey =
+        Coupon(id: '', name: '', monetization: 0, brandId: "", active: false);
+    notifyListeners();
+  }
+
+  void resetSelectedCoupon() {
+    _selectedCoupon =
+        Coupon(id: '', name: '', monetization: 0, brandId: "", active: false);
     notifyListeners();
   }
 

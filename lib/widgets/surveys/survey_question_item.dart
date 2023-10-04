@@ -168,12 +168,7 @@ class SurveyQuestionItem extends StatelessWidget {
       SurveyProvider surveyProvider, CloseQuestion question) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: 10),
-        showListOptions(surveyProvider),
-        SizedBox(height: 5),
-        addNewOptionButton(surveyProvider, question.type!)
-      ],
+      children: [SizedBox(height: 10), showListOptions(surveyProvider)],
     );
   }
 
@@ -219,7 +214,9 @@ class SurveyQuestionItem extends StatelessWidget {
         SizedBox(height: 10),
         showListOptions(surveyProvider),
         SizedBox(height: 5),
-        addNewOptionButton(surveyProvider, question.type!)
+        question.options!.length == 5
+            ? Container()
+            : addNewOptionButton(surveyProvider, question.type!)
       ],
     );
   }
@@ -283,6 +280,7 @@ class SurveyQuestionItem extends StatelessWidget {
           return Container(
               margin: EdgeInsets.only(bottom: 10),
               child: QuickyTextField(
+                readOnly: question.type == 'close',
                 onChanged: (String value) {
                   surveyProvider.handleChangeTitleOption(
                       indexQuestion, index, value);

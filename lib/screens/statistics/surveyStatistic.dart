@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/providers/statistics/statisticsProvider.dart';
 import 'package:quickyshop/services/statisticsService.dart';
+import 'package:quickyshop/utils/Colors.dart';
+import 'package:quickyshop/widgets/graphs/linearProgressIndicator.dart';
 
 class SurveyStatistic extends StatefulWidget {
   const SurveyStatistic({super.key});
@@ -34,14 +36,18 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                       children: [
                         Text(
                           'Mis',
-                          style: TextStyle(fontSize: 25),
+                          style: TextStyle(
+                              fontSize: 25,
+                              color: QuickyColors.disableColor,
+                              fontWeight: FontWeight.w700),
                         ),
                         SizedBox(
                           width: 5,
                         ),
                         Text(
                           'Estadisticas',
-                          style: TextStyle(fontSize: 25),
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.w700),
                         ),
                       ],
                     ),
@@ -55,6 +61,7 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                     )
                   ],
                 ),
+                SizedBox(height: 20),
                 Expanded(child: Consumer<StatisticProvider>(
                     builder: (context, data, child) {
                   return FutureBuilder(
@@ -73,38 +80,83 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                           children: [
                             Text(
                               '$surveyName',
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w600),
                             ),
                             SizedBox(height: 10),
-                            Text(
-                              'Total de respuestas: $totalResponses',
-                              style: TextStyle(fontSize: 20),
+                            RichText(
+                              text: TextSpan(
+                                  text: 'Total de',
+                                  style: TextStyle(
+                                      color: QuickyColors.disableColor,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: ' $totalResponses ',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    TextSpan(
+                                        text: 'respuestas',
+                                        style: TextStyle(
+                                            color: QuickyColors.disableColor,
+                                            fontWeight: FontWeight.w600))
+                                  ]),
                             ),
                             SizedBox(height: 20),
                             Column(
                                 children: questions.map((e) {
                               List<dynamic> data = e['data'];
                               return Container(
-                                margin: EdgeInsets.symmetric(vertical: 10),
+                                padding: EdgeInsets.symmetric(vertical: 20),
+                                width: double.infinity,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(e['question']),
-                                    SizedBox(height: 20),
+                                    Text(
+                                      e['question'],
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700),
+                                    ),
                                     Column(
-                                      children: data
-                                          .map((e) => Container(
-                                                margin: EdgeInsets.symmetric(
-                                                    vertical: 10),
-                                                child: Text(
-                                                    'Respuesta No. ${data.indexOf(e) + 1}. Contestada: ${e['count']}'),
-                                              ))
-                                          .toList(),
-                                    )
+                                      children: data.map((e) {
+                                        //int count = e['count'];
+                                        int count = e['count'];
+                                        double countDouble = count.toDouble();
+                                        return Container(
+                                          width: double.infinity,
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  'Respuesta No. ${data.indexOf(e) + 1}. Contestada: ${count}'),
+                                              SizedBox(height: 20),
+                                              ProgressBar(
+                                                current: countDouble,
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
                                   ],
                                 ),
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                  top: BorderSide(
+                                    color: Colors.black,
+                                    width: 2.0,
+                                  ),
+                                )),
                               );
-                            }).toList())
+                            }).toList()),
                           ],
                         );
                       } else {

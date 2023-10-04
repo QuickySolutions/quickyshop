@@ -91,43 +91,33 @@ class _CouponsListScreeenState extends State<CouponsListScreeen> {
         context: context,
         builder: (context) {
           return QuickyAlertDialog(
-              onNextClick: () {
-                if (couponProvider.isValidForm &&
-                    !storeProvider.wantToSaveInAllStores) {
-                  Coupon couponItem = Coupon(
-                      active: true,
-                      brandId: AppPreferences().brandId,
-                      name: couponProvider.couponName,
-                      monetization: couponProvider.couponMonetization);
+            onNextClick: () {
+              if (couponProvider.isValidForm &&
+                  !storeProvider.wantToSaveInAllStores) {
+                Coupon couponItem = Coupon(
+                    active: true,
+                    brandId: AppPreferences().brandId,
+                    name: couponProvider.couponName,
+                    monetization: couponProvider.couponMonetization);
 
-                  couponProvider.create(couponItem);
-                  Navigator.pop(context);
-                } else if (couponProvider.isValidForm &&
-                    storeProvider.wantToSaveInAllStores) {
-                  couponProvider.changePageContent();
-                } else {
-                  const snackBar = SnackBar(
-                    content: Text('Rellena los datos'),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }
-              },
-              showNextButton: true,
-              size: 'md',
-              childContent: PageView(
-                onPageChanged: (value) {
-                  couponProvider.setPage(value);
-                },
-                controller: couponProvider.pageController,
-                children: [
-                  ContentAlertCoupon(
-                    operationType: OperationType.add,
-                  ),
-                  ContentAlertCoupon(
-                    operationType: OperationType.storeslist,
-                  ),
-                ],
-              ));
+                couponProvider.create(couponItem);
+                Navigator.pop(context);
+              } else if (couponProvider.isValidForm &&
+                  storeProvider.wantToSaveInAllStores) {
+                couponProvider.changePageContent();
+              } else {
+                const snackBar = SnackBar(
+                  content: Text('Rellena los datos'),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            },
+            showNextButton: true,
+            size: 'md',
+            childContent: ContentAlertCoupon(
+              operationType: OperationType.add,
+            ),
+          );
         });
   }
 }

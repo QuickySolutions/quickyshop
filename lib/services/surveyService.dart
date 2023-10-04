@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:quickyshop/models/survey/Survey.dart';
+import 'package:quickyshop/providers/coupons/coupon_provider.dart';
 import 'package:quickyshop/providers/store/store_provider.dart';
 import 'package:quickyshop/utils/api.dart';
 
@@ -22,12 +23,18 @@ class SurveyResponse {
 class SurveyService {
   Dio _dio = Dio();
 
-  Future<SurveyResponse> createSurvey(
-      Survey survey, List<String> storeList, String brandId) async {
+  Future<SurveyResponse> createSurvey(Survey survey, List<String> storeList,
+      String brandId, CouponProvider couponProvider) async {
     Response response = await _dio.post(ApiUrl.API + '/surveys', data: {
       'survey': survey.toJson(),
       'stores': storeList,
-      'brandId': brandId
+      'brandId': brandId,
+      'coupon': {
+        'isCreated': couponProvider.getCreatedCoupon().id!.isNotEmpty,
+        ...couponProvider.getCreatedCoupon().id!.isNotEmpty
+            ? couponProvider.getCreatedCoupon().toJson()
+            : couponProvider.getSelectedCoupon().toJson(),
+      }
     });
 
     return SurveyResponse.fromJSONResponse(response.data);

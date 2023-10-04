@@ -8,6 +8,6 @@ class ApiUrl {
   static String _LOCAL_API =
       'http://${Platform.isAndroid ? '192.168.1.24' : Platform.isIOS ? 'localhost' : ''}:8080';
 
-  //static String API = dotenv.env['MODE'] == 'dev' ? _LOCAL_API : _REMOTE_API;
-  static String API = _REMOTE_API;
+  static String API = dotenv.env['MODE'] == 'dev' ? _LOCAL_API : _REMOTE_API;
+  //static String API = _REMOTE_API;
 }

@@ -36,6 +36,13 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setDefaultStore(dynamic store) {
+    _storeSelected = Store.fromJSONResponse(store);
+    _hasSelectedStore = true;
+    _hasSelectedBrand = false;
+    notifyListeners();
+  }
+
   void restoreBrandDefault() {
     _hasSelectedStore = false;
     _hasSelectedBrand = true;

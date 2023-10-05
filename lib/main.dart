@@ -6,6 +6,7 @@ import 'package:quickyshop/firebase_options.dart';
 import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/providers/auth/loginProvider.dart';
+import 'package:quickyshop/providers/auth/profileProvider.dart';
 import 'package:quickyshop/providers/coupons/coupon_provider.dart';
 import 'package:quickyshop/providers/statistics/statisticsProvider.dart';
 import 'package:quickyshop/providers/survey/survey_provider.dart';
@@ -55,7 +56,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SurveyProvider()),
         ChangeNotifierProvider(create: (_) => AppProvider()),
         ChangeNotifierProvider(create: (_) => LoginProvider()),
-        ChangeNotifierProvider(create: (_) => StatisticProvider())
+        ChangeNotifierProvider(create: (_) => StatisticProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -78,7 +80,7 @@ class MyApp extends StatelessWidget {
           '/survey/stadistic': (context) => SurveyStatistic(),
           '/surveys': (context) => SurveyListScreen(),
           '/create/survey': (context) => CreateSurveyScreen(),
-          '/qr': (context) => QRViewScreen()
+          '/qr': (context) => QRViewScreen(),
         },
       ),
     );

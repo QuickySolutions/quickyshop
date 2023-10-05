@@ -32,6 +32,13 @@ class BrandService {
     return response.data;
   }
 
+  Future<Map<String, dynamic>> updateBrand(
+      String id, Map<String, dynamic> data) async {
+    Response response =
+        await _dio.put(ApiUrl.API + '/brands/${id}', data: data);
+    return response.data;
+  }
+
   Future<List<Store>> branchOfficesByBrand(String brandId) async {
     List<Store> stores = [];
 

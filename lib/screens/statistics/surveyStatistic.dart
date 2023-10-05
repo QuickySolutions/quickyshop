@@ -124,7 +124,6 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                                     ),
                                     Column(
                                       children: data.map((e) {
-                                        //int count = e['count'];
                                         int count = e['count'];
                                         double countDouble = count.toDouble();
                                         return Container(

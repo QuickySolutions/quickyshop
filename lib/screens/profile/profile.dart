@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
+import 'package:quickyshop/providers/auth/profileProvider.dart';
+import 'package:quickyshop/services/brandService.dart';
 import 'package:quickyshop/widgets/app/goBackButton.dart';
 import 'package:quickyshop/services/storeService.dart';
-import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/widgets/app/ProfileUser.dart';
-import 'package:quickyshop/widgets/profile/boxStadistic.dart';
-import 'package:quickyshop/widgets/profile/chipRankingItem.dart';
+import 'package:quickyshop/widgets/profile/editFormProfile.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -15,10 +15,37 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  BrandService _brandService = BrandService();
   StoreService _storeService = StoreService();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final profileProvider =
+          Provider.of<ProfileProvider>(context, listen: false);
+      final appProvider = Provider.of<AppProvider>(context, listen: false);
+
+      if (appProvider.hasSelectedBrand) {
+        profileProvider.onChangeName(appProvider.brandDefault.name);
+        profileProvider.onChangeEmail(appProvider.brandDefault.email);
+        profileProvider.onChangeCellPhone(appProvider.brandDefault.cellphone);
+        profileProvider.onChangePhoto(appProvider.brandDefault.photo);
+      } else {
+        profileProvider.onChangeName(appProvider.storeSelected.name);
+        profileProvider.onChangeEmail(appProvider.storeSelected.email);
+        profileProvider.onChangePhoto(appProvider.storeSelected.photo);
+        profileProvider.onChangeLocation(appProvider.storeSelected.photo);
+      }
+    });
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final appProvider = Provider.of<AppProvider>(context);
+    final profileProvider = Provider.of<ProfileProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -51,48 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               SizedBox(height: 20),
-              Container(
-                width: double.infinity,
-                child: Text(
-                  appProvider.hasSelectedBrand
-                      ? appProvider.brandDefault.name
-                      : appProvider.storeSelected.name,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                width: double.infinity,
-                child: Text(
-                  appProvider.hasSelectedStore
-                      ? appProvider.storeSelected.location
-                      : '',
-                  textAlign: TextAlign.center,
-                  style:
-                      TextStyle(fontSize: 15, color: QuickyColors.disableColor),
-                ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ChipRankingItem(),
-                  ChipRankingItem(),
-                  ChipRankingItem(),
-                ],
-              ),
-              SizedBox(height: 20),
-              Text(
-                appProvider.hasSelectedBrand
-                    ? appProvider.brandDefault.category
-                    : appProvider.storeSelected.category,
-                style:
-                    TextStyle(color: QuickyColors.disableColor, fontSize: 18),
-              ),
-              SizedBox(height: 20),
-              BoxStadistic(),
-              SizedBox(height: 20),
+              profileProvider.showForm ? EditProfileForm() : Container(),
               Column(
                 children: [
                   Container(
@@ -102,29 +88,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         backgroundColor: MaterialStateProperty.all(
                             Color.fromARGB(255, 192, 226, 255)),
                       ),
-                      onPressed: () {},
-                      child: Text(
-                        'Editar subtienda',
-                        style: TextStyle(
-                            color: Colors.blue, fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    child: FilledButton.tonal(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Color.fromARGB(255, 255, 192, 192)),
-                      ),
-                      onPressed: () {
-                        _storeService.changeStatusStore(
-                            appProvider.storeSelected.id!, false);
+                      onPressed: () async {
+                        if (profileProvider.showForm) {
+                          if (appProvider.hasSelectedBrand) {
+                            profileProvider.setIsLoading(true);
+                            final data = await _brandService.updateBrand(
+                                appProvider.brandDefault.id,
+                                profileProvider.toBrand());
+
+                            appProvider.setDefaultBrand(data['data']['value']);
+
+                            profileProvider.setIsLoading(false);
+                            profileProvider.showFormProfile(false);
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, "/base", (r) => false);
+                          } else {
+                            //profileProvider.setIsLoading(true);
+                            final data = await _storeService.updateStore(
+                                appProvider.storeSelected.id!,
+                                profileProvider.toStore());
+                            appProvider.setDefaultStore(data['data']['value']);
+
+                            profileProvider.setIsLoading(false);
+                            profileProvider.showFormProfile(false);
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, "/base", (r) => false);
+                          }
+                        } else {
+                          profileProvider.showFormProfile(true);
+                        }
                       },
                       child: Text(
-                        'Deshabilitar',
+                        profileProvider.isLoading
+                            ? 'Cargando...'
+                            : appProvider.hasSelectedBrand
+                                ? 'Editar perfil comercial'
+                                : 'Editar subtienda',
                         style: TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.w700),
+                            color: Colors.blue, fontWeight: FontWeight.w700),
                       ),
                     ),
                   ),

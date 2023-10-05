@@ -13,6 +13,13 @@ class StoreService {
     return response.data;
   }
 
+  Future<Map<String, dynamic>> updateStore(
+      String id, Map<String, dynamic> data) async {
+    Response response =
+        await _dio.put(ApiUrl.API + '/stores/${id}', data: data);
+    return response.data;
+  }
+
   Future<Map<String, dynamic>> verifyNumberStoreToSendSMS(
       Map<String, dynamic> storeData) async {
     late Map<String, dynamic> responseMap = {};

@@ -58,4 +58,30 @@ class AppProvider with ChangeNotifier {
     _brandDefault.photo = "";
     notifyListeners();
   }
+
+  void reset() {
+    _brandDefault = Brand(
+        id: '',
+        name: '',
+        email: '',
+        cellphone: '',
+        principalCategory: '',
+        category: '',
+        subCategory: '',
+        photo: '');
+    _storeSelected = Store(
+        name: '',
+        photo: '',
+        category: '',
+        subcategory: '',
+        email: '',
+        location: '',
+        principal_category: '',
+        brandId: '');
+
+    _hasSelectedBrand = false;
+    _hasSelectedStore = false;
+
+    notifyListeners();
+  }
 }

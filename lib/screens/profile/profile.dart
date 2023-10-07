@@ -137,6 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Color.fromARGB(255, 255, 192, 192)),
                       ),
                       onPressed: () {
+                        appProvider.reset();
                         AppPreferences().setIdBrand("");
                         Navigator.pushNamedAndRemoveUntil(
                             context, "/", (r) => false);

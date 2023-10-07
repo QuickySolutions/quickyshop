@@ -265,12 +265,12 @@ class SurveyProvider extends ChangeNotifier {
     setIsLoading(true);
     StoreResponse surveyResponse =
         await _storeService.getSurveysFromStore(storeId);
-    inspect(surveyResponse);
     List<Survey> surveysResponseList = surveyResponse.data;
-    if (surveysResponseList.isNotEmpty) {
-      _surveys = surveysResponseList;
+    if (surveysResponseList.isEmpty) {
+      _surveys = [];
       setIsLoading(false);
     } else {
+      _surveys = surveysResponseList;
       setIsLoading(false);
     }
 

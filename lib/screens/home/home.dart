@@ -151,7 +151,8 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                       SizedBox(height: 20),
-                      appProvider.hasSelectedBrand
+                      appProvider.hasSelectedBrand ||
+                              appProvider.brandDefault.id.isNotEmpty
                           ? FutureBuilder(
                               future: _brandService.branchOfficesByBrand(
                                   AppPreferences().brandId),

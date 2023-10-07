@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
@@ -22,6 +24,7 @@ class _SurveyListScreenState extends State<SurveyListScreen> {
       if (appProvider.hasSelectedBrand) {
         Provider.of<SurveyProvider>(context, listen: false).getAll();
       } else {
+        inspect(appProvider.storeSelected);
         Provider.of<SurveyProvider>(context, listen: false)
             .getSurveysFromStore(appProvider.storeSelected.id!);
       }

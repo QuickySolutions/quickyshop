@@ -117,11 +117,11 @@ class CouponProvider extends ChangeNotifier {
     CouponResponse couponResponse =
         await _storeService.getAllCouponsFromStore(storeId);
     List<Coupon> listCoupons = couponResponse.data;
-    print(listCoupons);
-    if (listCoupons.isNotEmpty) {
-      _coupons = listCoupons;
+    if (listCoupons.isEmpty) {
+      _coupons = [];
       setIsLoading(false);
     } else {
+      _coupons = listCoupons;
       setIsLoading(false);
     }
 

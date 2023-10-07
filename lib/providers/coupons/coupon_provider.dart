@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:quickyshop/firebase/uploadFilesToFirebase.dart';
 import 'package:quickyshop/models/Coupon.dart';
 import 'package:quickyshop/preferences/appPreferences.dart';
+import 'package:quickyshop/providers/store/store_provider.dart';
 import 'package:quickyshop/services/couponsService.dart';
+import 'package:quickyshop/services/storeService.dart';
 import 'package:uuid/uuid.dart';
 
 class CouponProvider extends ChangeNotifier {
   File _selectedFile = File('');
   CouponsService _couponsService = CouponsService();
+  StoreService _storeService = StoreService();
   int _activePage = 0;
   final PageController _pageController = PageController(initialPage: 0);
   bool _isLoadingRequest = false;
@@ -109,6 +112,22 @@ class CouponProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void getCouponsFromStore(String storeId) async {
+    setIsLoading(true);
+    CouponResponse couponResponse =
+        await _storeService.getAllCouponsFromStore(storeId);
+    List<Coupon> listCoupons = couponResponse.data;
+    print(listCoupons);
+    if (listCoupons.isNotEmpty) {
+      _coupons = listCoupons;
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+    }
+
+    notifyListeners();
+  }
+
   Future<String> uploadCouponCover(
       File selectedPicture, String couponId) async {
     UploadFilesToFirebase service = UploadFilesToFirebase();
@@ -120,18 +139,20 @@ class CouponProvider extends ChangeNotifier {
     }
   }
 
-  void create(Coupon coupon) async {
+  void create(Coupon coupon, StoreProvider storeProvider) async {
     setIsLoading(true);
 
     if (selectedFile.path.isEmpty) {
-      CouponResponse response = await _couponsService.createCoupon(coupon);
+      CouponResponse response = await _couponsService.createCoupon(
+          coupon, storeProvider.selectedStores);
       Coupon newCoupon = Coupon.fromJSONResponse(response.data);
       _coupons.add(newCoupon);
       clear();
     } else {
       String urlPicture = await uploadCouponCover(selectedFile, Uuid().v4());
       coupon.photo = urlPicture;
-      CouponResponse response = await _couponsService.createCoupon(coupon);
+      CouponResponse response = await _couponsService.createCoupon(
+          coupon, storeProvider.selectedStores);
       Coupon newCoupon = Coupon.fromJSONResponse(response.data);
       _coupons.add(newCoupon);
       clear();
@@ -208,6 +229,7 @@ class CouponProvider extends ChangeNotifier {
   void changePageContent() {
     _pageController.animateToPage(_activePage + 1,
         duration: Duration(milliseconds: 500), curve: Curves.ease);
+    _activePage += 1;
     notifyListeners();
   }
 
@@ -232,6 +254,7 @@ class CouponProvider extends ChangeNotifier {
 
   void clear() {
     _selectedFile = File('');
+    _activePage = 0;
     notifyListeners();
   }
 }

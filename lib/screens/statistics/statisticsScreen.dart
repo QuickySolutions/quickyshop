@@ -21,8 +21,13 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final appProvider = Provider.of<AppProvider>(context, listen: false);
-      Provider.of<StatisticProvider>(context, listen: false)
-          .getAll(appProvider.brandDefault.id);
+      if (appProvider.hasSelectedBrand) {
+        Provider.of<StatisticProvider>(context, listen: false)
+            .getAll(appProvider.brandDefault.id);
+      } else {
+        Provider.of<StatisticProvider>(context, listen: false)
+            .getStoreSurveys(appProvider.storeSelected.id!);
+      }
     });
     // TODO: implement initState
     super.initState();

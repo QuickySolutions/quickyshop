@@ -42,9 +42,10 @@ class CouponsService {
     }
   }
 
-  Future<CouponResponse> createCoupon(Coupon coupon) async {
-    Response response =
-        await _dio.post(ApiUrl.API + '/coupons', data: coupon.toJson());
+  Future<CouponResponse> createCoupon(
+      Coupon coupon, List<String> storesId) async {
+    Response response = await _dio.post(ApiUrl.API + '/coupons',
+        data: {...coupon.toJson(), 'stores': storesId});
     return CouponResponse.fromJSONResponse(response.data);
   }
 

@@ -30,9 +30,7 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
       AppProvider appProvider, String photoUrl) async {
     Map<String, dynamic> storeData = {
       'name': signUpProvider.storeName,
-      'email': appProvider.wantToAddNewStore
-          ? appProvider.brandDefault.email
-          : signUpProvider.emailStore,
+      'email': signUpProvider.emailStore,
       'password': signUpProvider.passwordStore,
       'location': signUpProvider.storeLocation,
       'cellphone': signUpProvider.cellPhoneStore,
@@ -112,22 +110,29 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
                       borderRadius: BorderRadius.circular(100),
                     ),
                   ),
-                  onPressed: () async {
-                    String url = await _filesToFirebase.uploadFile(
-                        photoProvider.photo!,
-                        signUpProvider.storeName,
-                        signUpProvider,
-                        photoProvider,
-                        appProvider.wantToAddNewStore);
-                    createBranchOrBranchOffice(
-                        signUpProvider, appProvider, url);
-                    signUpProvider.setPhotoProfile(url);
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, "/base", (r) => false);
-                    photoProvider.uploadPicToFirebase(false);
-                  },
+                  onPressed: signUpProvider.isLoading
+                      ? null
+                      : () async {
+                          signUpProvider.setIsLoading(true);
+                          if (signUpProvider.isLoading) {
+                            String url = await _filesToFirebase.uploadFile(
+                                photoProvider.photo!,
+                                signUpProvider.storeName,
+                                signUpProvider,
+                                photoProvider,
+                                appProvider.wantToAddNewStore);
+                            signUpProvider.setIsLoading(true);
+                            createBranchOrBranchOffice(
+                                signUpProvider, appProvider, url);
+                            signUpProvider.setPhotoProfile(url);
+                            signUpProvider.setIsLoading(false);
+                            photoProvider.uploadPicToFirebase(false);
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, "/base", (r) => false);
+                          }
+                        },
                   child: Text(
-                    'Guardar',
+                    signUpProvider.isLoading ? 'Cargando...' : 'Guardar',
                     style: TextStyle(
                         fontSize: 17,
                         color: Colors.black,

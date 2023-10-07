@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:quickyshop/models/survey/questions/CheckboxQuestion.dart';
@@ -17,6 +18,7 @@ import 'package:quickyshop/models/survey/questions/options/RadioOption.dart';
 import 'package:quickyshop/models/survey/questions/options/ScaleOption.dart';
 import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/services/brandService.dart';
+import 'package:quickyshop/services/storeService.dart';
 import 'package:quickyshop/utils/survey_utils.dart';
 import 'package:uuid/uuid.dart';
 
@@ -52,6 +54,8 @@ class SurveyProvider extends ChangeNotifier {
   File get selectedPhoto => _selectedPhoto;
   SurveyAction get surveyAction => _surveyAction;
   int get indexTitleToEditQuestion => _indexTitleToEditQuestion;
+
+  StoreService _storeService = StoreService();
 
   bool get isValidForm {
     if (_surveyName.isEmpty ||
@@ -247,6 +251,22 @@ class SurveyProvider extends ChangeNotifier {
         await _brandService.getSurveysByBrand(AppPreferences().brandId);
     List<Survey> surveysResponseList = surveyResponse.data;
 
+    if (surveysResponseList.isNotEmpty) {
+      _surveys = surveysResponseList;
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+    }
+
+    notifyListeners();
+  }
+
+  void getSurveysFromStore(String storeId) async {
+    setIsLoading(true);
+    StoreResponse surveyResponse =
+        await _storeService.getSurveysFromStore(storeId);
+    inspect(surveyResponse);
+    List<Survey> surveysResponseList = surveyResponse.data;
     if (surveysResponseList.isNotEmpty) {
       _surveys = surveysResponseList;
       setIsLoading(false);

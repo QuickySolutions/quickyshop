@@ -37,6 +37,14 @@ class StatisticProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void getStoreSurveys(String brandIdValue) async {
+    List<Survey> response =
+        await _statisticService.getStoreStatistics(brandIdValue);
+    _surveys = response;
+
+    notifyListeners();
+  }
+
   void getSurveyQuestionStatistic(String brandIdValue) async {
     List<Survey> response =
         await _statisticService.getBrandStatistics(brandIdValue);

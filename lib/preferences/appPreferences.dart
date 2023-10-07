@@ -12,4 +12,7 @@ class AppPreferences {
 
   Future<bool> setIdBrand(String name) => _pref.setString('brand_id', name);
   String get brandId => _pref.getString('brand_id') ?? '';
+
+  Future<bool> setIdStore(String name) => _pref.setString('store_id', name);
+  String get storeId => _pref.getString('store_id') ?? '';
 }

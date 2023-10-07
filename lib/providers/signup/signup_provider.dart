@@ -14,11 +14,13 @@ class SignUpProvider extends ChangeNotifier {
   String _confirmPasswordStore = "";
   String _photoProfile = "no_photo";
   String _cellPhoneStore = "";
+  bool _isLoading = false;
 
   //category selection
   String _principalCategorySelected = "";
   String _subLevelSelected = "";
   String _subSubLevelSelected = "";
+  bool get isLoading => _isLoading;
 
   bool get isSignedWithSocialMedia => _isSignedWithSocialMedia;
 
@@ -69,6 +71,11 @@ class SignUpProvider extends ChangeNotifier {
 
   void setPasswordStore(String valuePasswordStore) {
     _passwordStore = valuePasswordStore;
+    notifyListeners();
+  }
+
+  void setIsLoading(bool value) {
+    _isLoading = value;
     notifyListeners();
   }
 

@@ -6,6 +6,7 @@ import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/providers/statistics/statisticsProvider.dart';
 import 'package:quickyshop/providers/survey/survey_provider.dart';
 import 'package:quickyshop/services/brandService.dart';
+import 'package:quickyshop/services/storeService.dart';
 import 'package:quickyshop/widgets/brand/brand-mini-card.dart';
 
 import '../../utils/Colors.dart';
@@ -23,6 +24,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool isLoadingBrandInformation = true;
   final BrandService _brandService = BrandService();
+  final StoreService _storeService = StoreService();
   int selectedStore = -1;
 
   Future<void> getBrandInformation() async {
@@ -37,9 +39,29 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> getStoreInformation() async {
+    //final signupProvider = Provider.of<SignUpProvider>(context, listen: false);
+    final appProvider = Provider.of<AppProvider>(context, listen: false);
+    final StoreResponse store =
+        await _storeService.getStoreInformation(AppPreferences().storeId);
+
+    appProvider.setDefaultStore(store.data);
+    setState(() {
+      isLoadingBrandInformation = false;
+    });
+  }
+
   @override
   void initState() {
-    getBrandInformation();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final appProvider = Provider.of<AppProvider>(context, listen: false);
+
+      if (appProvider.hasSelectedStore) {
+        getStoreInformation();
+      } else {
+        getBrandInformation();
+      }
+    });
 
     // TODO: implement initState
     super.initState();
@@ -54,7 +76,9 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
       body: isLoadingBrandInformation
           ? RefreshIndicator(
-              onRefresh: getBrandInformation,
+              onRefresh: appProvider.hasSelectedBrand
+                  ? getBrandInformation
+                  : getStoreInformation,
               child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Container(
@@ -66,7 +90,9 @@ class _HomePageState extends State<HomePage> {
               ),
             )
           : RefreshIndicator(
-              onRefresh: getBrandInformation,
+              onRefresh: appProvider.hasSelectedBrand
+                  ? getBrandInformation
+                  : getStoreInformation,
               child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Container(
@@ -125,61 +151,64 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                       SizedBox(height: 20),
-                      FutureBuilder(
-                          future: _brandService
-                              .branchOfficesByBrand(AppPreferences().brandId),
-                          builder:
-                              (context, AsyncSnapshot<List<Store>> snapshot) {
-                            if (snapshot.hasData) {
-                              return Container(
-                                height: 120,
-                                child: ListView(
-                                  padding: EdgeInsets.only(
-                                      top: 5, bottom: 5, left: 20),
-                                  scrollDirection: Axis.horizontal,
-                                  children: <Widget>[
-                                    BrandMiniCard(
-                                      brand: appProvider.brandDefault,
-                                      isSelected:
-                                          appProvider.hasSelectedBrand &&
-                                              !appProvider.hasSelectedStore,
+                      appProvider.hasSelectedBrand
+                          ? FutureBuilder(
+                              future: _brandService.branchOfficesByBrand(
+                                  AppPreferences().brandId),
+                              builder: (context,
+                                  AsyncSnapshot<List<Store>> snapshot) {
+                                if (snapshot.hasData) {
+                                  return Container(
+                                    height: 120,
+                                    child: ListView(
+                                      padding: EdgeInsets.only(
+                                          top: 5, bottom: 5, left: 20),
+                                      scrollDirection: Axis.horizontal,
+                                      children: <Widget>[
+                                        BrandMiniCard(
+                                          brand: appProvider.brandDefault,
+                                          isSelected:
+                                              appProvider.hasSelectedBrand &&
+                                                  !appProvider.hasSelectedStore,
+                                        ),
+                                        Row(
+                                            children: snapshot.data!.map((e) {
+                                          return Container(
+                                            width: 280,
+                                            margin: EdgeInsets.only(right: 20),
+                                            child: StoreMiniCard(
+                                                showImage: true,
+                                                onTap: () {
+                                                  appProvider.selectStore(e);
+                                                },
+                                                store: e,
+                                                isSelected:
+                                                    appProvider.hasSelectedStore
+                                                        ? e.id ==
+                                                            appProvider
+                                                                .storeSelected
+                                                                .id
+                                                        : false),
+                                          );
+                                        }).toList()),
+                                      ],
                                     ),
-                                    Row(
-                                        children: snapshot.data!.map((e) {
-                                      return Container(
-                                        width: 280,
-                                        margin: EdgeInsets.only(right: 20),
-                                        child: StoreMiniCard(
-                                            showImage: true,
-                                            onTap: () {
-                                              appProvider.selectStore(e);
-                                            },
-                                            store: e,
-                                            isSelected: appProvider
-                                                    .hasSelectedStore
-                                                ? e.id ==
-                                                    appProvider.storeSelected.id
-                                                : false),
-                                      );
-                                    }).toList()),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              return CircularProgressIndicator();
-                            }
-                          }),
-                      SizedBox(height: 10),
-                      !appProvider.hasSelectedStore
-                          ? ButtonLeadButton()
+                                  );
+                                } else {
+                                  return CircularProgressIndicator();
+                                }
+                              })
                           : Container(),
-                      SizedBox(height: 10),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Image(
-                          image: AssetImage('assets/images/example-graph.png'),
-                        ),
-                      ),
+                      // !appProvider.hasSelectedStore
+                      //     ? ButtonLeadButton()
+                      //     : Container(),
+                      // SizedBox(height: 10),
+                      // Padding(
+                      //   padding: EdgeInsets.symmetric(horizontal: 20),
+                      //   child: Image(
+                      //     image: AssetImage('assets/images/example-graph.png'),
+                      //   ),
+                      // ),
                       SizedBox(height: 30),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
@@ -296,6 +325,11 @@ class _HomePageState extends State<HomePage> {
                                           appProvider.brandDefault.id);
                                       Navigator.pushNamed(
                                           context, '/profile/statistics');
+                                    } else {
+                                      statisticProvider.setStoreId(
+                                          appProvider.storeSelected.id!);
+                                      Navigator.pushNamed(
+                                          context, '/profile/statistics');
                                     }
                                   },
                                   child: Container(
@@ -333,42 +367,45 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       SizedBox(height: 30),
-                      Container(
-                        height: 65,
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              elevation: 0,
-                              backgroundColor: QuickyColors.primaryColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                            ),
-                            onPressed: () {
-                              surveyProvider.setPage(0);
-                              Navigator.pushNamed(context, '/create/survey');
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '+',
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  'Crear nueva encuesta',
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                )
-                              ],
-                            )),
-                      ),
+                      appProvider.hasSelectedBrand
+                          ? Container(
+                              height: 65,
+                              width: MediaQuery.of(context).size.width * 0.85,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 0,
+                                    backgroundColor: QuickyColors.primaryColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    surveyProvider.setPage(0);
+                                    Navigator.pushNamed(
+                                        context, '/create/survey');
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '+',
+                                        style: TextStyle(
+                                            fontSize: 17,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      SizedBox(width: 10),
+                                      Text(
+                                        'Crear nueva encuesta',
+                                        style: TextStyle(
+                                            fontSize: 17,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500),
+                                      )
+                                    ],
+                                  )),
+                            )
+                          : Container(),
                     ],
                   ),
                 ),

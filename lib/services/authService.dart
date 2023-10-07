@@ -5,14 +5,18 @@ class AuthResponse {
   String message;
   dynamic data;
   bool status;
-
+  String from;
   AuthResponse(
-      {required this.message, required this.data, required this.status});
+      {required this.message,
+      required this.from,
+      required this.data,
+      required this.status});
 
   factory AuthResponse.fromJSONResponse(Map<String, dynamic> response) {
     return AuthResponse(
         message: response['message'],
         data: response['data'],
+        from: response['from'],
         status: response['status']);
   }
 }

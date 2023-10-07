@@ -26,10 +26,14 @@ class LoginProvider with ChangeNotifier {
       return AuthResponse(
           message: response.message,
           data: response.data,
+          from: response.from,
           status: response.status);
     } catch (e) {
       return AuthResponse(
-          message: 'Email o usuario incorrectos', data: null, status: false);
+          message: 'Email o usuario incorrectos',
+          from: 'nothing',
+          data: null,
+          status: false);
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/providers/survey/survey_provider.dart';
 import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/widgets/app/goBackButton.dart';
@@ -16,7 +17,14 @@ class _SurveyListScreenState extends State<SurveyListScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<SurveyProvider>(context, listen: false).getAll();
+      final appProvider = Provider.of<AppProvider>(context, listen: false);
+
+      if (appProvider.hasSelectedBrand) {
+        Provider.of<SurveyProvider>(context, listen: false).getAll();
+      } else {
+        Provider.of<SurveyProvider>(context, listen: false)
+            .getSurveysFromStore(appProvider.storeSelected.id!);
+      }
     }); // TODO: implement initState
     super.initState();
   }

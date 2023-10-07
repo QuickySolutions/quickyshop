@@ -30,6 +30,20 @@ class StatisticService {
     return responseData;
   }
 
+  Future<List<Survey>> getStoreStatistics(String storeId) async {
+    List<Survey> responseData = [];
+    List<dynamic> responseMap;
+    Response response =
+        await _dio.get(ApiUrl.API + '/stadistics/store/${storeId}');
+    print(response.data);
+    responseMap = response.data['surveys'];
+    responseMap.forEach((e) {
+      responseData.add(Survey.fromJSONResponseWithOutQuestions(e));
+    });
+
+    return responseData;
+  }
+
   Future<Map<String, dynamic>> getSurveyQuestionsStatistics(
       String surveyId) async {
     Response response =

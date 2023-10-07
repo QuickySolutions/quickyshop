@@ -63,7 +63,10 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: AppPreferences().brandId.isNotEmpty ? '/base' : '/',
+        initialRoute: AppPreferences().brandId.isNotEmpty ||
+                AppPreferences().storeId.isNotEmpty
+            ? '/base'
+            : '/',
         routes: {
           '/': (context) => const PrincipalScreen(),
           '/send-code': (context) => SendCodeScreen(),

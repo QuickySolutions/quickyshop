@@ -56,9 +56,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               SizedBox(height: 15),
               QuickyTextField(
-                defaultValue: appProvider.wantToAddNewStore
-                    ? appProvider.brandDefault.email
-                    : signUpProvider.emailStore,
                 hintText: 'Correo de Tienda',
                 prefixIcon: Padding(
                   padding: EdgeInsets.only(left: 10),
@@ -82,8 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
               ),
               SizedBox(height: 15),
-              !signUpProvider.isSignedWithSocialMedia &&
-                      appProvider.wantToAddNewStore == false
+              !signUpProvider.isSignedWithSocialMedia
                   ? Column(
                       children: [
                         QuickyTextField(

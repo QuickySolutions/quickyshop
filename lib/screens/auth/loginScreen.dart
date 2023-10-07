@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/models/Brand.dart';
 import 'package:quickyshop/preferences/appPreferences.dart';
+import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/providers/auth/loginProvider.dart';
 import '../../utils/Colors.dart';
 import '../../utils/general_methods.dart';
@@ -19,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context);
+    final appProvider = Provider.of<AppProvider>(context);
     return QuickyAuthScaffold(
         currentScreenType: 'register',
         contentScreen: Scaffold(
@@ -71,11 +75,28 @@ class _LoginScreenState extends State<LoginScreen> {
                               ? () async {
                                   var responseLogin =
                                       await loginProvider.login();
-                                  AppPreferences()
-                                      .setIdBrand(responseLogin.data['_id']);
 
-                                  Navigator.pushNamedAndRemoveUntil(
-                                      context, "/base", (r) => false);
+                                  inspect(responseLogin);
+
+                                  if (responseLogin.from == 'brand') {
+                                    AppPreferences()
+                                        .setIdBrand(responseLogin.data['_id']);
+                                    //set providers to brand
+                                    appProvider
+                                        .setDefaultBrand(responseLogin.data);
+
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, "/base", (r) => false);
+                                  } else {
+                                    AppPreferences()
+                                        .setIdStore(responseLogin.data['_id']);
+
+                                    appProvider
+                                        .setDefaultStore(responseLogin.data);
+
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, "/base", (r) => false);
+                                  }
                                 }
                               : null,
                           child: Text(

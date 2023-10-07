@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/models/Coupon.dart';
 import 'package:quickyshop/preferences/appPreferences.dart';
+import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/providers/coupons/coupon_provider.dart';
 import 'package:quickyshop/providers/store/store_provider.dart';
 import 'package:quickyshop/utils/Colors.dart';
@@ -20,7 +21,14 @@ class _CouponsListScreeenState extends State<CouponsListScreeen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<CouponProvider>(context, listen: false).getAll();
+      final appProvider = Provider.of<AppProvider>(context, listen: false);
+
+      if (appProvider.hasSelectedBrand) {
+        Provider.of<CouponProvider>(context, listen: false).getAll();
+      } else {
+        Provider.of<CouponProvider>(context, listen: false)
+            .getCouponsFromStore(appProvider.storeSelected.id!);
+      }
     });
     // TODO: implement initState
 
@@ -93,18 +101,31 @@ class _CouponsListScreeenState extends State<CouponsListScreeen> {
           return QuickyAlertDialog(
             onNextClick: () {
               if (couponProvider.isValidForm &&
-                  !storeProvider.wantToSaveInAllStores) {
+                      !storeProvider.wantToSaveInAllStores ||
+                  (couponProvider.isValidForm &&
+                      storeProvider.wantToSaveInAllStores &&
+                      storeProvider.selectedStores.isNotEmpty)) {
                 Coupon couponItem = Coupon(
                     active: true,
                     brandId: AppPreferences().brandId,
                     name: couponProvider.couponName,
                     monetization: couponProvider.couponMonetization);
 
-                couponProvider.create(couponItem);
+                couponProvider.create(couponItem, storeProvider);
+                couponProvider.clear();
+                storeProvider.reset();
                 Navigator.pop(context);
+              } else if (couponProvider.activePage == 1 &&
+                  storeProvider.selectedStores.isEmpty) {
+                const snackBar = SnackBar(
+                  content: Text('Las tiendas son necesarias'),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               } else if (couponProvider.isValidForm &&
                   storeProvider.wantToSaveInAllStores) {
-                couponProvider.changePageContent();
+                if (couponProvider.activePage == 0) {
+                  couponProvider.changePageContent();
+                }
               } else {
                 const snackBar = SnackBar(
                   content: Text('Rellena los datos'),

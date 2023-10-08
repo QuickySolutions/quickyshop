@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/preferences/appPreferences.dart';
@@ -103,16 +105,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Navigator.pushNamedAndRemoveUntil(
                                 context, "/base", (r) => false);
                           } else {
-                            //profileProvider.setIsLoading(true);
-                            final data = await _storeService.updateStore(
-                                appProvider.storeSelected.id!,
-                                profileProvider.toStore());
-                            appProvider.setDefaultStore(data['data']['value']);
+                            profileProvider.setIsLoading(true);
+                            try {
+                              final data = await _storeService.updateStore(
+                                  appProvider.storeSelected.id!,
+                                  profileProvider.toStore());
+                              inspect(data['data']['value']);
+                              appProvider
+                                  .setDefaultStore(data['data']['value']);
 
-                            profileProvider.setIsLoading(false);
-                            profileProvider.showFormProfile(false);
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, "/base", (r) => false);
+                              profileProvider.setIsLoading(false);
+                              profileProvider.showFormProfile(false);
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, "/base", (r) => false);
+                            } catch (e) {
+                              print(e);
+                            }
                           }
                         } else {
                           profileProvider.showFormProfile(true);

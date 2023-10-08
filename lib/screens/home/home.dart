@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/models/Store.dart';
@@ -43,8 +45,7 @@ class _HomePageState extends State<HomePage> {
     //final signupProvider = Provider.of<SignUpProvider>(context, listen: false);
     final appProvider = Provider.of<AppProvider>(context, listen: false);
     final StoreResponse store =
-        await _storeService.getStoreInformation(AppPreferences().storeId);
-
+        await _storeService.getStoreInformation(appProvider.storeSelected.id!);
     appProvider.setDefaultStore(store.data);
     setState(() {
       isLoadingBrandInformation = false;
@@ -200,9 +201,9 @@ class _HomePageState extends State<HomePage> {
                                 }
                               })
                           : Container(),
-                      // !appProvider.hasSelectedStore
-                      //     ? ButtonLeadButton()
-                      //     : Container(),
+                      !appProvider.hasSelectedStore
+                          ? ButtonLeadButton()
+                          : Container(),
                       // SizedBox(height: 10),
                       // Padding(
                       //   padding: EdgeInsets.symmetric(horizontal: 20),

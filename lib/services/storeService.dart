@@ -34,6 +34,7 @@ class StoreService {
 
   Future<StoreResponse> getStoreInformation(String id) async {
     Response response = await _dio.get(ApiUrl.API + '/stores/${id}');
+    print(response.data);
     return StoreResponse.fromJSONResponse(response.data);
   }
 
@@ -41,6 +42,7 @@ class StoreService {
       String id, Map<String, dynamic> data) async {
     Response response =
         await _dio.put(ApiUrl.API + '/stores/${id}', data: data);
+    print(response.data);
     return response.data;
   }
 

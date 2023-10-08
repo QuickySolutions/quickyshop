@@ -60,21 +60,22 @@ class _BaseHomePageState extends State<BaseHomePage> {
                         child: Icon(Icons.qr_code, size: 35),
                       ),
                       label: ''),
-                  BottomNavigationBarItem(
-                      icon: Container(
-                        padding: EdgeInsets.only(top: 30),
-                        child: Icon(Icons.notifications, size: 35),
-                      ),
-                      label: ''),
+                  // BottomNavigationBarItem(
+                  //     icon: Container(
+                  //       padding: EdgeInsets.only(top: 30),
+                  //       child: Icon(Icons.notifications, size: 35),
+                  //     ),
+                  //     label: ''),
                 ],
               ),
             ),
           )),
       body: PageView.builder(
+        allowImplicitScrolling: false,
         controller: _pageController,
-        onPageChanged: (value) {
-          setState(() {});
-        },
+        itemCount: screens.length,
+        physics: NeverScrollableScrollPhysics(),
+        onPageChanged: (value) {},
         itemBuilder: (BuildContext context, int index) {
           return screens[index];
         },

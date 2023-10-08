@@ -44,40 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBHWqefbNZtqajxnG9N1VDNnm6ywLitMaU',
-    appId: '1:151057766591:web:dfe9fbf4d7023da2860e0a',
-    messagingSenderId: '151057766591',
-    projectId: 'quickyshop-7be38',
-    authDomain: 'quickyshop-7be38.firebaseapp.com',
-    storageBucket: 'quickyshop-7be38.appspot.com',
-    measurementId: 'G-RGWBNCCQWM',
+    apiKey: 'AIzaSyA_B_5geLZKqm46Nm6vMNlthrQRhzO6beU',
+    appId: '1:359622514274:web:e93649e93e4136e71ba33b',
+    messagingSenderId: '359622514274',
+    projectId: 'quicky-398020',
+    authDomain: 'quicky-398020.firebaseapp.com',
+    storageBucket: 'quicky-398020.appspot.com',
+    measurementId: 'G-1XRZ66DC2S',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCDbJ9DiZ8OJNT6taVvgzaaA0hlK1S_tT4',
-    appId: '1:151057766591:android:f044ab25e72054a2860e0a',
-    messagingSenderId: '151057766591',
-    projectId: 'quickyshop-7be38',
-    storageBucket: 'quickyshop-7be38.appspot.com',
+    apiKey: 'AIzaSyCJNQunn2dzN_62P8JarXRVC9XdwTUY2To',
+    appId: '1:359622514274:android:a7de630124a999171ba33b',
+    messagingSenderId: '359622514274',
+    projectId: 'quicky-398020',
+    storageBucket: 'quicky-398020.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBC2ZzvoMYojP0qHVtmXPp3pQB5-piFmqI',
-    appId: '1:151057766591:ios:8cd3e5f32a409d57860e0a',
-    messagingSenderId: '151057766591',
-    projectId: 'quickyshop-7be38',
-    storageBucket: 'quickyshop-7be38.appspot.com',
-    iosClientId: '151057766591-ucqh61r6738dcpi2cahbkcdb9vm1nshr.apps.googleusercontent.com',
-    iosBundleId: 'com.example.quickyshop',
+    apiKey: 'AIzaSyB4KJ_gRIuPTrwZrT8mISrmjH-GC0M4XpI',
+    appId: '1:359622514274:ios:a60c3d1a13373d3e1ba33b',
+    messagingSenderId: '359622514274',
+    projectId: 'quicky-398020',
+    storageBucket: 'quicky-398020.appspot.com',
+    iosClientId: '359622514274-0sbf2pnp1t8k36b1f4nanbs9a1i07957.apps.googleusercontent.com',
+    iosBundleId: 'quickyshop.app',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBC2ZzvoMYojP0qHVtmXPp3pQB5-piFmqI',
-    appId: '1:151057766591:ios:26bcb2281f267e17860e0a',
-    messagingSenderId: '151057766591',
-    projectId: 'quickyshop-7be38',
-    storageBucket: 'quickyshop-7be38.appspot.com',
-    iosClientId: '151057766591-2t84dfia9dp5e2qajoj160v1qbfov1s7.apps.googleusercontent.com',
+    apiKey: 'AIzaSyB4KJ_gRIuPTrwZrT8mISrmjH-GC0M4XpI',
+    appId: '1:359622514274:ios:bf959ead0e633b9e1ba33b',
+    messagingSenderId: '359622514274',
+    projectId: 'quicky-398020',
+    storageBucket: 'quicky-398020.appspot.com',
+    iosClientId: '359622514274-o07bm21qopsnf255er8okhgr9r5smr7e.apps.googleusercontent.com',
     iosBundleId: 'com.example.quickyshop.RunnerTests',
   );
 }

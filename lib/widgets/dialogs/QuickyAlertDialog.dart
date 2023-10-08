@@ -40,9 +40,12 @@ class _QuickyAlertDialogState extends State<QuickyAlertDialog> {
                   width: MediaQuery.of(context).size.width * 0.75,
                   height: widget.size == 'xs-small'
                       ? 120
-                      : widget.size == 'small'
-                          ? 380
-                          : 500,
+                      : widget.size == 'error-coupon' ||
+                              widget.size == 'approved-coupon'
+                          ? 190
+                          : widget.size == 'small'
+                              ? 380
+                              : 500,
                   child: widget.childContent),
               QuickyCloseButton(),
               widget.showNextButton

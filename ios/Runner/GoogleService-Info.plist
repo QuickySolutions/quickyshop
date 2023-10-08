@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>151057766591-ucqh61r6738dcpi2cahbkcdb9vm1nshr.apps.googleusercontent.com</string>
+	<string>359622514274-fsjbf00eu02iaof0qasmm5ptsqg67ahl.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.151057766591-ucqh61r6738dcpi2cahbkcdb9vm1nshr</string>
+	<string>com.googleusercontent.apps.359622514274-fsjbf00eu02iaof0qasmm5ptsqg67ahl</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBC2ZzvoMYojP0qHVtmXPp3pQB5-piFmqI</string>
+	<string>AIzaSyB4KJ_gRIuPTrwZrT8mISrmjH-GC0M4XpI</string>
 	<key>GCM_SENDER_ID</key>
-	<string>151057766591</string>
+	<string>359622514274</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.quickyshop</string>
+	<string>com.example.quiky</string>
 	<key>PROJECT_ID</key>
-	<string>quickyshop-7be38</string>
+	<string>quicky-398020</string>
 	<key>STORAGE_BUCKET</key>
-	<string>quickyshop-7be38.appspot.com</string>
+	<string>quicky-398020.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:151057766591:ios:8cd3e5f32a409d57860e0a</string>
+	<string>1:359622514274:ios:dc695dad33fda0041ba33b</string>
 </dict>
 </plist>

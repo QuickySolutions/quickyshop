@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
     //final signupProvider = Provider.of<SignUpProvider>(context, listen: false);
     final appProvider = Provider.of<AppProvider>(context, listen: false);
     final Map<String, dynamic> brand =
-        await _brandService.getBrandInformation(AppPreferences().brandId);
+        await _brandService.getBrandInformation(appProvider.brandDefault.id);
     appProvider.setDefaultBrand(brand['data']);
 
     setState(() {

@@ -107,55 +107,111 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                                   ]),
                             ),
                             SizedBox(height: 20),
-                            Column(
-                                children: questions.map((e) {
-                              List<dynamic> data = e['data'];
-                              return Container(
-                                padding: EdgeInsets.symmetric(vertical: 20),
-                                width: double.infinity,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      e['question'],
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700),
+                            // Column(
+                            //     children: questions.map((e) {
+                            //   List<dynamic> data = e['data'];
+                            //   return Container(
+                            //     padding: EdgeInsets.symmetric(vertical: 20),
+                            //     width: double.infinity,
+                            //     child: Column(
+                            //       crossAxisAlignment: CrossAxisAlignment.start,
+                            //       children: [
+                            //         Text(
+                            //           e['question'],
+                            //           style: TextStyle(
+                            //               fontSize: 20,
+                            //               fontWeight: FontWeight.w700),
+                            //         ),
+                            //         Column(
+                            //           children: data.map((e) {
+                            //             int count = e['count'];
+                            //             double countDouble = count.toDouble();
+                            //             return Container(
+                            //               width: double.infinity,
+                            //               margin: EdgeInsets.symmetric(
+                            //                   vertical: 10),
+                            //               child: Column(
+                            //                 crossAxisAlignment:
+                            //                     CrossAxisAlignment.start,
+                            //                 children: [
+                            //                   Text(
+                            //                       'Respuesta No. ${data.indexOf(e) + 1}. Contestada: ${count}'),
+                            //                   SizedBox(height: 20),
+                            //                   ProgressBar(
+                            //                     current: countDouble,
+                            //                   )
+                            //                 ],
+                            //               ),
+                            //             );
+                            //           }).toList(),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //     decoration: BoxDecoration(
+                            //         border: Border(
+                            //       top: BorderSide(
+                            //         color: Colors.black,
+                            //         width: 2.0,
+                            //       ),
+                            //     )),
+                            //   );
+                            // }).toList()),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: questions.length,
+                                itemBuilder: (context, index) {
+                                  print(questions.length);
+                                  List<dynamic> data = questions[index]['data'];
+                                  return Container(
+                                    padding: EdgeInsets.symmetric(vertical: 20),
+                                    width: double.infinity,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          questions[index]['question'],
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        Column(
+                                          children: data.map((e) {
+                                            int count = e['count'];
+                                            double countDouble =
+                                                count.toDouble();
+                                            return Container(
+                                              width: double.infinity,
+                                              margin: EdgeInsets.symmetric(
+                                                  vertical: 10),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                      'Respuesta No. ${data.indexOf(e) + 1}. Contestada: ${count}'),
+                                                  SizedBox(height: 20),
+                                                  ProgressBar(
+                                                    current: countDouble,
+                                                  )
+                                                ],
+                                              ),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ],
                                     ),
-                                    Column(
-                                      children: data.map((e) {
-                                        int count = e['count'];
-                                        double countDouble = count.toDouble();
-                                        return Container(
-                                          width: double.infinity,
-                                          margin: EdgeInsets.symmetric(
-                                              vertical: 10),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                  'Respuesta No. ${data.indexOf(e) + 1}. Contestada: ${count}'),
-                                              SizedBox(height: 20),
-                                              ProgressBar(
-                                                current: countDouble,
-                                              )
-                                            ],
-                                          ),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ],
-                                ),
-                                decoration: BoxDecoration(
-                                    border: Border(
-                                  top: BorderSide(
-                                    color: Colors.black,
-                                    width: 2.0,
-                                  ),
-                                )),
-                              );
-                            }).toList()),
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                      top: BorderSide(
+                                        color: Colors.black,
+                                        width: 2.0,
+                                      ),
+                                    )),
+                                  );
+                                },
+                              ),
+                            )
                           ],
                         );
                       } else {

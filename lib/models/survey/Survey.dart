@@ -12,6 +12,7 @@ class Survey {
   String initDate;
   String finalDate;
   List<String>? stores;
+  int points;
   Survey(
       {this.id,
       this.photo,
@@ -21,6 +22,7 @@ class Survey {
       required this.secretPassword,
       this.description,
       this.stores,
+      this.points = 30,
       this.active = true,
       this.questions});
 
@@ -34,6 +36,7 @@ class Survey {
         description: response['description'],
         active: response['active'],
         photo: response['photo'],
+        points: response['points'],
         initDate: response['initDate'],
         finalDate: response['finalDate'],
         secretPassword: response['secretPassword'],
@@ -47,6 +50,7 @@ class Survey {
         id: response['_id'],
         name: response['name'],
         stores: stores,
+        points: response['points'],
         description: response['description'],
         active: response['active'],
         photo: response['photo'],
@@ -62,6 +66,7 @@ class Survey {
       'photo': photo,
       'name': name,
       'active': active,
+      'points': points,
       'secretPassword': secretPassword,
       'initDate': initDate,
       'finalDate': finalDate,

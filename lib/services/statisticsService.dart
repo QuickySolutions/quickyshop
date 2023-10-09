@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:quickyshop/models/survey/Survey.dart';
 import 'package:quickyshop/utils/api.dart';
@@ -48,7 +50,7 @@ class StatisticService {
       String surveyId) async {
     Response response =
         await _dio.get(ApiUrl.API + '/surveys/$surveyId/question/stadistics');
-
+    inspect(response.data);
     return response.data;
   }
 }

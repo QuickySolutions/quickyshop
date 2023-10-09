@@ -4,7 +4,15 @@ import 'package:quickyshop/models/Store.dart';
 
 class AppProvider with ChangeNotifier {
   bool _wantToAddNewStore = false;
-  late Store _storeSelected;
+  late Store _storeSelected = Store(
+      name: '',
+      photo: '',
+      category: '',
+      subcategory: '',
+      email: '',
+      location: '',
+      principal_category: '',
+      brandId: '');
   late Brand _brandDefault;
   bool _hasSelectedStore = false;
   bool _hasSelectedBrand = false;
@@ -45,6 +53,11 @@ class AppProvider with ChangeNotifier {
 
   void restoreBrandDefault() {
     _hasSelectedStore = false;
+    _hasSelectedBrand = true;
+    notifyListeners();
+  }
+
+  void selectBrand() {
     _hasSelectedBrand = true;
     notifyListeners();
   }

@@ -13,7 +13,15 @@ class AppProvider with ChangeNotifier {
       location: '',
       principal_category: '',
       brandId: '');
-  late Brand _brandDefault;
+  late Brand _brandDefault = Brand(
+      id: "",
+      name: "",
+      email: "",
+      cellphone: "",
+      principalCategory: "",
+      category: "",
+      subCategory: "",
+      photo: "");
   bool _hasSelectedStore = false;
   bool _hasSelectedBrand = false;
   int _currentPage = 0;

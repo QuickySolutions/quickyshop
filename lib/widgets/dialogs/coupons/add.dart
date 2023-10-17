@@ -69,26 +69,26 @@ class AddCouponForm extends StatelessWidget {
                 },
                 hintText: 'Valor monetario del cupón'),
             SizedBox(height: 10),
-            Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Transform.scale(
-                    scale: 1.2,
-                    child: Checkbox(
-                        checkColor: Colors.white,
-                        activeColor: QuickyColors.primaryColor,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        value: storeProvider.wantToSaveInAllStores,
-                        onChanged: (value) {
-                          storeProvider.onSaveInAllStores(value!);
-                        }),
-                  ),
-                  Expanded(child: Text('Enviar este cupon a tiendas'))
-                ],
-              ),
-            ),
+            // Container(
+            //   child: Row(
+            //     crossAxisAlignment: CrossAxisAlignment.center,
+            //     children: [
+            //       Transform.scale(
+            //         scale: 1.2,
+            //         child: Checkbox(
+            //             checkColor: Colors.white,
+            //             activeColor: QuickyColors.primaryColor,
+            //             shape: RoundedRectangleBorder(
+            //                 borderRadius: BorderRadius.circular(5)),
+            //             value: storeProvider.wantToSaveInAllStores,
+            //             onChanged: (value) {
+            //               storeProvider.onSaveInAllStores(value!);
+            //             }),
+            //       ),
+            //       Expanded(child: Text('Enviar este cupon a tiendas'))
+            //     ],
+            //   ),
+            // ),
           ],
         ),
         StoreList()

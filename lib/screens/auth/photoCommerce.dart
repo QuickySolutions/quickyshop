@@ -50,7 +50,7 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
 
     if (!appProvider.wantToAddNewStore) {
       final response = await _storeService.createBranch(storeData);
-
+      signUpProvider.clearAll();
       AppPreferences().setIdBrand(response['data']['_id']);
       appProvider.setDefaultBrand(response['data']);
     } else {

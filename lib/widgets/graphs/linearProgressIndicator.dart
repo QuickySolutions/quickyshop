@@ -15,6 +15,7 @@ class ProgressBar extends StatelessWidget {
         var x = boxConstraints.maxWidth;
         var currentOnDecimal = current / 100;
         var percent = (currentOnDecimal / 10) * x;
+
         return Stack(
           children: [
             Container(

@@ -199,11 +199,18 @@ class SurveyQuestionItem extends StatelessWidget {
   }
 
   Widget miniReviewQuestionContent() {
-    return QuickyTextField();
+    return QuickyTextField(
+      hintText: 'Aqui ira la opinión del usuario',
+      readOnly: true,
+    );
   }
 
   Widget largeReviewQuestionContent() {
-    return QuickyTextArea(maxLines: 6);
+    return QuickyTextArea(
+      maxLines: 6,
+      hintText: 'Aqui ira la opinión del usuario',
+      readOnly: true,
+    );
   }
 
   Widget scaleQuestionContent(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/providers/statistics/statisticsProvider.dart';
@@ -160,8 +162,8 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                               child: ListView.builder(
                                 itemCount: questions.length,
                                 itemBuilder: (context, index) {
-                                  print(questions.length);
                                   List<dynamic> data = questions[index]['data'];
+                                  print(data);
                                   return Container(
                                     padding: EdgeInsets.symmetric(vertical: 20),
                                     width: double.infinity,
@@ -178,8 +180,14 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                                         Column(
                                           children: data.map((e) {
                                             int count = e['count'];
-                                            double countDouble =
-                                                count.toDouble();
+                                            double percent = ((count / 3) * 1);
+                                            String inString = percent
+                                                .toStringAsFixed(1); // '2.35'
+                                            double inDouble =
+                                                double.parse(inString);
+
+                                            print(inDouble);
+
                                             return Container(
                                               width: double.infinity,
                                               margin: EdgeInsets.symmetric(
@@ -188,11 +196,19 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
+                                                  Text('$inDouble'),
                                                   Text(
                                                       'Respuesta No. ${data.indexOf(e) + 1}. Contestada: ${count}'),
                                                   SizedBox(height: 20),
-                                                  ProgressBar(
-                                                    current: countDouble,
+                                                  // ProgressBar(
+                                                  //   current: (count /
+                                                  //           totalResponses) *
+                                                  //       100,
+                                                  // )
+                                                  LinearProgressIndicator(
+                                                    backgroundColor:
+                                                        QuickyColors.greyColor,
+                                                    value: inDouble,
                                                   )
                                                 ],
                                               ),

@@ -46,7 +46,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(AppPreferences().brandId);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => SignUpProvider()),

@@ -28,17 +28,19 @@ class CreateSurveyScreen extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
+    final heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Consumer<SurveyProvider>(
         builder: (context, value, child) {
           return SafeArea(
             child: Container(
-              height: MediaQuery.of(context).size.height,
+              height: heightScreen,
               child: Column(
                 children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.878,
+                  Expanded(
+                      child: Container(
+                    padding: EdgeInsets.only(bottom: 5),
                     child: PageView.builder(
                       controller: value.pageController,
                       onPageChanged: (int page) {
@@ -49,14 +51,14 @@ class CreateSurveyScreen extends StatelessWidget {
                         return pages[index];
                       },
                     ),
-                  ),
+                  )),
                   Container(
-                    padding: EdgeInsets.only(top: 12),
+                    height: heightScreen * 0.04,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: _buildPageIndicator(value),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),

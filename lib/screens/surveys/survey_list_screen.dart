@@ -24,7 +24,6 @@ class _SurveyListScreenState extends State<SurveyListScreen> {
       if (appProvider.hasSelectedBrand) {
         Provider.of<SurveyProvider>(context, listen: false).getAll();
       } else {
-        inspect(appProvider.storeSelected);
         Provider.of<SurveyProvider>(context, listen: false)
             .getSurveysFromStore(appProvider.storeSelected.id!);
       }

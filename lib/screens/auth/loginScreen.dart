@@ -76,8 +76,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   var responseLogin =
                                       await loginProvider.login();
 
-                                  inspect(responseLogin);
-
                                   if (responseLogin.from == 'brand') {
                                     AppPreferences()
                                         .setIdBrand(responseLogin.data['_id']);

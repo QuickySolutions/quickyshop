@@ -175,7 +175,6 @@ class CouponProvider extends ChangeNotifier {
       updatedCoupon.photo = urlPicture;
       CouponResponse response = await _couponsService.editCoupon(updatedCoupon);
       coupon = Coupon.fromJSONResponse(response.data);
-      print(updatedCoupon.photo);
     }
 
     int indexOfItem =

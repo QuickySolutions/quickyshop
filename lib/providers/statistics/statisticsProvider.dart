@@ -31,7 +31,6 @@ class StatisticProvider extends ChangeNotifier {
         await _statisticService.getBrandStatistics(brandIdValue);
 
     _surveys = response;
-    print(_surveys);
 
     notifyListeners();
   }
@@ -53,8 +52,6 @@ class StatisticProvider extends ChangeNotifier {
         await _statisticService.getBrandStatistics(brandIdValue);
 
     _surveys = response;
-
-    print(_surveys);
 
     notifyListeners();
   }

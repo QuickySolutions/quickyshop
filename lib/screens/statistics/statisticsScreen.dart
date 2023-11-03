@@ -35,7 +35,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final appProvider = Provider.of<AppProvider>(context);
     final statisticProvider = Provider.of<StatisticProvider>(context);
     return Scaffold(
       body: Container(

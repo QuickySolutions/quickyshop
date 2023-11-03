@@ -37,7 +37,6 @@ class StatisticService {
     List<dynamic> responseMap;
     Response response =
         await _dio.get(ApiUrl.API + '/stadistics/store/${storeId}');
-    print(response.data);
     responseMap = response.data['surveys'];
     responseMap.forEach((e) {
       responseData.add(Survey.fromJSONResponseWithOutQuestions(e));
@@ -50,7 +49,6 @@ class StatisticService {
       String surveyId) async {
     Response response =
         await _dio.get(ApiUrl.API + '/surveys/$surveyId/question/stadistics');
-    inspect(response.data);
     return response.data;
   }
 }

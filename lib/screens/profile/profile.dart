@@ -110,7 +110,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               final data = await _storeService.updateStore(
                                   appProvider.storeSelected.id!,
                                   profileProvider.toStore());
-                              inspect(data['data']['value']);
                               appProvider
                                   .setDefaultStore(data['data']['value']);
 

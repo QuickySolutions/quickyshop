@@ -1,11 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/providers/statistics/statisticsProvider.dart';
 import 'package:quickyshop/services/statisticsService.dart';
 import 'package:quickyshop/utils/Colors.dart';
-import 'package:quickyshop/widgets/graphs/linearProgressIndicator.dart';
+import 'package:quickyshop/utils/general_methods.dart';
 
 class SurveyStatistic extends StatefulWidget {
   const SurveyStatistic({super.key});
@@ -77,6 +75,9 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                             snapshot.data!['survey']['numberResponses'];
 
                         List<dynamic> questions = snapshot.data!['questions'];
+
+                        int numberOfPeople = totalResponses;
+
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -109,61 +110,12 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                                   ]),
                             ),
                             SizedBox(height: 20),
-                            // Column(
-                            //     children: questions.map((e) {
-                            //   List<dynamic> data = e['data'];
-                            //   return Container(
-                            //     padding: EdgeInsets.symmetric(vertical: 20),
-                            //     width: double.infinity,
-                            //     child: Column(
-                            //       crossAxisAlignment: CrossAxisAlignment.start,
-                            //       children: [
-                            //         Text(
-                            //           e['question'],
-                            //           style: TextStyle(
-                            //               fontSize: 20,
-                            //               fontWeight: FontWeight.w700),
-                            //         ),
-                            //         Column(
-                            //           children: data.map((e) {
-                            //             int count = e['count'];
-                            //             double countDouble = count.toDouble();
-                            //             return Container(
-                            //               width: double.infinity,
-                            //               margin: EdgeInsets.symmetric(
-                            //                   vertical: 10),
-                            //               child: Column(
-                            //                 crossAxisAlignment:
-                            //                     CrossAxisAlignment.start,
-                            //                 children: [
-                            //                   Text(
-                            //                       'Respuesta No. ${data.indexOf(e) + 1}. Contestada: ${count}'),
-                            //                   SizedBox(height: 20),
-                            //                   ProgressBar(
-                            //                     current: countDouble,
-                            //                   )
-                            //                 ],
-                            //               ),
-                            //             );
-                            //           }).toList(),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //     decoration: BoxDecoration(
-                            //         border: Border(
-                            //       top: BorderSide(
-                            //         color: Colors.black,
-                            //         width: 2.0,
-                            //       ),
-                            //     )),
-                            //   );
-                            // }).toList()),
                             Expanded(
                               child: ListView.builder(
                                 itemCount: questions.length,
                                 itemBuilder: (context, index) {
                                   List<dynamic> data = questions[index]['data'];
-                                  print(data);
+
                                   return Container(
                                     padding: EdgeInsets.symmetric(vertical: 20),
                                     width: double.infinity,
@@ -180,14 +132,8 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                                         Column(
                                           children: data.map((e) {
                                             int count = e['count'];
-                                            double percent = ((count / 3) * 1);
-                                            String inString = percent
-                                                .toStringAsFixed(1); // '2.35'
-                                            double inDouble =
-                                                double.parse(inString);
-
-                                            print(inDouble);
-
+                                            double percent =
+                                                (count / numberOfPeople) * 1;
                                             return Container(
                                               width: double.infinity,
                                               margin: EdgeInsets.symmetric(
@@ -196,19 +142,13 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text('$inDouble'),
                                                   Text(
                                                       'Respuesta No. ${data.indexOf(e) + 1}. Contestada: ${count}'),
                                                   SizedBox(height: 20),
-                                                  // ProgressBar(
-                                                  //   current: (count /
-                                                  //           totalResponses) *
-                                                  //       100,
-                                                  // )
                                                   LinearProgressIndicator(
                                                     backgroundColor:
                                                         QuickyColors.greyColor,
-                                                    value: inDouble,
+                                                    value: percent,
                                                   )
                                                 ],
                                               ),

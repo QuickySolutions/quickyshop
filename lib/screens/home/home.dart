@@ -35,7 +35,6 @@ class _HomePageState extends State<HomePage> {
     final Map<String, dynamic> brand =
         await _brandService.getBrandInformation(appProvider.brandDefault.id);
     appProvider.setDefaultBrand(brand['data']);
-
     setState(() {
       isLoadingBrandInformation = false;
     });

@@ -73,6 +73,26 @@ class _DefineCategoryScreenState extends State<DefineCategoryScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
+            signUpProvider.principalCategorySelected.isNotEmpty
+                ? Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          if (signUpProvider
+                                  .principalCategorySelected.isNotEmpty &&
+                              signUpProvider.subLevelSelected.isNotEmpty) {
+                            signUpProvider.selectedSubLevelCategory("");
+                          } else {
+                            signUpProvider.selectPrincipalCategory("");
+                          }
+                        },
+                        child: Text('Volver'),
+                      ),
+                    ),
+                  )
+                : Container(),
             Expanded(
               child: isLoading
                   ? Center(

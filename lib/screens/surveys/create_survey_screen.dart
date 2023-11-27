@@ -226,6 +226,7 @@ Widget principalFormSurvey(
         Text('Nombre de la encuesta:'),
         SizedBox(height: 15),
         QuickyTextField(
+          keyboardType: TextInputType.name,
           defaultValue: surveyProvider.surveyAction == SurveyAction.create
               ? ''
               : surveyProvider.surveyName,

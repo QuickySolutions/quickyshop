@@ -59,6 +59,7 @@ class QuickyTextArea extends StatelessWidget {
   void Function()? onTap;
   String? hintText;
   bool? readOnly;
+  TextInputType keyboardType;
   TextEditingController? controller;
   final bool? hideText;
   final int? maxLines;
@@ -68,6 +69,7 @@ class QuickyTextArea extends StatelessWidget {
       this.controller,
       this.hideText = false,
       this.onTap,
+      this.keyboardType = TextInputType.text,
       this.readOnly = false,
       this.suffixIcon,
       required this.maxLines,
@@ -81,6 +83,7 @@ class QuickyTextArea extends StatelessWidget {
       initialValue: defaultValue,
       readOnly: readOnly!,
       onChanged: onChanged,
+      textInputAction: TextInputAction.done,
       controller: controller,
       maxLines: maxLines!,
       obscureText: hideText!,

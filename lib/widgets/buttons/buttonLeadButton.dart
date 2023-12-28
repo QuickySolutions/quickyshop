@@ -35,7 +35,7 @@ class ButtonLeadButton extends StatelessWidget {
                       Navigator.pushNamed(context, '/register');
                     },
                     child: Text(
-                      'Agregar tienda',
+                      'Agregar subtienda',
                       style: TextStyle(
                           fontSize: 17,
                           color: Colors.black,

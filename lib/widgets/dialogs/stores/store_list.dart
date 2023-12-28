@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/providers/store/store_provider.dart';
 import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/widgets/store/store-mini-card.dart';
@@ -22,6 +23,7 @@ class _StoreListState extends State<StoreList> {
   @override
   Widget build(BuildContext context) {
     final storeProvider = Provider.of<StoreProvider>(context);
+    final appProvider = Provider.of<AppProvider>(context);
     return Consumer<StoreProvider>(builder: (context, data, child) {
       return data.isLoading
           ? Center(
@@ -31,7 +33,23 @@ class _StoreListState extends State<StoreList> {
             )
           : data.stores.isEmpty
               ? Center(
-                  child: Text('No hay datos'),
+                  child: GestureDetector(
+                    onTap: () {
+                      appProvider.setWantToAddNewStore(true);
+                      Navigator.pushNamed(context, '/register');
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      decoration: BoxDecoration(
+                          color: QuickyColors.primaryColor,
+                          borderRadius: BorderRadius.circular(50)),
+                      child: Text(
+                        'Agregar subtienda',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
                 )
               : ListView.builder(
                   padding: EdgeInsets.only(top: 10, left: 5, right: 5),

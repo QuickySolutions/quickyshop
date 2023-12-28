@@ -57,6 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               SizedBox(height: 15),
               QuickyTextField(
                 hintText: 'Correo de Tienda',
+                defaultValue: signUpProvider.emailStore,
                 prefixIcon: Padding(
                   padding: EdgeInsets.only(left: 10),
                   child: getCustomIconToTextFieldInPrefx(
@@ -110,36 +111,90 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ],
                     )
                   : Container(),
-              SizedBox(height: 30),
-              Center(
-                child: Container(
-                  height: 55,
-                  width: MediaQuery.of(context).size.width * 0.65,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        backgroundColor: QuickyColors.secondaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
+              appProvider.wantToAddNewStore
+                  ? Column(
+                      children: [
+                        QuickyTextField(
+                          hintText: 'Contraseña',
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: getCustomIconToTextFieldInPrefx(
+                                'assets/icons/usability/key.png'),
+                          ),
+                          hideText: true,
+                          onChanged: (String value) {
+                            signUpProvider.setPasswordStore(value);
+                          },
                         ),
-                      ),
-                      onPressed: () async {
-                        if (appProvider.wantToAddNewStore) {
-                          Navigator.pushNamed(context, '/select/photo');
-                        } else {
-                          Navigator.pushNamed(context, '/select/category');
-                        }
-                      },
-                      child: Text(
-                        'Registrarse',
-                        style: TextStyle(
-                            fontSize: 17,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700),
-                      )),
+                        SizedBox(height: 15),
+                        QuickyTextField(
+                          hintText: 'Confirmar contraseña',
+                          hideText: true,
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: getCustomIconToTextFieldInPrefx(
+                                'assets/icons/usability/key.png'),
+                          ),
+                          onChanged: (String value) {
+                            signUpProvider.setPasswordConfirmStore(value);
+                          },
+                        ),
+                      ],
+                    )
+                  : Container(),
+              SizedBox(height: 30),
+              Container(
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 55,
+                      width: MediaQuery.of(context).size.width * 0.65,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: QuickyColors.secondaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                          ),
+                          onPressed: () async {
+                            if (appProvider.wantToAddNewStore) {
+                              Navigator.pushNamed(context, '/select/photo');
+                            } else {
+                              Navigator.pushNamed(context, '/select/category');
+                            }
+                          },
+                          child: Text(
+                            'Registrarse',
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700),
+                          )),
+                    ),
+                    SizedBox(height: 20),
+                    Container(
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width * 0.65,
+                      child: GestureDetector(
+                          onTap: () async {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            'Atras',
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700),
+                          )),
+                    )
+                  ],
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 20),
               Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: RichText(

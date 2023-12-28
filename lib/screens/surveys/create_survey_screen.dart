@@ -7,6 +7,7 @@ import 'package:quickyshop/models/Coupon.dart';
 import 'package:quickyshop/models/survey/Survey.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/providers/coupons/coupon_provider.dart';
+import 'package:quickyshop/providers/store/store_provider.dart';
 import 'package:quickyshop/providers/survey/survey_provider.dart';
 import 'package:quickyshop/screens/surveys/create_survey_questions_screen.dart';
 import 'package:quickyshop/screens/surveys/store_selection_screen.dart';
@@ -29,6 +30,8 @@ class CreateSurveyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final heightScreen = MediaQuery.of(context).size.height;
+    final storeProvider = Provider.of<StoreProvider>(context);
+    final surveyProvider = Provider.of<SurveyProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Consumer<SurveyProvider>(
@@ -43,6 +46,10 @@ class CreateSurveyScreen extends StatelessWidget {
                     padding: EdgeInsets.only(bottom: 5),
                     child: PageView.builder(
                       controller: value.pageController,
+                      physics:
+                          surveyProvider.surveyAction == SurveyAction.create
+                              ? NeverScrollableScrollPhysics()
+                              : ScrollPhysics(),
                       onPageChanged: (int page) {
                         value.setPage(page);
                       },

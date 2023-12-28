@@ -51,13 +51,13 @@ class _BaseHomePageState extends State<BaseHomePage> {
                   BottomNavigationBarItem(
                       icon: Container(
                         padding: EdgeInsets.only(top: 30),
-                        child: Icon(Icons.home, size: 35),
+                        child: Icon(Icons.home, size: 30),
                       ),
                       label: ''),
                   BottomNavigationBarItem(
                       icon: Container(
                         padding: EdgeInsets.only(top: 30),
-                        child: Icon(Icons.qr_code, size: 35),
+                        child: Icon(Icons.qr_code, size: 30),
                       ),
                       label: ''),
                   // BottomNavigationBarItem(

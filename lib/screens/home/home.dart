@@ -217,7 +217,7 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Encuesta más popular: ',
+                              'Dashboard',
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w500),
                             ),

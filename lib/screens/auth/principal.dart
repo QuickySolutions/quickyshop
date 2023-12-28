@@ -97,7 +97,7 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
                     onTap: () async {
@@ -130,13 +130,6 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
                         height: 40,
                         width: 40,
                         image: AssetImage('assets/icons/auth/google.png')),
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Image(
-                        height: 40,
-                        width: 40,
-                        image: AssetImage('assets/icons/auth/twitter.png')),
                   ),
                 ],
               ),

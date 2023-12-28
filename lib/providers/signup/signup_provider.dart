@@ -12,7 +12,7 @@ class SignUpProvider extends ChangeNotifier {
   String _emailStore = "";
   String _passwordStore = "";
   String _confirmPasswordStore = "";
-  String _photoProfile = "no_photo";
+  String _photoProfile = "";
   String _cellPhoneStore = "";
   bool _isLoading = false;
 

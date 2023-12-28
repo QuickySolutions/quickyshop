@@ -10,5 +10,5 @@ class ApiUrl {
 
   //static String API = dotenv.env['MODE'] == 'dev' ? _LOCAL_API : _REMOTE_API;
 
-  static String API = _REMOTE_API;
+  static String API = _LOCAL_API;
 }

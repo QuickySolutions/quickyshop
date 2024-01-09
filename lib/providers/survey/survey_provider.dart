@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:quickyshop/models/Coupon.dart';
+import 'package:quickyshop/models/Store.dart';
 import 'package:quickyshop/models/survey/questions/CheckboxQuestion.dart';
 import 'package:quickyshop/models/survey/Question.dart';
 import 'package:quickyshop/models/survey/Survey.dart';
@@ -40,6 +42,11 @@ class SurveyProvider extends ChangeNotifier {
   final PageController _pageController = PageController(initialPage: 0);
   final BrandService _brandService = BrandService();
   late int _indexTitleToEditQuestion = -1;
+  late Coupon _selectedCoupon =
+      Coupon(name: '', monetization: 0, brandId: "", active: false);
+  late Coupon _createdCoupon =
+      Coupon(name: '', monetization: 0, brandId: "", active: false);
+  List<Store> _selectedStores = [];
 
   Survey get survey => _survey;
   String get surveyName => _surveyName;
@@ -332,6 +339,20 @@ class SurveyProvider extends ChangeNotifier {
         break;
       default:
     }
+  }
+
+  void selectCoupon(Coupon coupon) {
+    _selectedCoupon = coupon;
+    notifyListeners();
+  }
+
+  void chooseStore(Store store) {
+    if (_selectedStores.contains(store)) {
+      _selectedStores.remove(store);
+    } else {
+      _selectedStores.add(store);
+    }
+    notifyListeners();
   }
 
   void resetCurrentPage() {

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:quickyshop/utils/api.dart';
 
@@ -23,9 +25,32 @@ class AuthResponse {
 
 class AuthService {
   final Dio _dio = Dio();
-  Future<AuthResponse> login({email, password}) async {
-    Response response = await _dio.post("${ApiUrl.API}/users/store/login",
-        data: {'email': email, 'password': password});
-    return AuthResponse.fromJSONResponse(response.data);
+
+  Future<AuthResponse> login({
+    String? email,
+    String? password,
+    String? signInMethod,
+  }) async {
+    late Response response;
+
+    try {
+      if (signInMethod == 'password') {
+        response = await _dio.post("${ApiUrl.API}/users/store/login", data: {
+          'email': email,
+          'password': password,
+          'signInMethod': 'password',
+        });
+      } else {
+        response = await _dio.post("${ApiUrl.API}/users/store/login", data: {
+          'email': email,
+          'password': '',
+          'signInMethod': 'socialMedia',
+        });
+      }
+
+      return AuthResponse.fromJSONResponse(response.data);
+    } catch (error) {
+      throw error;
+    }
   }
 }

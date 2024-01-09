@@ -145,9 +145,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       onPressed: () {
                         appProvider.reset();
-                        AppPreferences().setIdBrand("");
                         Navigator.pushNamedAndRemoveUntil(
                             context, "/", (r) => false);
+                        AppPreferences().setIdBrand("");
                       },
                       child: Text(
                         'Cerrar sesión',

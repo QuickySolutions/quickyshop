@@ -30,10 +30,12 @@ class _HomePageState extends State<HomePage> {
   int selectedStore = -1;
 
   Future<void> getBrandInformation() async {
-    //final signupProvider = Provider.of<SignUpProvider>(context, listen: false);
+    print(AppPreferences().brandId);
     final appProvider = Provider.of<AppProvider>(context, listen: false);
-    final Map<String, dynamic> brand =
-        await _brandService.getBrandInformation(appProvider.brandDefault.id);
+    final Map<String, dynamic> brand = await _brandService.getBrandInformation(
+        appProvider.hasSelectedStore
+            ? appProvider.brandDefault.id
+            : AppPreferences().brandId);
     appProvider.setDefaultBrand(brand['data']);
     setState(() {
       isLoadingBrandInformation = false;
@@ -41,7 +43,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> getStoreInformation() async {
-    //final signupProvider = Provider.of<SignUpProvider>(context, listen: false);
     final appProvider = Provider.of<AppProvider>(context, listen: false);
     final StoreResponse store =
         await _storeService.getStoreInformation(appProvider.storeSelected.id!);

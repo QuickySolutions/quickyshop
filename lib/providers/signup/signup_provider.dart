@@ -116,6 +116,9 @@ class SignUpProvider extends ChangeNotifier {
     _principalCategorySelected = "";
     _subLevelSelected = "";
     _subSubLevelSelected = "";
+    _photoProfile = "";
+    _passwordStore = "";
+    _confirmPasswordStore = "";
     notifyListeners();
   }
 }

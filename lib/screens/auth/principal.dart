@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/firebase/authentication.dart';
+import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/providers/signup/signup_provider.dart';
+import 'package:quickyshop/services/authService.dart';
 
 import '../../utils/Colors.dart';
 import '../../widgets/scaffolds/authScaffold.dart';
@@ -16,8 +18,8 @@ class PrincipalScreen extends StatefulWidget {
 }
 
 class _PrincipalScreenState extends State<PrincipalScreen> {
-  AuthenticationService _authenticationService = AuthenticationService();
-
+  final AuthenticationService _authenticationService = AuthenticationService();
+  final AuthService _authService = AuthService();
   @override
   Widget build(BuildContext context) {
     final _signUpProvider = Provider.of<SignUpProvider>(context);
@@ -111,19 +113,29 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
                   ),
                   GestureDetector(
                     onTap: () async {
+                      final googleResponse =
+                          await _authenticationService.signInWithGoogle();
+
                       try {
-                        final response =
-                            await _authenticationService.signInWithGoogle();
+                        AuthResponse response = await _authService.login(
+                            email: googleResponse.user!.email);
+                        if (response.from == 'brand') {
+                          AppPreferences().setIdBrand(response.data['_id']);
+                        } else {
+                          AppPreferences().setIdStore(response.data['_id']);
+                        }
+
+                        Navigator.pushReplacementNamed(context, '/base');
+                      } catch (e) {
                         _signUpProvider
-                            .setNameStore(response.user!.displayName!);
-                        _signUpProvider.setEmailStore(response.user!.email!);
+                            .setNameStore(googleResponse.user!.displayName!);
                         _signUpProvider
-                            .setPhotoProfile(response.user!.photoURL!);
+                            .setEmailStore(googleResponse.user!.email!);
+                        _signUpProvider
+                            .setPhotoProfile(googleResponse.user!.photoURL!);
                         _signUpProvider.setSignedWithSocialMedia(true);
 
                         Navigator.pushNamed(context, '/send-code');
-                      } catch (e) {
-                        _signUpProvider.setSignedWithSocialMedia(false);
                       }
                     },
                     child: Image(

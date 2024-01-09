@@ -80,68 +80,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
               ),
               SizedBox(height: 15),
-              !signUpProvider.isSignedWithSocialMedia
-                  ? Column(
-                      children: [
-                        QuickyTextField(
-                          hintText: 'Contraseña',
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: getCustomIconToTextFieldInPrefx(
-                                'assets/icons/usability/key.png'),
-                          ),
-                          hideText: true,
-                          onChanged: (String value) {
-                            signUpProvider.setPasswordStore(value);
-                          },
-                        ),
-                        SizedBox(height: 15),
-                        QuickyTextField(
-                          hintText: 'Confirmar contraseña',
-                          hideText: true,
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: getCustomIconToTextFieldInPrefx(
-                                'assets/icons/usability/key.png'),
-                          ),
-                          onChanged: (String value) {
-                            signUpProvider.setPasswordConfirmStore(value);
-                          },
-                        ),
-                      ],
-                    )
-                  : Container(),
-              appProvider.wantToAddNewStore
-                  ? Column(
-                      children: [
-                        QuickyTextField(
-                          hintText: 'Contraseña',
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: getCustomIconToTextFieldInPrefx(
-                                'assets/icons/usability/key.png'),
-                          ),
-                          hideText: true,
-                          onChanged: (String value) {
-                            signUpProvider.setPasswordStore(value);
-                          },
-                        ),
-                        SizedBox(height: 15),
-                        QuickyTextField(
-                          hintText: 'Confirmar contraseña',
-                          hideText: true,
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: getCustomIconToTextFieldInPrefx(
-                                'assets/icons/usability/key.png'),
-                          ),
-                          onChanged: (String value) {
-                            signUpProvider.setPasswordConfirmStore(value);
-                          },
-                        ),
-                      ],
-                    )
-                  : Container(),
+              QuickyTextField(
+                hintText: 'Contraseña',
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: getCustomIconToTextFieldInPrefx(
+                      'assets/icons/usability/key.png'),
+                ),
+                hideText: true,
+                onChanged: (String value) {
+                  signUpProvider.setPasswordStore(value);
+                },
+              ),
               SizedBox(height: 30),
               Container(
                 alignment: Alignment.center,

@@ -14,7 +14,7 @@ class BaseHomePage extends StatefulWidget {
 
 class _BaseHomePageState extends State<BaseHomePage> {
   List<Widget> screens = [HomePage(), QRViewScreen()];
-  PageController _pageController = PageController(initialPage: 0);
+  final PageController _pageController = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
     final appProvider = Provider.of<AppProvider>(context);

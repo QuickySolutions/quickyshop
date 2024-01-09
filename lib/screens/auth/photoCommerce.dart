@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -70,6 +69,7 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
       AppPreferences().setIdBrand(response['data']['_id']);
       appProvider.setDefaultBrand(response['data']);
     } else {
+      signUpProvider.clearAll();
       await _brandService.createBranchOffice(
           appProvider.brandDefault.id, storeData);
       appProvider.setWantToAddNewStore(false);
@@ -79,7 +79,6 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
   @override
   Widget build(BuildContext context) {
     final signUpProvider = Provider.of<SignUpProvider>(context);
-    final photoProvider = Provider.of<PhotoProvider>(context);
     final appProvider = Provider.of<AppProvider>(context);
     return QuickyAuthScaffold(
       currentScreenType: 'register',
@@ -146,8 +145,14 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 30),
-            Container(
+            const SizedBox(height: 30),
+            signUpProvider.photoProfile.isNotEmpty && pickedImage
+                ? Column(children: [
+                    restorePhotoFromGoogle(),
+                    const SizedBox(height: 30),
+                  ])
+                : Container(),
+            SizedBox(
               height: 65,
               width: MediaQuery.of(context).size.width * 0.75,
               child: ElevatedButton(
@@ -161,54 +166,31 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
                   onPressed: signUpProvider.isLoading
                       ? null
                       : () async {
-                          // late String url = "";
-                          // signUpProvider.setIsLoading(true);
-                          // if (signUpProvider.isLoading) {
-                          //   if (pickedImage) {
-                          //     url = await uploadPhotoToFirebase(
-                          //         signUpProvider, appProvider);
-                          //   }
-                          //   signUpProvider.setIsLoading(true);
-                          //   await createBranchOrBranchOffice(
-                          //       signUpProvider, appProvider, url);
-                          //   signUpProvider.setPhotoProfile(url);
-                          //   signUpProvider.setIsLoading(false);
-                          //   photoProvider.uploadPicToFirebase(false);
-                          //   Navigator.pushNamedAndRemoveUntil(
-                          //       context, "/base", (r) => false);
-                          // }
-                          if (appProvider.wantToAddNewStore) {
-                            //
+                          if (pickedImage) {
+                            late String url = "";
+                            signUpProvider.setIsLoading(true);
+                            url = await uploadPhotoToFirebase(
+                                signUpProvider, appProvider);
+                            await createBranchOrBranchOffice(
+                                signUpProvider, appProvider, url);
+
+                            signUpProvider.setPhotoProfile(url);
+                            signUpProvider.setIsLoading(false);
+                          } else if (signUpProvider.photoProfile.isNotEmpty) {
+                            await createBranchOrBranchOffice(signUpProvider,
+                                appProvider, signUpProvider.photoProfile);
+                            signUpProvider
+                                .setPhotoProfile(signUpProvider.photoProfile);
+                            signUpProvider.setIsLoading(false);
                           } else {
-                            //user is signup
-                            if (pickedImage) {
-                              late String url = "";
-                              signUpProvider.setIsLoading(true);
-                              url = await uploadPhotoToFirebase(
-                                  signUpProvider, appProvider);
-                              await createBranchOrBranchOffice(
-                                  signUpProvider, appProvider, url);
-
-                              signUpProvider.setPhotoProfile(url);
-                              signUpProvider.setIsLoading(false);
-                            } else if (signUpProvider.photoProfile.isNotEmpty) {
-                              print('aqui con foto de google');
-                              await createBranchOrBranchOffice(signUpProvider,
-                                  appProvider, signUpProvider.photoProfile);
-                              signUpProvider
-                                  .setPhotoProfile(signUpProvider.photoProfile);
-                              signUpProvider.setIsLoading(false);
-                            } else {
-                              print('aqui sin foto');
-                              await createBranchOrBranchOffice(
-                                  signUpProvider, appProvider, "");
-                              signUpProvider.setPhotoProfile("");
-                              signUpProvider.setIsLoading(false);
-                            }
-
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, "/base", (r) => false);
+                            await createBranchOrBranchOffice(
+                                signUpProvider, appProvider, "");
+                            signUpProvider.setPhotoProfile("");
+                            signUpProvider.setIsLoading(false);
                           }
+
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, "/base", (r) => false);
                         },
                   child: Text(
                     signUpProvider.isLoading ? 'Cargando...' : 'Guardar',
@@ -225,14 +207,20 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
   }
 
   Widget showPhoto(SignUpProvider signUpProvider) {
-    if (signUpProvider.photoProfile.isNotEmpty) {
-      return Image(
+    if (signUpProvider.photoProfile.isNotEmpty && !pickedImage) {
+      return FadeInImage(
         height: double.infinity,
         fit: BoxFit.cover,
+        placeholder: const AssetImage('assets/utils/loading.gif'),
         image: NetworkImage(signUpProvider.photoProfile),
       );
     } else if (!pickedImage) {
-      return Image(image: AssetImage("assets/images/not-available.png"));
+      return const FadeInImage(
+        height: double.infinity,
+        fit: BoxFit.cover,
+        placeholder: AssetImage('assets/utils/loading.gif'),
+        image: AssetImage("assets/images/not-available.png"),
+      );
     } else {
       return Image.file(
         imageFile,
@@ -241,6 +229,19 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
         fit: BoxFit.cover,
       );
     }
+  }
+
+  Widget restorePhotoFromGoogle() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          pickedImage = !pickedImage;
+          imageFile = File("");
+        });
+      },
+      child: const Text('Restablecer foto',
+          style: TextStyle(decoration: TextDecoration.underline)),
+    );
   }
 
   Future<String> uploadPhotoToFirebase(

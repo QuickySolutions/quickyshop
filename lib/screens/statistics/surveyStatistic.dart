@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/providers/statistics/statisticsProvider.dart';
@@ -71,6 +73,7 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                         AsyncSnapshot<Map<String, dynamic>> snapshot) {
                       if (snapshot.hasData) {
                         String surveyName = snapshot.data!['survey']['name'];
+
                         int totalResponses =
                             snapshot.data!['survey']['numberResponses'];
 
@@ -115,7 +118,6 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                                 itemCount: questions.length,
                                 itemBuilder: (context, index) {
                                   List<dynamic> data = questions[index]['data'];
-
                                   return Container(
                                     padding: EdgeInsets.symmetric(vertical: 20),
                                     width: double.infinity,
@@ -131,9 +133,8 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                                         ),
                                         Column(
                                           children: data.map((e) {
-                                            int count = e['count'];
-                                            double percent =
-                                                (count / numberOfPeople) * 1;
+                                            print((e['count'] / data.length) *
+                                                100);
                                             return Container(
                                               width: double.infinity,
                                               margin: EdgeInsets.symmetric(
@@ -143,16 +144,21 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                      'Respuesta No. ${data.indexOf(e) + 1}. Contestada: ${count}'),
+                                                      'Respuesta No. ${data.indexOf(e) + 1}. Contestada: ${e['count']}'),
                                                   SizedBox(height: 20),
                                                   LinearProgressIndicator(
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                            Color>(Colors.red),
                                                     backgroundColor:
                                                         QuickyColors.greyColor,
-                                                    value: percent,
+                                                    value: (e['count'] /
+                                                        data.length),
                                                   )
                                                 ],
                                               ),
                                             );
+                                            //return Container();
                                           }).toList(),
                                         ),
                                       ],

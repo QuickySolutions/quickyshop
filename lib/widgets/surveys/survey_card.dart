@@ -23,7 +23,7 @@ class _SurveyCardState extends State<SurveyCard> {
     final storeProvider = Provider.of<StoreProvider>(context);
     return Container(
       margin: EdgeInsets.only(bottom: 10),
-      height: 130,
+      height: 140,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           boxShadow: [

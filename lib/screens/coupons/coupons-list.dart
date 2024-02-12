@@ -30,8 +30,6 @@ class _CouponsListScreeenState extends State<CouponsListScreeen> {
             .getCouponsFromStore(appProvider.storeSelected.id!);
       }
     });
-    // TODO: implement initState
-
     super.initState();
   }
 
@@ -76,7 +74,7 @@ class _CouponsListScreeenState extends State<CouponsListScreeen> {
                           color: QuickyColors.primaryColor,
                         ),
                       )
-                    : data.couponsList.length == 0
+                    : data.couponsList.isEmpty
                         ? Center(
                             child: Text('No hay datos'),
                           )

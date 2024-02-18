@@ -48,6 +48,10 @@ class BrandMiniCard extends StatelessWidget {
               child: Image(
                   height: double.infinity,
                   width: 100,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image(
+                        image: AssetImage('assets/images/not-available.png'));
+                  },
                   fit: BoxFit.cover,
                   image: NetworkImage(brand.photo)),
             ),

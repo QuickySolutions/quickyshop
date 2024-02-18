@@ -43,6 +43,10 @@ class CategoryItem extends StatelessWidget {
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10)),
                   child: Image(
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image(
+                          image: AssetImage('assets/images/not-available.png'));
+                    },
                     height: 90,
                     fit: BoxFit.cover,
                     image: NetworkImage(image),

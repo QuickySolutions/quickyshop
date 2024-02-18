@@ -120,6 +120,15 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.2),
+                                    spreadRadius: 2,
+                                    blurRadius: 2,
+                                    offset: Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
                                 borderRadius: BorderRadius.circular(5),
                                 color: Colors.white,
                               ),

@@ -1,11 +1,14 @@
 import 'dart:developer';
+import 'dart:math';
 
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/providers/statistics/statisticsProvider.dart';
 import 'package:quickyshop/services/statisticsService.dart';
 import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/utils/general_methods.dart';
+import 'package:quickyshop/widgets/charts/pie_chart.dart';
 
 class SurveyStatistic extends StatefulWidget {
   const SurveyStatistic({super.key});
@@ -16,6 +19,27 @@ class SurveyStatistic extends StatefulWidget {
 
 class _SurveyStatisticState extends State<SurveyStatistic> {
   StatisticService _statisticService = StatisticService();
+
+  List<PieChartSectionData> pieChartData = [
+    PieChartSectionData(
+      color: Colors.blue,
+      value: 25,
+      title: '25%',
+      radius: 50,
+    ),
+    PieChartSectionData(
+      color: Colors.red,
+      value: 50,
+      title: '50%',
+      radius: 50,
+    ),
+    PieChartSectionData(
+      color: Colors.green,
+      value: 25,
+      title: '25%',
+      radius: 50,
+    ),
+  ];
   @override
   void initState() {
     // TODO: implement initState
@@ -117,59 +141,70 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                               child: ListView.builder(
                                 itemCount: questions.length,
                                 itemBuilder: (context, index) {
-                                  List<dynamic> data = questions[index]['data'];
-                                  return Container(
-                                    padding: EdgeInsets.symmetric(vertical: 20),
-                                    width: double.infinity,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          questions[index]['question'],
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                        Column(
-                                          children: data.map((e) {
-                                            print((e['count'] / data.length) *
-                                                100);
-                                            return Container(
-                                              width: double.infinity,
-                                              margin: EdgeInsets.symmetric(
-                                                  vertical: 10),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                      'Respuesta No. ${data.indexOf(e) + 1}. Contestada: ${e['count']}'),
-                                                  SizedBox(height: 20),
-                                                  LinearProgressIndicator(
-                                                    valueColor:
-                                                        AlwaysStoppedAnimation<
-                                                            Color>(Colors.red),
-                                                    backgroundColor:
-                                                        QuickyColors.greyColor,
-                                                    value: (e['count'] /
-                                                        data.length),
-                                                  )
-                                                ],
-                                              ),
-                                            );
-                                            //return Container();
-                                          }).toList(),
-                                        ),
-                                      ],
-                                    ),
-                                    decoration: BoxDecoration(
-                                        border: Border(
-                                      top: BorderSide(
-                                        color: Colors.black,
-                                        width: 2.0,
+                                  List<dynamic> data = (questions[index]['data']
+                                          as List<dynamic>)
+                                      .map((e) {
+                                    return {
+                                      'color': getRandomColor(),
+                                      ...e,
+                                    };
+                                  }).toList();
+
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                          context, '/survey/stadistic/question',
+                                          arguments: data);
+                                    },
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 20),
+                                      width: double.infinity,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            questions[index]['question'],
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                          // Column(
+                                          //   children: data.map((e) {
+                                          //     print((e['count'] / data.length) *
+                                          //         100);
+                                          //     return Container(
+                                          //       width: double.infinity,
+                                          //       margin: EdgeInsets.symmetric(
+                                          //           vertical: 10),
+                                          //       child: Column(
+                                          //         crossAxisAlignment:
+                                          //             CrossAxisAlignment.start,
+                                          //         children: [
+                                          //           Text(
+                                          //               'Respuesta No. ${data.indexOf(e) + 1}. Contestada: ${e['count']}'),
+                                          //           SizedBox(height: 20),
+                                          //           LinearProgressIndicator(
+                                          //             valueColor:
+                                          //                 AlwaysStoppedAnimation<
+                                          //                     Color>(Colors.red),
+                                          //             backgroundColor:
+                                          //                 QuickyColors.greyColor,
+                                          //             value: (e['count'] /
+                                          //                 data.length),
+                                          //           )
+                                          //         ],
+                                          //       ),
+                                          //     );
+                                          //     //return Container();
+                                          //   }).toList(),
+                                          // ),
+
+                                          PieChartWidget(data: data)
+                                        ],
                                       ),
-                                    )),
+                                    ),
                                   );
                                 },
                               ),
@@ -186,5 +221,15 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                 }))
               ],
             )));
+  }
+
+  Color getRandomColor() {
+    Random random = Random();
+    return Color.fromRGBO(
+      random.nextInt(128) + 250,
+      random.nextInt(128) + 250,
+      random.nextInt(128) + 250,
+      1.0,
+    );
   }
 }

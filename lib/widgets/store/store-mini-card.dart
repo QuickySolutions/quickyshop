@@ -54,6 +54,11 @@ class StoreMiniCard extends StatelessWidget {
                           height: 100,
                           width: 100,
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image(
+                                image: AssetImage(
+                                    'assets/images/not-available.png'));
+                          },
                           image: NetworkImage(store.photo)),
                     ),
                   )

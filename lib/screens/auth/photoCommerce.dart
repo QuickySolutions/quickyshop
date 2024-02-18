@@ -211,6 +211,9 @@ class _DefinePhotoCommerceScreenState extends State<DefinePhotoCommerceScreen> {
       return FadeInImage(
         height: double.infinity,
         fit: BoxFit.cover,
+        imageErrorBuilder: (context, error, stackTrace) {
+          return Image(image: AssetImage('assets/images/not-available.png'));
+        },
         placeholder: const AssetImage('assets/utils/loading.gif'),
         image: NetworkImage(signUpProvider.photoProfile),
       );

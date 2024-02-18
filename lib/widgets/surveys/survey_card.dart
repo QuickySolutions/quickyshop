@@ -50,6 +50,11 @@ class _SurveyCardState extends State<SurveyCard> {
                         fit: BoxFit.cover,
                         image: AssetImage('assets/images/not-available.png'))
                     : Image(
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image(
+                              image: AssetImage(
+                                  'assets/images/not-available.png'));
+                        },
                         fit: BoxFit.cover,
                         image: NetworkImage(widget.survey.photo!),
                       ),

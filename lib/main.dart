@@ -14,6 +14,7 @@ import 'package:quickyshop/screens/QR/QR_view.dart';
 import 'package:quickyshop/screens/coupons/coupons-list.dart';
 import 'package:quickyshop/screens/home/base.dart';
 import 'package:quickyshop/screens/profile/profile.dart';
+import 'package:quickyshop/screens/statistics/statisticPerQuestion.dart';
 import 'package:quickyshop/screens/statistics/statisticsScreen.dart';
 import 'package:quickyshop/screens/statistics/surveyStatistic.dart';
 import 'package:quickyshop/screens/surveys/create_survey_screen.dart';
@@ -80,6 +81,7 @@ class MyApp extends StatelessWidget {
           '/profile': (context) => ProfileScreen(),
           '/profile/statistics': (context) => StatisticsScreen(),
           '/survey/stadistic': (context) => SurveyStatistic(),
+          '/survey/stadistic/question': (context) => QuestionStatistics(),
           '/surveys': (context) => SurveyListScreen(),
           '/create/survey': (context) => CreateSurveyScreen(),
           '/qr': (context) => QRViewScreen(),

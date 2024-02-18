@@ -50,6 +50,11 @@ class CouponCard extends StatelessWidget {
                       : Image(
                           width: double.infinity,
                           height: 130,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image(
+                                image: AssetImage(
+                                    'assets/images/not-available.png'));
+                          },
                           fit: BoxFit.cover,
                           image: NetworkImage(coupon.photo!)),
                 ),

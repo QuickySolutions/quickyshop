@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:quickyshop/utils/Colors.dart';
 
 class SwitchControl extends StatefulWidget {
-  final ValueChanged<bool> onChanged;
+  final ValueChanged<bool>? onChanged;
   SwitchControl({
     this.value = false,
-    required this.onChanged,
+    this.onChanged,
   });
 
   bool value;
@@ -53,7 +53,7 @@ class _SwitchControlState extends State<SwitchControl> {
       onTap: () {
         setState(() {
           widget.value = !widget.value;
-          widget.onChanged(widget.value);
+          widget.onChanged!(widget.value);
         });
       },
     );

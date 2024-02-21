@@ -4,6 +4,7 @@ import 'package:quickyshop/models/survey/Survey.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/providers/statistics/statisticsProvider.dart';
 import 'package:quickyshop/services/statisticsService.dart';
+import 'package:quickyshop/services/surveyService.dart';
 import 'package:quickyshop/widgets/app/chipItem.dart';
 import 'package:quickyshop/widgets/app/customSwitch.dart';
 
@@ -15,7 +16,7 @@ class StatisticsScreen extends StatefulWidget {
 }
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
-  final StatisticService _statisticService = StatisticService();
+  final SurveyService _surveyService = SurveyService();
 
   @override
   void initState() {
@@ -125,11 +126,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                     color: Colors.grey.withOpacity(0.2),
                                     spreadRadius: 2,
                                     blurRadius: 2,
-                                    offset: Offset(
-                                        0, 3), // changes position of shadow
+                                    offset: Offset(0, 3),
                                   ),
                                 ],
-                                borderRadius: BorderRadius.circular(5),
+                                borderRadius: BorderRadius.circular(20),
                                 color: Colors.white,
                               ),
                               child: Container(
@@ -148,7 +148,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                       children: [
                                         SwitchControl(
                                           value: survey.active,
-                                          onChanged: (bool value) {},
                                         ),
                                         Text(
                                             '${survey.active ? "Activa" : "No Activa"}')

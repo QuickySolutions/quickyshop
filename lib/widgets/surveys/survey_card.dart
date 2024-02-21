@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:quickyshop/models/survey/Survey.dart';
 import 'package:quickyshop/providers/store/store_provider.dart';
 import 'package:quickyshop/providers/survey/survey_provider.dart';
+import 'package:quickyshop/services/surveyService.dart';
 import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/widgets/app/customSwitch.dart';
 
@@ -17,10 +18,12 @@ class SurveyCard extends StatefulWidget {
 
 class _SurveyCardState extends State<SurveyCard> {
   bool wantToSeeOptions = false;
+  final SurveyService _surveyService = SurveyService();
   @override
   Widget build(BuildContext context) {
     final surveyProvider = Provider.of<SurveyProvider>(context);
     final storeProvider = Provider.of<StoreProvider>(context);
+
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       height: 140,
@@ -135,8 +138,9 @@ class _SurveyCardState extends State<SurveyCard> {
                             SizedBox(height: 12),
                             SwitchControl(
                               value: widget.survey.active,
-                              onChanged: (value) {
-                                print(value);
+                              onChanged: (value) async {
+                                await _surveyService.switchSurveyStatus(
+                                    widget.survey.id!, value);
                               },
                             )
                           ],

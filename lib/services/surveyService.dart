@@ -40,6 +40,11 @@ class SurveyService {
     return SurveyResponse.fromJSONResponse(response.data);
   }
 
+  Future<void> switchSurveyStatus(String idSurvey, bool status) async {
+    await _dio.put(ApiUrl.API + '/surveys/$idSurvey/status',
+        data: {'status': status});
+  }
+
   Future<SurveyResponse> editSurvey(
       Survey survey, StoreProvider storeProvider) async {
     Response response = await _dio.put(ApiUrl.API + '/surveys/${survey.id}',

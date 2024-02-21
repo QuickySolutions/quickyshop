@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
               child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Container(
-                  padding: EdgeInsets.only(top: 50, bottom: 20),
+                  padding: EdgeInsets.only(top: 80, bottom: 20),
                   child: Column(
                     children: [
                       appProvider.hasSelectedBrand
@@ -201,17 +201,11 @@ class _HomePageState extends State<HomePage> {
                                 }
                               })
                           : Container(),
+                      SizedBox(height: 20),
                       !appProvider.hasSelectedStore
                           ? ButtonLeadButton()
                           : Container(),
-                      // SizedBox(height: 10),
-                      // Padding(
-                      //   padding: EdgeInsets.symmetric(horizontal: 20),
-                      //   child: Image(
-                      //     image: AssetImage('assets/images/example-graph.png'),
-                      //   ),
-                      // ),
-                      SizedBox(height: 30),
+                      SizedBox(height: 20),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Row(
@@ -222,12 +216,6 @@ class _HomePageState extends State<HomePage> {
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w500),
                             ),
-                            Text(
-                              'Ver todas',
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  decoration: TextDecoration.underline),
-                            )
                           ],
                         ),
                       ),
@@ -247,15 +235,13 @@ class _HomePageState extends State<HomePage> {
                                   child: Container(
                                     padding: EdgeInsets.only(bottom: 8),
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(20),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.grey.withOpacity(0.2),
-                                          spreadRadius: 2,
-                                          blurRadius: 2,
-                                          offset: Offset(0,
-                                              3), // changes position of shadow
-                                        ),
+                                            color: Colors.grey.withOpacity(0.2),
+                                            spreadRadius: 2,
+                                            blurRadius: 2,
+                                            offset: Offset(0, 3)),
                                       ],
                                       color: Colors.white,
                                     ),
@@ -287,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Container(
                                     padding: EdgeInsets.only(bottom: 8),
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(20),
                                       boxShadow: [
                                         BoxShadow(
                                           color: Colors.grey.withOpacity(0.2),
@@ -337,7 +323,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Container(
                                     padding: EdgeInsets.only(bottom: 8),
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(20),
                                       boxShadow: [
                                         BoxShadow(
                                           color: Colors.grey.withOpacity(0.2),

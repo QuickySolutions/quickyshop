@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:quickyshop/firebase/uploadFilesToFirebase.dart';
 import 'package:quickyshop/preferences/appPreferences.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
-import 'package:quickyshop/providers/photo/photo_provider.dart';
 import 'package:quickyshop/services/brandService.dart';
 import '../../providers/signup/signup_provider.dart';
 import '../../services/storeService.dart';

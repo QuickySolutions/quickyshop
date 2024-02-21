@@ -32,9 +32,6 @@ class _QuestionStatisticsState extends State<QuestionStatistics> {
                   PieChartWidget(
                     data: questions,
                   ),
-                  PieChartWidget(
-                    data: questions,
-                  )
                 ],
               ),
             ),

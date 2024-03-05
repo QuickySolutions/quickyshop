@@ -82,6 +82,12 @@ class _ProfileUserState extends State<ProfileUser> {
                     fit: BoxFit.cover,
                   )
                 : Image(
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image(
+                          height: widget.height,
+                          width: widget.width,
+                          image: AssetImage('assets/images/not-available.png'));
+                    },
                     width: widget.width,
                     height: widget.height,
                     fit: BoxFit.cover,

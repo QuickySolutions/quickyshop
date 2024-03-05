@@ -42,7 +42,7 @@ class _SurveyCardState extends State<SurveyCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-              width: 100,
+              width: 120,
               height: double.infinity,
               child: ClipRRect(
                 borderRadius: BorderRadius.only(
@@ -50,6 +50,7 @@ class _SurveyCardState extends State<SurveyCard> {
                     topLeft: Radius.circular(10)),
                 child: widget.survey.photo!.isEmpty
                     ? Image(
+                        width: double.infinity,
                         fit: BoxFit.cover,
                         image: AssetImage('assets/images/not-available.png'))
                     : Image(
@@ -62,7 +63,6 @@ class _SurveyCardState extends State<SurveyCard> {
                         image: NetworkImage(widget.survey.photo!),
                       ),
               )),
-          SizedBox(width: 8),
           Expanded(
             child: wantToSeeOptions
                 ? Container(
@@ -122,7 +122,7 @@ class _SurveyCardState extends State<SurveyCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.45,
+                              width: MediaQuery.of(context).size.width * 0.35,
                               child: Text(
                                 widget.survey.name,
                                 style: TextStyle(

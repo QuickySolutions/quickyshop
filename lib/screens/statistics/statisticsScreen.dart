@@ -107,7 +107,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 10,
                                 mainAxisSpacing: 10,
-                                mainAxisExtent: 150),
+                                mainAxisExtent: 170),
                         itemCount: data.surveys.length,
                         itemBuilder: (BuildContext context, int index) {
                           Survey survey = data.surveys[index];
@@ -139,16 +139,17 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                   children: [
                                     Text(survey.name,
                                         overflow: TextOverflow.ellipsis),
-                                    SizedBox(height: 15),
+                                    SizedBox(height: 10),
                                     Text("Vence: ${survey.finalDate}"),
-                                    SizedBox(height: 15),
-                                    Row(
+                                    SizedBox(height: 10),
+                                    Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         SwitchControl(
                                           value: survey.active,
                                         ),
+                                        SizedBox(height: 5),
                                         Text(
                                             '${survey.active ? "Activa" : "No Activa"}')
                                       ],

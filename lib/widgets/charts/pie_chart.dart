@@ -12,7 +12,8 @@ class PieChartWidget extends StatelessWidget {
         titleStyle: const TextStyle(color: Colors.white),
         color: e['color'],
         value: (e['count'] as int).toDouble(),
-        title: e['titleOptionSurvey'],
+        title:
+            '${(((e['count'] as int).toDouble() / data.length) * 100).toInt().toString()}%',
         radius: 50,
       );
     }).toList();

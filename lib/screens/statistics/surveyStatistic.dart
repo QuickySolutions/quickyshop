@@ -200,7 +200,32 @@ class _SurveyStatisticState extends State<SurveyStatistic> {
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w700),
                                           ),
-                                          PieChartWidget(data: data)
+                                          PieChartWidget(data: data),
+                                          Column(
+                                            children: data
+                                                .map((e) => Container(
+                                                      margin: EdgeInsets.only(
+                                                          bottom: 5),
+                                                      child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Container(
+                                                            height: 5,
+                                                            width: 5,
+                                                            color: e['color'],
+                                                          ),
+                                                          SizedBox(width: 5),
+                                                          Expanded(
+                                                            child: Text(e[
+                                                                'titleOptionSurvey']),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ))
+                                                .toList(),
+                                          )
                                         ],
                                       ),
                                     ),

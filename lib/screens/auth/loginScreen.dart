@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/models/Brand.dart';
@@ -28,84 +26,80 @@ class _LoginScreenState extends State<LoginScreen> {
         contentScreen: Scaffold(
             backgroundColor: Colors.transparent,
             body: SingleChildScrollView(
-                padding: EdgeInsets.only(top: 120, left: 30, right: 30),
                 child: Column(
-                  children: [
-                    Image(
-                      height: 150,
-                      width: 150,
-                      image: AssetImage('assets/icons/brand/logo-quicky.png'),
-                    ),
-                    SizedBox(height: 40),
-                    QuickyTextField(
-                      onChanged: (value) {
-                        loginProvider.onChangeEmail(value);
-                      },
-                      hintText: 'Ingrese email',
-                      prefixIcon: Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: getCustomIconToTextFieldInPrefx(
-                              'assets/icons/usability/mail.png')),
-                    ),
-                    SizedBox(height: 20),
-                    QuickyTextField(
-                      onChanged: (value) {
-                        loginProvider.onChangePassword(value);
-                      },
-                      hintText: 'Ingrese contraseña',
-                      hideText: true,
-                      prefixIcon: Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: getCustomIconToTextFieldInPrefx(
-                              'assets/icons/usability/key.png')),
-                    ),
-                    SizedBox(height: 20),
-                    Container(
-                      height: 60,
-                      width: MediaQuery.of(context).size.width * 0.90,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor: QuickyColors.secondaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                          ),
-                          onPressed: loginProvider.isValidForm
-                              ? () async {
-                                  var responseLogin =
-                                      await loginProvider.login();
+              children: [
+                Image(
+                  height: 150,
+                  width: 150,
+                  image: AssetImage('assets/icons/brand/logo-quicky.png'),
+                ),
+                SizedBox(height: 40),
+                QuickyTextField(
+                  onChanged: (value) {
+                    loginProvider.onChangeEmail(value);
+                  },
+                  hintText: 'Ingrese email',
+                  prefixIcon: Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: getCustomIconToTextFieldInPrefx(
+                          'assets/icons/usability/mail.png')),
+                ),
+                SizedBox(height: 20),
+                QuickyTextField(
+                  onChanged: (value) {
+                    loginProvider.onChangePassword(value);
+                  },
+                  hintText: 'Ingrese contraseña',
+                  hideText: true,
+                  prefixIcon: Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: getCustomIconToTextFieldInPrefx(
+                          'assets/icons/usability/key.png')),
+                ),
+                SizedBox(height: 20),
+                Container(
+                  height: 60,
+                  width: MediaQuery.of(context).size.width * 0.90,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: QuickyColors.secondaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                      ),
+                      onPressed: loginProvider.isValidForm
+                          ? () async {
+                              var responseLogin = await loginProvider.login();
 
-                                  if (responseLogin.from == 'brand') {
-                                    AppPreferences()
-                                        .setIdBrand(responseLogin.data['_id']);
-                                    //set providers to brand
-                                    appProvider
-                                        .setDefaultBrand(responseLogin.data);
+                              if (responseLogin.from == 'brand') {
+                                AppPreferences()
+                                    .setIdBrand(responseLogin.data['_id']);
+                                //set providers to brand
+                                appProvider.setDefaultBrand(responseLogin.data);
 
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context, "/base", (r) => false);
-                                  } else {
-                                    AppPreferences()
-                                        .setIdStore(responseLogin.data['_id']);
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, "/base", (r) => false);
+                              } else {
+                                AppPreferences()
+                                    .setIdStore(responseLogin.data['_id']);
 
-                                    appProvider
-                                        .setDefaultStore(responseLogin.data);
+                                appProvider.setDefaultStore(responseLogin.data);
 
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context, "/base", (r) => false);
-                                  }
-                                }
-                              : null,
-                          child: Text(
-                            'Iniciar sesión',
-                            style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700),
-                          )),
-                    ),
-                  ],
-                ))));
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, "/base", (r) => false);
+                              }
+                            }
+                          : null,
+                      child: Text(
+                        'Iniciar sesión',
+                        style: TextStyle(
+                            fontSize: 17,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700),
+                      )),
+                ),
+              ],
+            ))));
   }
 }

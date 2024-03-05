@@ -22,30 +22,24 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
   final AuthService _authService = AuthService();
   @override
   Widget build(BuildContext context) {
-    final _signUpProvider = Provider.of<SignUpProvider>(context);
+    final signUpProvider = Provider.of<SignUpProvider>(context);
     return QuickyAuthScaffold(
       currentScreenType: 'principal',
-      contentScreen: Container(
-        margin: EdgeInsets.only(
-          top: 40,
-        ),
+      contentScreen: SizedBox(
         width: double.infinity,
-        padding: EdgeInsets.only(top: 70, left: 30, right: 30),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: EdgeInsets.only(top: 80),
-              child: Image(
-                height: 180,
-                width: 180,
-                image: AssetImage('assets/icons/brand/quiky.png'),
-              ),
+            Image(
+              height: 200,
+              width: 200,
+              image: AssetImage('assets/icons/brand/quiky.png'),
             ),
             Text(
               'COMERCIO',
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 40),
+            SizedBox(height: 15),
             Container(
               height: 65,
               width: MediaQuery.of(context).size.width * 0.65,
@@ -68,7 +62,7 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
                         fontWeight: FontWeight.w700),
                   )),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 15),
             Container(
               height: 65,
               width: MediaQuery.of(context).size.width * 0.65,
@@ -92,7 +86,7 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
                         fontWeight: FontWeight.w700),
                   )),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 15),
             Image(
                 width: MediaQuery.of(context).size.width * 0.65,
                 image: AssetImage('assets/utils/borderPrincipal.png')),
@@ -127,14 +121,13 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
 
                         Navigator.pushReplacementNamed(context, '/base');
                       } catch (e) {
-                        _signUpProvider
+                        signUpProvider
                             .setNameStore(googleResponse.user!.displayName!);
-                        _signUpProvider
+                        signUpProvider
                             .setEmailStore(googleResponse.user!.email!);
-                        _signUpProvider
+                        signUpProvider
                             .setPhotoProfile(googleResponse.user!.photoURL!);
-                        _signUpProvider.setSignedWithSocialMedia(true);
-
+                        signUpProvider.setSignedWithSocialMedia(true);
                         Navigator.pushNamed(context, '/send-code');
                       }
                     },
@@ -146,9 +139,8 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 20),
             Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25),
+                padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(children: [

@@ -367,8 +367,11 @@ class _CreateSurveyQuestionsScreenState
                 child: QuickyButton(
                     disabled: surveyProvider.survey.questions!.isEmpty ||
                         surveyProvider.isLoadingCreateOrEditSurvey,
-                    type: QuickyButtonTypes.finishSurvey,
-                    child: Text('Finalizar'),
+                    type: QuickyButtonTypes.primary,
+                    child: Text(
+                      'Finalizar',
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                    ),
                     onTap: () async {
                       surveyProvider.setLoadCreateOrEditSurvey(true);
 

@@ -9,6 +9,7 @@ import 'package:quickyshop/services/brandService.dart';
 import 'package:quickyshop/widgets/app/goBackButton.dart';
 import 'package:quickyshop/services/storeService.dart';
 import 'package:quickyshop/widgets/app/ProfileUser.dart';
+import 'package:quickyshop/widgets/profile/changePasswordForm.dart';
 import 'package:quickyshop/widgets/profile/editFormProfile.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -17,8 +18,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  BrandService _brandService = BrandService();
-  StoreService _storeService = StoreService();
+  final BrandService _brandService = BrandService();
+  final StoreService _storeService = StoreService();
 
   @override
   void initState() {
@@ -79,85 +80,109 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
-              profileProvider.showForm ? EditProfileForm() : Container(),
-              Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    child: FilledButton.tonal(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Color.fromARGB(255, 192, 226, 255)),
-                      ),
-                      onPressed: () async {
-                        if (profileProvider.showForm) {
-                          if (appProvider.hasSelectedBrand) {
-                            profileProvider.setIsLoading(true);
-                            final data = await _brandService.updateBrand(
-                                appProvider.brandDefault.id,
-                                profileProvider.toBrand());
+              SizedBox(height: 50),
+              profileProvider.showForm
+                  ? EditProfileForm()
+                  : profileProvider.showChangePasswordForm
+                      ? ChangePasswordForm()
+                      : Column(
+                          children: [
+                            ListTile(
+                              onTap: () {
+                                profileProvider.showFormProfile(true);
+                              },
+                              leading: Icon(Icons.edit),
+                              title: Text('Editar información corporativa'),
+                            ),
+                            Divider(),
+                            ListTile(
+                              onTap: () {
+                                profileProvider.showChangePassword(true);
+                              },
+                              leading: Icon(Icons.security),
+                              title: Text('Seguridad'),
+                            )
+                          ],
+                        )
+              // SizedBox(height: 20),
+              // profileProvider.showForm ? EditProfileForm() : Container(),
+              // Column(
+              //   children: [
+              //     Container(
+              //       width: double.infinity,
+              //       child: FilledButton.tonal(
+              //         style: ButtonStyle(
+              //           backgroundColor: MaterialStateProperty.all(
+              //               Color.fromARGB(255, 192, 226, 255)),
+              //         ),
+              //         onPressed: () async {
+              //           if (profileProvider.showForm) {
+              //             if (appProvider.hasSelectedBrand) {
+              //               profileProvider.setIsLoading(true);
+              //               final data = await _brandService.updateBrand(
+              //                   appProvider.brandDefault.id,
+              //                   profileProvider.toBrand());
 
-                            appProvider.setDefaultBrand(data['data']['value']);
+              //               appProvider.setDefaultBrand(data['data']['value']);
 
-                            profileProvider.setIsLoading(false);
-                            profileProvider.showFormProfile(false);
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, "/base", (r) => false);
-                          } else {
-                            profileProvider.setIsLoading(true);
-                            try {
-                              final data = await _storeService.updateStore(
-                                  appProvider.storeSelected.id!,
-                                  profileProvider.toStore());
-                              appProvider
-                                  .setDefaultStore(data['data']['value']);
+              //               profileProvider.setIsLoading(false);
+              //               profileProvider.showFormProfile(false);
+              //               Navigator.pushNamedAndRemoveUntil(
+              //                   context, "/base", (r) => false);
+              //             } else {
+              //               profileProvider.setIsLoading(true);
+              //               try {
+              //                 final data = await _storeService.updateStore(
+              //                     appProvider.storeSelected.id!,
+              //                     profileProvider.toStore());
+              //                 appProvider
+              //                     .setDefaultStore(data['data']['value']);
 
-                              profileProvider.setIsLoading(false);
-                              profileProvider.showFormProfile(false);
-                              Navigator.pushNamedAndRemoveUntil(
-                                  context, "/base", (r) => false);
-                            } catch (e) {
-                              print(e);
-                            }
-                          }
-                        } else {
-                          profileProvider.showFormProfile(true);
-                        }
-                      },
-                      child: Text(
-                        profileProvider.isLoading
-                            ? 'Cargando...'
-                            : appProvider.hasSelectedBrand
-                                ? 'Editar perfil comercial'
-                                : 'Editar subtienda',
-                        style: TextStyle(
-                            color: Colors.blue, fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    child: FilledButton.tonal(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Color.fromARGB(255, 255, 192, 192)),
-                      ),
-                      onPressed: () {
-                        appProvider.reset();
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, "/", (r) => false);
-                        AppPreferences().setIdBrand("");
-                      },
-                      child: Text(
-                        'Cerrar sesión',
-                        style: TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                  )
-                ],
-              ),
+              //                 profileProvider.setIsLoading(false);
+              //                 profileProvider.showFormProfile(false);
+              //                 Navigator.pushNamedAndRemoveUntil(
+              //                     context, "/base", (r) => false);
+              //               } catch (e) {
+              //                 print(e);
+              //               }
+              //             }
+              //           } else {
+              //             profileProvider.showFormProfile(true);
+              //           }
+              //         },
+              //         child: Text(
+              //           profileProvider.isLoading
+              //               ? 'Cargando...'
+              //               : appProvider.hasSelectedBrand
+              //                   ? 'Editar perfil comercial'
+              //                   : 'Editar subtienda',
+              //           style: TextStyle(
+              //               color: Colors.blue, fontWeight: FontWeight.w700),
+              //         ),
+              //       ),
+              //     ),
+              //     Container(
+              //       width: double.infinity,
+              //       child: FilledButton.tonal(
+              //         style: ButtonStyle(
+              //           backgroundColor: MaterialStateProperty.all(
+              //               Color.fromARGB(255, 255, 192, 192)),
+              //         ),
+              //         onPressed: () {
+              //           appProvider.reset();
+              //           Navigator.pushNamedAndRemoveUntil(
+              //               context, "/", (r) => false);
+              //           AppPreferences().setIdBrand("");
+              //         },
+              //         child: Text(
+              //           'Cerrar sesión',
+              //           style: TextStyle(
+              //               color: Colors.red, fontWeight: FontWeight.w700),
+              //         ),
+              //       ),
+              //     )
+              //   ],
+              // ),
             ],
           ),
         ),

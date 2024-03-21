@@ -25,10 +25,10 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
     final signUpProvider = Provider.of<SignUpProvider>(context);
     return QuickyAuthScaffold(
       currentScreenType: 'principal',
-      contentScreen: SizedBox(
+      contentScreen: Container(
+        padding: const EdgeInsets.only(top: 120),
         width: double.infinity,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image(
               height: 200,

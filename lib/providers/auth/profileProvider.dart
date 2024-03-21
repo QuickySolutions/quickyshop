@@ -8,6 +8,7 @@ class ProfileProvider with ChangeNotifier {
   late String _cellphone;
   bool _isLoading = false;
   bool _showForm = false;
+  bool _showChangePasswordForm = false;
 
   String get name => _name;
   String get location => _location;
@@ -16,6 +17,7 @@ class ProfileProvider with ChangeNotifier {
   String get cellPhone => _cellphone;
   bool get isLoading => _isLoading;
   bool get showForm => _showForm;
+  bool get showChangePasswordForm => _showChangePasswordForm;
 
   void onChangeName(String value) {
     _name = value;
@@ -49,6 +51,11 @@ class ProfileProvider with ChangeNotifier {
 
   void showFormProfile(bool value) {
     _showForm = value;
+    notifyListeners();
+  }
+
+  void showChangePassword(bool value) {
+    _showChangePasswordForm = value;
     notifyListeners();
   }
 

@@ -47,7 +47,7 @@ class EditProfileForm extends StatelessWidget {
                 SizedBox(height: 20),
                 QuickyTextField(
                   defaultValue: appProvider.brandDefault.name,
-                  hintText: 'Nombre de subtienda',
+                  hintText: 'Nombre de marca',
                   onChanged: (String value) {
                     profileProvider.onChangeName(value);
                   },
@@ -55,7 +55,7 @@ class EditProfileForm extends StatelessWidget {
                 SizedBox(height: 20),
                 QuickyTextField(
                   defaultValue: appProvider.brandDefault.email,
-                  hintText: 'Correo de subtienda',
+                  hintText: 'Correo de marca',
                   onChanged: (String value) {
                     profileProvider.onChangeEmail(value);
                   },
@@ -63,11 +63,12 @@ class EditProfileForm extends StatelessWidget {
                 SizedBox(height: 20),
                 QuickyTextField(
                   defaultValue: appProvider.brandDefault.cellphone,
-                  hintText: 'Telefono de subtienda',
+                  hintText: 'Telefono de ',
                   onChanged: (String value) {
                     profileProvider.onChangeCellPhone(value);
                   },
-                )
+                ),
+                SizedBox(height: 20),
               ],
             )
           : Column(

@@ -29,7 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       contentScreen: Scaffold(
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
-          padding: EdgeInsets.only(top: 120, left: 30, right: 30),
+          padding: EdgeInsets.only(top: 120, left: 30, right: 30, bottom: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

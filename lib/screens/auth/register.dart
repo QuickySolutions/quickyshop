@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
+import 'package:quickyshop/services/authService.dart';
+import 'package:quickyshop/utils/error_dialog.dart';
+import 'package:quickyshop/widgets/dialogs/QuickyAlertDialog.dart';
 
 import '../../providers/signup/signup_provider.dart';
 import '../../utils/Colors.dart';
@@ -18,6 +21,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   bool wantToSeePassword = false;
   bool wantToSeePassword2 = false;
+  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +103,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       height: 55,
                       width: MediaQuery.of(context).size.width * 0.65,
                       child: ElevatedButton(
@@ -111,13 +115,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           onPressed: () async {
-                            if (appProvider.wantToAddNewStore) {
-                              Navigator.pushNamed(context, '/select/photo');
+                            bool existUser =
+                                await _authService.checkIfExistUser(
+                                    email: signUpProvider.emailStore);
+
+                            if (!existUser) {
+                              showErrorMessage("Usuario existente.", context);
                             } else {
-                              Navigator.pushNamed(context, '/select/category');
+                              if (appProvider.wantToAddNewStore) {
+                                Navigator.pushNamed(context, '/select/photo');
+                              } else {
+                                Navigator.pushNamed(
+                                    context, '/select/category');
+                              }
                             }
                           },
-                          child: Text(
+                          child: const Text(
                             'Registrarse',
                             style: TextStyle(
                                 fontSize: 17,
@@ -125,7 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 fontWeight: FontWeight.w700),
                           )),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Container(
                       alignment: Alignment.center,
                       width: MediaQuery.of(context).size.width * 0.65,

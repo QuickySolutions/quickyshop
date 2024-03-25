@@ -53,4 +53,17 @@ class AuthService {
       throw error;
     }
   }
+
+  Future<bool> checkIfExistUser({String? email}) async {
+    Response response =
+        await _dio.post("${ApiUrl.API}/users/store/check/email", data: {
+      'email': email,
+    });
+    print(response);
+    if (response.data['success']) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

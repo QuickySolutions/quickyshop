@@ -101,6 +101,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               },
                               leading: Icon(Icons.security),
                               title: Text('Seguridad'),
+                            ),
+                            Divider(),
+                            ListTile(
+                              onTap: () {
+                                appProvider.reset();
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, "/", (r) => false);
+                                AppPreferences().setIdBrand("");
+                              },
+                              leading: Icon(Icons.exit_to_app),
+                              title: Text('Cerrar sesión'),
                             )
                           ],
                         )

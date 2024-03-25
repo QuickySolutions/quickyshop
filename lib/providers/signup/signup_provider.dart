@@ -31,6 +31,10 @@ class SignUpProvider extends ChangeNotifier {
   String get passwordStore => _passwordStore;
   File get physicalPhoto => _phisicalPhoto;
 
+  bool get isFormRegisterValid {
+    return true;
+  }
+
   String get principalCategorySelected => _principalCategorySelected;
   String get subLevelSelected => _subLevelSelected;
   String get subSubLevelSelected => _subSubLevelSelected;

@@ -86,7 +86,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                               child: Container(
                                 child: ChipItem(
                                     text:
-                                        'Encuestas hechas: ${data.surveys.length}'),
+                                        'Encuestas creadas: ${data.surveys.length}'),
                               ),
                             ),
                             SizedBox(width: 20),

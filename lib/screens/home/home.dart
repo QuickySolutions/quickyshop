@@ -9,6 +9,7 @@ import 'package:quickyshop/providers/statistics/statisticsProvider.dart';
 import 'package:quickyshop/providers/survey/survey_provider.dart';
 import 'package:quickyshop/services/brandService.dart';
 import 'package:quickyshop/services/storeService.dart';
+import 'package:quickyshop/utils/error_dialog.dart';
 import 'package:quickyshop/widgets/brand/brand-mini-card.dart';
 
 import '../../utils/Colors.dart';
@@ -27,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   bool isLoadingBrandInformation = true;
   final BrandService _brandService = BrandService();
   final StoreService _storeService = StoreService();
+  late List<Store> _subStores = [];
   int selectedStore = -1;
 
   Future<void> getBrandInformation() async {
@@ -36,8 +38,11 @@ class _HomePageState extends State<HomePage> {
         appProvider.hasSelectedStore
             ? appProvider.brandDefault.id
             : AppPreferences().brandId);
+    final stores =
+        await _brandService.branchOfficesByBrand(AppPreferences().brandId);
     appProvider.setDefaultBrand(brand['data']);
     setState(() {
+      _subStores = stores;
       isLoadingBrandInformation = false;
     });
   }
@@ -154,52 +159,39 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(height: 20),
                       appProvider.hasSelectedBrand ||
                               appProvider.brandDefault.id.isNotEmpty
-                          ? FutureBuilder(
-                              future: _brandService.branchOfficesByBrand(
-                                  AppPreferences().brandId),
-                              builder: (context,
-                                  AsyncSnapshot<List<Store>> snapshot) {
-                                if (snapshot.hasData) {
-                                  return Container(
-                                    height: 120,
-                                    child: ListView(
-                                      padding: EdgeInsets.only(
-                                          top: 5, bottom: 5, left: 20),
-                                      scrollDirection: Axis.horizontal,
-                                      children: <Widget>[
-                                        BrandMiniCard(
-                                          brand: appProvider.brandDefault,
-                                          isSelected:
-                                              appProvider.hasSelectedBrand &&
-                                                  !appProvider.hasSelectedStore,
-                                        ),
-                                        Row(
-                                            children: snapshot.data!.map((e) {
-                                          return Container(
-                                            width: 280,
-                                            margin: EdgeInsets.only(right: 20),
-                                            child: StoreMiniCard(
-                                                showImage: true,
-                                                onTap: () {
-                                                  appProvider.selectStore(e);
-                                                },
-                                                store: e,
-                                                isSelected:
-                                                    appProvider.hasSelectedStore
-                                                        ? e.id ==
-                                                            appProvider
-                                                                .storeSelected
-                                                                .id
-                                                        : false),
-                                          );
-                                        }).toList()),
-                                      ],
-                                    ),
-                                  );
-                                } else {
-                                  return CircularProgressIndicator();
-                                }
-                              })
+                          ? Container(
+                              height: 120,
+                              child: ListView(
+                                padding: EdgeInsets.only(
+                                    top: 5, bottom: 5, left: 20),
+                                scrollDirection: Axis.horizontal,
+                                children: <Widget>[
+                                  BrandMiniCard(
+                                    brand: appProvider.brandDefault,
+                                    isSelected: appProvider.hasSelectedBrand &&
+                                        !appProvider.hasSelectedStore,
+                                  ),
+                                  Row(
+                                      children: _subStores.map((e) {
+                                    return Container(
+                                      width: 280,
+                                      margin: EdgeInsets.only(right: 20),
+                                      child: StoreMiniCard(
+                                          showImage: true,
+                                          onTap: () {
+                                            appProvider.selectStore(e);
+                                          },
+                                          store: e,
+                                          isSelected: appProvider
+                                                  .hasSelectedStore
+                                              ? e.id ==
+                                                  appProvider.storeSelected.id
+                                              : false),
+                                    );
+                                  }).toList()),
+                                ],
+                              ),
+                            )
                           : Container(),
                       SizedBox(height: 20),
                       !appProvider.hasSelectedStore
@@ -367,11 +359,17 @@ class _HomePageState extends State<HomePage> {
                                       borderRadius: BorderRadius.circular(100),
                                     ),
                                   ),
-                                  onPressed: () {
-                                    surveyProvider.setPage(0);
-                                    Navigator.pushNamed(
-                                        context, '/create/survey');
-                                  },
+                                  onPressed: _subStores.isEmpty
+                                      ? () {
+                                          showErrorMessage(
+                                              "Agrega una subtienda primero, antes de crear una encuesta.",
+                                              context);
+                                        }
+                                      : () {
+                                          surveyProvider.setPage(0);
+                                          Navigator.pushNamed(
+                                              context, '/create/survey');
+                                        },
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [

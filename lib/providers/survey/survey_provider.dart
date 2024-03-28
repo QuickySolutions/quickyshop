@@ -43,7 +43,7 @@ class SurveyProvider extends ChangeNotifier {
   final BrandService _brandService = BrandService();
   late int _indexTitleToEditQuestion = -1;
   late Coupon _selectedCoupon =
-      Coupon(name: '', monetization: 0, brandId: "", active: false);
+      Coupon(id: "", name: '', monetization: 0, brandId: "", active: false);
   late Coupon _createdCoupon =
       Coupon(name: '', monetization: 0, brandId: "", active: false);
   List<Store> _selectedStores = [];

@@ -25,9 +25,9 @@ class SurveyQuestionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final surveyProvider = Provider.of<SurveyProvider>(context);
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      padding: EdgeInsets.all(30),
-      decoration: BoxDecoration(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(30),
+      decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
               topRight: Radius.circular(50), bottomRight: Radius.circular(50))),
@@ -35,60 +35,59 @@ class SurveyQuestionItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    surveyProvider.changeTitleQuestion(indexQuestion);
-                  },
-                  child:
-                      surveyProvider.indexTitleToEditQuestion == indexQuestion
-                          ? CircleAvatar(
-                              backgroundColor: QuickyColors.primaryColor,
-                              child: const Icon(
-                                Icons.check,
-                                color: Colors.white,
-                              ),
-                            )
-                          : CircleAvatar(
-                              backgroundColor: QuickyColors.primaryColor,
-                              child: const Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                              ),
-                            ),
-                ),
-                SizedBox(width: 10),
-                surveyProvider.indexTitleToEditQuestion == indexQuestion
-                    ? Expanded(
-                        child: TextField(
-                        cursorColor: QuickyColors.primaryColor,
-                        onChanged: (String value) {
-                          surveyProvider.onChangeTitleQuetion(
-                              indexQuestion, value);
-                        },
-                        decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: QuickyColors.primaryColor),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: QuickyColors.primaryColor),
-                          ),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  surveyProvider.changeTitleQuestion(indexQuestion);
+                },
+                child: surveyProvider.indexTitleToEditQuestion == indexQuestion
+                    ? CircleAvatar(
+                        backgroundColor: QuickyColors.primaryColor,
+                        child: const Icon(
+                          Icons.check,
+                          color: Colors.white,
                         ),
-                      ))
-                    : Expanded(
-                        child: Text(
-                          '${indexQuestion + 1}. ${question.title}',
-                          style: TextStyle(fontSize: 20),
+                      )
+                    : CircleAvatar(
+                        backgroundColor: QuickyColors.primaryColor,
+                        child: const Icon(
+                          Icons.edit,
+                          color: Colors.white,
                         ),
                       ),
-              ],
-            ),
+              ),
+              const SizedBox(width: 10),
+              surveyProvider.indexTitleToEditQuestion == indexQuestion
+                  ? Expanded(
+                      child: TextFormField(
+                      initialValue:
+                          surveyProvider.survey.questions![indexQuestion].title,
+                      cursorColor: QuickyColors.primaryColor,
+                      onChanged: (String value) {
+                        surveyProvider.onChangeTitleQuetion(
+                            indexQuestion, value);
+                      },
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: QuickyColors.primaryColor),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: QuickyColors.primaryColor),
+                        ),
+                      ),
+                    ))
+                  : Expanded(
+                      child: Text(
+                        '${indexQuestion + 1}. ${question.title}',
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ),
+            ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           question.type != 'normal'
               ? showTypeQuestion(surveyProvider)
               : Container(),
@@ -141,7 +140,8 @@ class SurveyQuestionItem extends StatelessWidget {
           decoration: BoxDecoration(
               color: QuickyColors.primaryColor,
               borderRadius: BorderRadius.circular(20)),
-          padding: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+          padding:
+              const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -151,8 +151,8 @@ class SurveyQuestionItem extends StatelessWidget {
                     .firstWhere((element) => element.keyType == question.type)
                     .name,
               ),
-              SizedBox(width: 20),
-              Image(
+              const SizedBox(width: 20),
+              const Image(
                   height: 18,
                   width: 18,
                   image: AssetImage('assets/icons/usability/edit_white.png'))
@@ -168,9 +168,9 @@ class SurveyQuestionItem extends StatelessWidget {
       children: [
         Text(
             'Esta pregunta debe de tener como minimo ${question.minimumOptions} y como maximo ${question.maximumOptions}'),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         showListOptions(surveyProvider),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         addNewOptionButton(surveyProvider, question.type!)
       ],
     );
@@ -180,7 +180,7 @@ class SurveyQuestionItem extends StatelessWidget {
       SurveyProvider surveyProvider, CloseQuestion question) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [SizedBox(height: 10), showListOptions(surveyProvider)],
+      children: [const SizedBox(height: 10), showListOptions(surveyProvider)],
     );
   }
 
@@ -189,9 +189,9 @@ class SurveyQuestionItem extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         showListOptions(surveyProvider),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         addNewOptionButton(surveyProvider, question.type!)
       ],
     );
@@ -202,9 +202,9 @@ class SurveyQuestionItem extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         showListOptions(surveyProvider),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         addNewOptionButton(surveyProvider, question.type!)
       ],
     );
@@ -230,9 +230,9 @@ class SurveyQuestionItem extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         showListOptions(surveyProvider),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         question.options!.length == 5
             ? Container()
             : addNewOptionButton(surveyProvider, question.type!)
@@ -246,7 +246,7 @@ class SurveyQuestionItem extends StatelessWidget {
       onTap: () {
         surveyProvider.addNewOptionToQuestion(type, indexQuestion);
       },
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
@@ -273,17 +273,15 @@ class SurveyQuestionItem extends StatelessWidget {
 
         if (question.type == 'scale') {
           return Container(
-              margin: EdgeInsets.only(bottom: 10),
+              margin: const EdgeInsets.only(bottom: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    child: Text(
-                      getEmojiByPosition(index),
-                      style: TextStyle(fontSize: 30),
-                    ),
+                  Text(
+                    getEmojiByPosition(index),
+                    style: const TextStyle(fontSize: 30),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Flexible(
                     child: QuickyTextField(
                       onChanged: (String value) {
@@ -297,7 +295,7 @@ class SurveyQuestionItem extends StatelessWidget {
               ));
         } else {
           return Container(
-              margin: EdgeInsets.only(bottom: 10),
+              margin: const EdgeInsets.only(bottom: 10),
               child: QuickyTextField(
                 readOnly: question.type == 'close',
                 onChanged: (String value) {

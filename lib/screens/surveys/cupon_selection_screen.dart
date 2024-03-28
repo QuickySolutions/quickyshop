@@ -146,15 +146,17 @@ class _CouponSelectScreenState extends State<CouponSelectScreen> {
                           ],
                         ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
                   alignment: Alignment.center,
                   child: QuickyButton(
                       type: QuickyButtonTypes.primary,
-                      onTap: () {
-                        surveyProvider.changePage();
-                      },
-                      child: Text(
+                      onTap: surveyProvider.couponSelected.id!.isEmpty
+                          ? null
+                          : () {
+                              surveyProvider.changePage();
+                            },
+                      child: const Text(
                         'Continuar',
                         style: TextStyle(
                             fontSize: 17,

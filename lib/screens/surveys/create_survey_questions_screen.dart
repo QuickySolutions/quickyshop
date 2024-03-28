@@ -195,7 +195,6 @@ class _CreateSurveyQuestionsScreenState
     final storeProvider = Provider.of<StoreProvider>(context);
     final appProvider = Provider.of<AppProvider>(context);
     final couponProvider = Provider.of<CouponProvider>(context);
-    // TODO: implement build
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -214,7 +213,7 @@ class _CreateSurveyQuestionsScreenState
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(left: 10),
                       child: Text('Preguntas',
                           style: TextStyle(fontSize: 20, color: Colors.black)),
@@ -225,32 +224,32 @@ class _CreateSurveyQuestionsScreenState
                           onTap: () {
                             Question newQuestion = TemplateQuestion(
                                 isNew: true,
-                                id: Uuid().v4(),
+                                id: const Uuid().v4(),
                                 title: 'Pregunta...',
-                                type: 'normal') as Question;
+                                type: 'normal');
                             surveyProvider.addNewQuestion(newQuestion);
                           },
                           child: Container(
                             height: 32,
                             decoration: BoxDecoration(
                                 color: QuickyColors.primaryColor,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50))),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(50))),
                             width: 32,
                             alignment: Alignment.center,
-                            child: Icon(Icons.add, color: Colors.white),
+                            child: const Icon(Icons.add, color: Colors.white),
                           ),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Padding(
-                          padding: EdgeInsets.only(right: 10),
+                          padding: const EdgeInsets.only(right: 10),
                           child: SizedBox(
                               width: 30,
                               child: GestureDetector(
                                 onTap: () {
                                   surveyProvider.goBackPage();
                                 },
-                                child: CircleAvatar(
+                                child: const CircleAvatar(
                                   backgroundColor: Colors.white,
                                   radius: 30,
                                   child: Image(
@@ -361,14 +360,14 @@ class _CreateSurveyQuestionsScreenState
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.only(left: 50, right: 50, top: 20),
-              child: Container(
+              padding: const EdgeInsets.only(left: 50, right: 50, top: 20),
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.10,
                 child: QuickyButton(
                     disabled: surveyProvider.survey.questions!.isEmpty ||
                         surveyProvider.isLoadingCreateOrEditSurvey,
                     type: QuickyButtonTypes.primary,
-                    child: Text(
+                    child: const Text(
                       'Finalizar',
                       style: TextStyle(color: Colors.black, fontSize: 15),
                     ),
@@ -450,7 +449,7 @@ class _CreateSurveyQuestionsScreenState
         surveyProvider.survey,
         storeProvider.selectedStores,
         appProvider.brandDefault.id,
-        couponProvider);
+        surveyProvider.couponSelected);
     surveyProvider.reset();
     storeProvider.reset();
   }
@@ -459,9 +458,9 @@ class _CreateSurveyQuestionsScreenState
     return Container(
       height: 50.0,
       color: Colors.cyanAccent,
-      margin: EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(8.0),
       width: MediaQuery.of(context).size.width - 100,
-      child: Center(
+      child: const Center(
           child: Text(
         'Item 1',
         style: TextStyle(

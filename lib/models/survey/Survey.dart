@@ -1,3 +1,5 @@
+import 'package:quickyshop/models/Coupon.dart';
+import 'package:quickyshop/models/survey/Gift.dart';
 import 'package:quickyshop/models/survey/Question.dart';
 import 'package:quickyshop/utils/survey_utils.dart';
 
@@ -11,6 +13,7 @@ class Survey {
   String secretPassword;
   String initDate;
   String finalDate;
+  Coupon? gift;
   List<String>? stores;
   int points;
   Survey(
@@ -20,6 +23,7 @@ class Survey {
       required this.initDate,
       required this.finalDate,
       required this.secretPassword,
+      this.gift,
       this.description,
       this.stores,
       this.points = 30,
@@ -37,6 +41,16 @@ class Survey {
         active: response['active'],
         photo: response['photo'],
         points: response['points'],
+        gift: response['gift'] != null
+            ? Coupon.fromJSONResponse(response['gift'])
+            : Coupon(
+                id: '',
+                name: '',
+                monetization: 0,
+                active: false,
+                brandId: '',
+                photo: '',
+              ),
         initDate: response['initDate'],
         finalDate: response['finalDate'],
         secretPassword: response['secretPassword'],

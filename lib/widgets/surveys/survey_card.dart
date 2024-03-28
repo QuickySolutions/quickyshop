@@ -81,6 +81,9 @@ class _SurveyCardState extends State<SurveyCard> {
                                 storeProvider
                                     .setSelectedStores(widget.survey.stores!);
                                 surveyProvider.setPage(0);
+                                print(widget.survey.gift!.id);
+                                surveyProvider
+                                    .selectCoupon(widget.survey.gift!);
                                 surveyProvider.setSurvey(widget.survey);
                                 Navigator.pushNamed(context, '/create/survey');
                               },

@@ -3,6 +3,7 @@ import 'package:quickyshop/models/Coupon.dart';
 import 'package:quickyshop/models/survey/Survey.dart';
 import 'package:quickyshop/providers/coupons/coupon_provider.dart';
 import 'package:quickyshop/providers/store/store_provider.dart';
+import 'package:quickyshop/providers/survey/survey_provider.dart';
 import 'package:quickyshop/utils/api.dart';
 
 class SurveyResponse {
@@ -42,12 +43,13 @@ class SurveyService {
   }
 
   Future<SurveyResponse> editSurvey(
-      Survey survey, StoreProvider storeProvider) async {
-    Response response = await _dio.put(ApiUrl.API + '/surveys/${survey.id}',
-        data: {
-          'survey': survey.toJson(),
-          'stores': storeProvider.selectedStores
-        });
+      Survey survey, StoreProvider storeProvider, Coupon coupon) async {
+    Response response =
+        await _dio.put(ApiUrl.API + '/surveys/${survey.id}', data: {
+      'survey': survey.toJson(),
+      'stores': storeProvider.selectedStores,
+      'couponId': coupon.id
+    });
     return SurveyResponse.fromJSONResponse(response.data);
   }
 

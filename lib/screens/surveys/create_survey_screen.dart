@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:quickyshop/models/Coupon.dart';
 import 'package:quickyshop/models/survey/Survey.dart';
 import 'package:quickyshop/providers/app/appProvider.dart';
 import 'package:quickyshop/providers/coupons/coupon_provider.dart';
@@ -16,15 +15,11 @@ import 'package:quickyshop/utils/survey_utils.dart';
 import 'package:quickyshop/widgets/app/goBackButton.dart';
 import 'package:quickyshop/utils/Colors.dart';
 import 'package:quickyshop/widgets/buttons/quickyButton.dart';
-import 'package:quickyshop/widgets/dialogs/QuickyAlertDialog.dart';
-import 'package:quickyshop/widgets/dialogs/coupons/add.dart';
-import 'package:quickyshop/widgets/dialogs/coupons/list_coupons.dart';
 import 'package:quickyshop/widgets/inputs/quicky_textfield.dart';
-import 'package:uuid/uuid.dart';
 
 class CreateSurveyScreen extends StatelessWidget {
   final List<Widget> pages = [
-    FormSurveyScreen(),
+    const FormSurveyScreen(),
     const StoreSelectionScreen(),
     const CouponSelectScreen(),
     CreateSurveyQuestionsScreen(),
@@ -32,26 +27,25 @@ class CreateSurveyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final heightScreen = MediaQuery.of(context).size.height;
-    final storeProvider = Provider.of<StoreProvider>(context);
     final surveyProvider = Provider.of<SurveyProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Consumer<SurveyProvider>(
         builder: (context, value, child) {
           return SafeArea(
-            child: Container(
+            child: SizedBox(
               height: heightScreen,
               child: Column(
                 children: [
                   Expanded(
                       child: Container(
-                    padding: EdgeInsets.only(bottom: 5),
+                    padding: const EdgeInsets.only(bottom: 5),
                     child: PageView.builder(
                       controller: value.pageController,
                       physics:
                           surveyProvider.surveyAction == SurveyAction.create
-                              ? NeverScrollableScrollPhysics()
-                              : ScrollPhysics(),
+                              ? const NeverScrollableScrollPhysics()
+                              : const ScrollPhysics(),
                       onPageChanged: (int page) {
                         value.setPage(page);
                       },
@@ -61,7 +55,7 @@ class CreateSurveyScreen extends StatelessWidget {
                       },
                     ),
                   )),
-                  Container(
+                  SizedBox(
                     height: heightScreen * 0.04,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -88,16 +82,16 @@ class CreateSurveyScreen extends StatelessWidget {
   }
 
   Widget _indicator(bool isActive) {
-    return Container(
+    return SizedBox(
       height: 10,
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 150),
-        margin: EdgeInsets.symmetric(horizontal: 4.0),
+        duration: const Duration(milliseconds: 150),
+        margin: const EdgeInsets.symmetric(horizontal: 4.0),
         height: isActive ? 10 : 8.0,
         width: isActive ? 12 : 8.0,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: isActive ? Color(0XFF6BC4C9) : Color(0XFFEAEAEA),
+          color: isActive ? const Color(0XFF6BC4C9) : const Color(0XFFEAEAEA),
         ),
       ),
     );
@@ -105,22 +99,20 @@ class CreateSurveyScreen extends StatelessWidget {
 }
 
 class FormSurveyScreen extends StatelessWidget {
-  FormSurveyScreen({super.key});
+  const FormSurveyScreen({super.key});
   @override
   Widget build(BuildContext context) {
     final surveyProvider = Provider.of<SurveyProvider>(context);
     final couponProvider = Provider.of<CouponProvider>(context);
     final appProvider = Provider.of<AppProvider>(context);
     return SingleChildScrollView(
-      child: Container(
-        child: Column(
-          children: [
-            backgroundSurvey(surveyProvider, context),
-            principalFormSurvey(context, surveyProvider),
-            SizedBox(height: 10),
-            buttonsSurveys(context, surveyProvider, couponProvider, appProvider)
-          ],
-        ),
+      child: Column(
+        children: [
+          backgroundSurvey(surveyProvider, context),
+          principalFormSurvey(context, surveyProvider),
+          const SizedBox(height: 10),
+          buttonsSurveys(context, surveyProvider, couponProvider, appProvider)
+        ],
       ),
     );
   }
@@ -144,7 +136,7 @@ BoxDecoration setContainerBackground(SurveyProvider surveyProvider) {
 
   if (surveyProvider.surveyAction == SurveyAction.edit) {
     if (surveyHasNoPhoto && !userHasSelectImage) {
-      return BoxDecoration(
+      return const BoxDecoration(
         color: Color(0xff9C9FA0),
       );
     } else {
@@ -159,7 +151,7 @@ BoxDecoration setContainerBackground(SurveyProvider surveyProvider) {
     }
   } else {
     return BoxDecoration(
-        color: Color(0xff9C9FA0),
+        color: const Color(0xff9C9FA0),
         image: userHasSelectImage
             ? DecorationImage(
                 image: FileImage(surveyProvider.selectedPhoto),
@@ -204,15 +196,15 @@ Widget backgroundSurvey(SurveyProvider surveyProvider, BuildContext context) {
                   CircleAvatar(
                     backgroundColor: QuickyColors.primaryColor,
                     radius: 25,
-                    child: Image(
+                    child: const Image(
                         height: 20,
                         image: AssetImage(
                             'assets/icons/usability/edit_white.png')),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 15,
                   ),
-                  Text('Añadir foto')
+                  const Text('Añadir foto')
                 ],
               ),
             ),
@@ -232,8 +224,8 @@ Widget principalFormSurvey(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Nombre de la encuesta:'),
-        SizedBox(height: 15),
+        const Text('Nombre de la encuesta:'),
+        const SizedBox(height: 15),
         QuickyTextField(
           keyboardType: TextInputType.name,
           defaultValue: surveyProvider.surveyAction == SurveyAction.create

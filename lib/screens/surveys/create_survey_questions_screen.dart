@@ -408,8 +408,8 @@ class _CreateSurveyQuestionsScreenState
                                   surveyProvider.selectedPhoto,
                                   'SURVEY_PHOTO_${surveyProvider.survey.id}');
                           surveyProvider.setPhoto(url);
-                          await surveyService.editSurvey(
-                              surveyProvider.survey, storeProvider);
+                          await surveyService.editSurvey(surveyProvider.survey,
+                              storeProvider, surveyProvider.couponSelected);
                           surveyProvider.reset();
                           storeProvider.reset();
                           couponProvider.resetCreatedCoupon();
@@ -419,12 +419,13 @@ class _CreateSurveyQuestionsScreenState
                           Navigator.pushNamedAndRemoveUntil(
                               context, '/base', (_) => false);
                         } else {
-                          await surveyService.editSurvey(
-                              surveyProvider.survey, storeProvider);
+                          await surveyService.editSurvey(surveyProvider.survey,
+                              storeProvider, surveyProvider.couponSelected);
                           surveyProvider.reset();
                           storeProvider.reset();
                           couponProvider.resetCreatedCoupon();
                           couponProvider.resetSelectedCoupon();
+                          surveyProvider.setLoadCreateOrEditSurvey(false);
                           surveyProvider.resetCurrentPage();
                           Navigator.pushNamedAndRemoveUntil(
                               context, '/base', (_) => false);

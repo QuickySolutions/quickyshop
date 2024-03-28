@@ -10,6 +10,7 @@ import 'package:quickyshop/providers/coupons/coupon_provider.dart';
 import 'package:quickyshop/providers/store/store_provider.dart';
 import 'package:quickyshop/providers/survey/survey_provider.dart';
 import 'package:quickyshop/screens/surveys/create_survey_questions_screen.dart';
+import 'package:quickyshop/screens/surveys/cupon_selection_screen.dart';
 import 'package:quickyshop/screens/surveys/store_selection_screen.dart';
 import 'package:quickyshop/utils/survey_utils.dart';
 import 'package:quickyshop/widgets/app/goBackButton.dart';
@@ -24,8 +25,9 @@ import 'package:uuid/uuid.dart';
 class CreateSurveyScreen extends StatelessWidget {
   final List<Widget> pages = [
     FormSurveyScreen(),
-    StoreSelectionScreen(),
-    CreateSurveyQuestionsScreen()
+    const StoreSelectionScreen(),
+    const CouponSelectScreen(),
+    CreateSurveyQuestionsScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -331,96 +333,6 @@ Widget buttonsSurveys(BuildContext context, SurveyProvider surveyProvider,
     child: Column(
       children: [
         QuickyButton(
-          type: QuickyButtonTypes.tertiary,
-          onTap: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return QuickyAlertDialog(
-                    childContent: AddCouponForm(),
-                    showNextButton: true,
-                    onNextClick: () {
-                      if (couponProvider.isValidForm) {
-                        Coupon couponItem = Coupon(
-                            id: Uuid().v4(),
-                            active: true,
-                            brandId: appProvider.brandDefault.id,
-                            name: couponProvider.couponName,
-                            monetization: couponProvider.couponMonetization);
-                        couponProvider.resetSelectedCoupon();
-                        couponProvider.addCoupon(couponItem);
-
-                        Navigator.pop(context);
-                      } else {
-                        const snackBar = SnackBar(
-                          content: Text('Rellena los datos'),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    },
-                  );
-                });
-          },
-          child: couponProvider.getCreatedCoupon().id!.isNotEmpty
-              ? Text(
-                  couponProvider.getCreatedCoupon().name,
-                  style: TextStyle(color: Colors.black),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '+',
-                      style: TextStyle(
-                          fontSize: 17,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Crear un cupón',
-                      style: TextStyle(
-                          fontSize: 17,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
-        ),
-        SizedBox(height: 10),
-        QuickyButton(
-            type: QuickyButtonTypes.secondary,
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return QuickyAlertDialog(
-                        childContent: Column(
-                      children: [Expanded(child: CouponList())],
-                    ));
-                  });
-            },
-            // child: couponProvider.areCouponSelectedOrCreated
-            //     ? Text(couponProvider.getCoupon.name)
-            //     : Text(
-            //         'Escoge un cupón guardado',
-            //         style: TextStyle(
-            //             fontSize: 17,
-            //             color: Colors.white,
-            //             fontWeight: FontWeight.w500),
-            //       )),
-
-            child: Text(
-              couponProvider.getSelectedCoupon().id!.isNotEmpty
-                  ? couponProvider.getSelectedCoupon().name
-                  : 'Escoge un cupón guardado',
-              style: TextStyle(
-                  fontSize: 17,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500),
-            )),
-        SizedBox(height: 10),
-        QuickyButton(
             disabled: !surveyProvider.isValidForm,
             type: QuickyButtonTypes.primary,
             onTap: () {
@@ -434,7 +346,6 @@ Widget buttonsSurveys(BuildContext context, SurveyProvider surveyProvider,
                     secretPassword: '1334444',
                     initDate: surveyProvider.initDate,
                     finalDate: surveyProvider.finalDate);
-
                 surveyProvider.addSurvey(survey);
               } else {
                 Survey survey = Survey(

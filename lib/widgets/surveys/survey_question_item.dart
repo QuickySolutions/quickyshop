@@ -44,10 +44,22 @@ class SurveyQuestionItem extends StatelessWidget {
                   },
                   child:
                       surveyProvider.indexTitleToEditQuestion == indexQuestion
-                          ? Icon(Icons.check)
-                          : Icon(Icons.edit),
+                          ? CircleAvatar(
+                              backgroundColor: QuickyColors.primaryColor,
+                              child: const Icon(
+                                Icons.check,
+                                color: Colors.white,
+                              ),
+                            )
+                          : CircleAvatar(
+                              backgroundColor: QuickyColors.primaryColor,
+                              child: const Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                            ),
                 ),
-                SizedBox(width: 5),
+                SizedBox(width: 10),
                 surveyProvider.indexTitleToEditQuestion == indexQuestion
                     ? Expanded(
                         child: TextField(

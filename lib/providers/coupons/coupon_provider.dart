@@ -146,7 +146,7 @@ class CouponProvider extends ChangeNotifier {
       CouponResponse response = await _couponsService.createCoupon(
           coupon, storeProvider.selectedStores);
       Coupon newCoupon = Coupon.fromJSONResponse(response.data);
-      _coupons.add(newCoupon);
+      _coupons.insert(0, newCoupon);
       clear();
     } else {
       String urlPicture = await uploadCouponCover(selectedFile, Uuid().v4());
@@ -154,7 +154,7 @@ class CouponProvider extends ChangeNotifier {
       CouponResponse response = await _couponsService.createCoupon(
           coupon, storeProvider.selectedStores);
       Coupon newCoupon = Coupon.fromJSONResponse(response.data);
-      _coupons.add(newCoupon);
+      _coupons.insert(0, newCoupon);
       clear();
     }
     setIsLoading(false);
@@ -254,6 +254,7 @@ class CouponProvider extends ChangeNotifier {
   void clear() {
     _selectedFile = File('');
     _activePage = 0;
+    resetCreatedCoupon();
     notifyListeners();
   }
 }

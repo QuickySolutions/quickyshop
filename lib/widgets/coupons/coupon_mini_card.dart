@@ -39,13 +39,15 @@ class CouponMiniCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image(
-                errorBuilder: (context, error, stackTrace) {
-                  return Image(
-                      image: AssetImage('assets/images/not-available.png'));
-                },
-                image: NetworkImage(
-                    'https://fingerprint.com/static/e972d7a2b37a5ca2e40f47af17c3abf3/45e84/what-is-coupon-glittering-how-can-it-harm-your-business_.jpg')),
+            showImage
+                ? Image(
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image(
+                          image: AssetImage('assets/images/not-available.png'));
+                    },
+                    image: NetworkImage(
+                        'https://fingerprint.com/static/e972d7a2b37a5ca2e40f47af17c3abf3/45e84/what-is-coupon-glittering-how-can-it-harm-your-business_.jpg'))
+                : Container(),
             Container(
               padding: EdgeInsets.all(16),
               child: Column(

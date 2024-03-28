@@ -57,6 +57,7 @@ class SurveyProvider extends ChangeNotifier {
   String get finalDate => _finalDate;
   List<Survey> get surveys => _surveys;
   bool get isLoading => _isLoadingRequest;
+  Coupon get couponSelected => _selectedCoupon;
   bool get isLoadingCreateOrEditSurvey => _isLoadingCreateOrEditSurvey;
   File get selectedPhoto => _selectedPhoto;
   SurveyAction get surveyAction => _surveyAction;
